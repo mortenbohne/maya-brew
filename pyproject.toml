@@ -1,0 +1,25 @@
+[project]
+name = "maya-brew"
+version = "0.1.0"
+description = "Safe interaction with python in maya"
+authors = [
+    {name = "Morten Bøhne", email = "github@mortenbohne.dk"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
