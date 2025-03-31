@@ -1,0 +1,72 @@
+---
+# This GitHub Actions workflow is triggered by pull requests, pushes to the
+# development branch, and manual dispatch events. It sets up the necessary
+# environment, and then runs a linter on the codebase.
+# The workflow supports an option to lint the entire codebase
+# or just the changes in the pull request. It uses the Super-Linter GitHub
+# Action to perform the linting and saves the linter output and summary as
+# artifacts.
+
+name: Lint Code Base
+
+on:
+  workflow_dispatch:
+    inputs:
+      lint_entire_codebase:
+        description: 'Lint entire codebase'
+        required: true
+        default: true
+        type: boolean
+  pull_request:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  build:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set VALIDATE_ALL_CODEBASE Environment Variable
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "VALIDATE_ALL_CODEBASE=${{ github.event.inputs.lint_entire_codebase }}" \
+              >> "$GITHUB_ENV"
+          else
+            echo "VALIDATE_ALL_CODEBASE=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: "${{ github.event.pull_request.head.ref }}"
+
+      - name: Install Dependencies
+        run: |
+          pip install --target ./dependencies .
+
+      - name: Lint Code Base
+        uses: github/super-linter@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: ${{ env.VALIDATE_ALL_CODEBASE }}
+          VALIDATE_JSCPD: false
+          VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          LINTER_RULES_PATH: /
+          PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
+          PYTHONPATH: "${{ github.workspace }}/dependencies"
+          SAVE_SUPER_LINTER_SUMMARY: true
+          SAVE_SUPER_LINTER_OUTPUT: true
+          DEFAULT_BRANCH: development
