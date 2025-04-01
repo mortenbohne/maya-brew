@@ -1,9 +1,12 @@
+"""
+Utilities for setting up logging in modules
+"""
 import fnmatch
 import os
 import sys
 import threading
 from typing import Optional, List
-
+from mb import get_bool_env_variable, PACKAGE_NAME
 
 import logging
 import time
@@ -12,6 +15,35 @@ from typing import Union
 import structlog
 
 import datetime
+
+PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
+
+
+
+TELEMETRY_PROCESSORS = []
+
+
+def telemetry_runner(target_logger, method_name, event_dict):
+    """
+    Runs processors for telemetry events or events where logger is enabled for event level.
+    Drops telemetry events after processing
+    """
+    is_telemetry_event = event_dict.get("event_type") == "telemetry"
+    if is_telemetry_event:
+        run_telemetry_processors(target_logger, method_name, event_dict)
+        raise structlog.DropEvent
+    event_level = event_dict.get("level")
+    numeric_level = getattr(logging, event_level.upper(), None)
+    if target_logger.isEnabledFor(numeric_level):
+        run_telemetry_processors(target_logger, method_name, event_dict)
+    return event_dict
+
+
+def run_telemetry_processors(target_logger, method_name, event_dict):
+    for processor in TELEMETRY_PROCESSORS:
+        processor(target_logger, method_name, event_dict)
+        return event_dict
+
 
 def format_console_time(target_logger, method_name, event_dict):
     event_dict["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -43,6 +75,7 @@ def configure(use_colors=False):
             ),
             structlog.processors.StackInfoRenderer(),
             structlog.processors.UnicodeDecoder(),
+            telemetry_runner,
             format_console_time,
             structlog.dev.ConsoleRenderer(colors=use_colors),
         ],
@@ -95,9 +128,6 @@ class LogAllLevelsContextManager:
         logging.disable(logging.NOTSET)
 
 
-PROPAGATE = os.getenv("CGUT_LOG_PROPAGATE", 0)
-
-
 class SuppressStdOutStdErr:
     def __init__(self, filter_list: Optional[List[str]] = None) -> None:
         filter_list = filter_list or []
@@ -143,6 +173,7 @@ class SuppressStdOutStdErr:
                 if pattern in line:
                     return True
         return False
+
     def _start_thread(self, read_fd, write_stream):
         def _filter_output():
             read_file = os.fdopen(read_fd)
@@ -222,6 +253,11 @@ class CustomLogger(structlog.stdlib.BoundLogger):
         super().setLevel(level)
 
 
+class TelemetryHandler:
+    """Abstract class for logging handlers to send telemetry data"""
+
+    pass
+
 
 def get_logger(name) -> CustomLogger:
     """
@@ -234,7 +270,12 @@ def get_logger(name) -> CustomLogger:
     # Hacks since current versions of pytest doesn't allow subclassing
     # of logging.getLogger
     setattr(logger, "all_log_levels", CustomLogger.all_log_levels)
-    setattr(logger, "silence", CustomLogger.silence)
+
+    def _silence(*args, **kwargs):
+        return CustomLogger.silence(*args, **kwargs)  # noqa
+
+    setattr(logger, "silence", _silence)
+
     setattr(logger, "timer", ExecutionTimer)
 
     def _send_telemetry(*args, **kwargs):
@@ -253,3 +294,24 @@ def get_logger(name) -> CustomLogger:
 
     setattr(logger, "at_level", at_level)
     return logger  # noqa
+
+
+def mock_telemetry_processor(logger, method_name, event_dict):
+    print(f"Sending to some telemetry service: {event_dict}")
+    return event_dict
+
+
+configure()
+
+if __name__ == "__main__":
+    TELEMETRY_PROCESSORS.append(mock_telemetry_processor)
+    configure(use_colors=True)
+    example_logger = get_logger(__name__)
+    example_logger.info("Logging configured")
+    example_logger.debug(
+        "This is a debug message and shouldn't be displayed as logging level is set to info"
+    )
+    example_logger.setLevel("DEBUG")
+    example_logger.debug(
+        "This is a debug message and should be displayed as logging level is set to debug"
+    )
