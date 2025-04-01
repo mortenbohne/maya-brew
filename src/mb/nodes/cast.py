@@ -43,9 +43,13 @@ def get_dag_path_from_string(node_path: str) -> OpenMaya2.MDagPath:
 
 
 def get_long_name_from_maya_string(name: str)-> str:
+    """
+    Convert a unique maya.cmds node string to a long name.
+    """
     matching_nodes = cmds.ls(name, long=True)
     if not matching_nodes:
         raise NoMatchingNodes(f"No objects matching '{name}' in scene")
-    if len(matching_nodes) > 1:
-        raise MultipleMatchingNodes(f"Multiple objects matching '{name}' in scene. Found {len(matching_nodes)} nodes: {matching_nodes}")
+    num_nodes = len(matching_nodes)
+    if num_nodes > 1:
+        raise MultipleMatchingNodes(f"Multiple objects matching '{name}' in scene. Found {num_nodes} nodes: {matching_nodes}")
     return matching_nodes[0]
