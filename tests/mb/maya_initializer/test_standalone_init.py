@@ -1,9 +1,14 @@
 from mb.maya_initializer import standalone_init
 
 
-def test_init_standalone():
-    standalone_init.init_standalone()
+def test_standalone_can_use_cmds():
+    standalone_init.initialize_maya()
 
     import maya.cmds as cmds
     cube, = cmds.polyCube(constructionHistory=False)
     assert isinstance(cube, str)
+
+
+def test_standalone_not_interactive():
+    from mb.maya_initializer.shared import is_interactive_maya
+    assert not is_interactive_maya()
