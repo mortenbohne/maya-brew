@@ -2,6 +2,8 @@ import os
 import logging
 
 PACKAGE_NAME = "MAYA_BREW"
+import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
+import maya.cmds as cmds
 
 
 def get_bool_env_variable(name: str, default=True):
@@ -26,7 +28,6 @@ def init():
         mb.log.configure(use_colors=get_bool_env_variable(f"{PACKAGE_NAME}_USE_LOG_COLORS", True))
     logger = mb.log.get_logger(__name__)
     logger.info("Initializing maya...")
-    import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
     os.environ["MAYA_NO_WARNING_FOR_MISSING_DEFAULT_RENDERER"] = "1"
     if is_interactive_maya():
         from mb.maya_initializer import interactive_init
