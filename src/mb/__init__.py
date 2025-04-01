@@ -1,10 +1,9 @@
 import os
 import logging
+import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
+import maya.cmds as cmds  # noqa: F401
 
 PACKAGE_NAME = "MAYA_BREW"
-import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
-import maya.cmds as cmds
-
 
 def get_bool_env_variable(name: str, default=True):
     value = os.getenv(name)
@@ -20,8 +19,9 @@ def init():
     old_handlers = logging.root.handlers[:]
     old_log_level = logging.getLogger().level
     from mb.maya_initializer.shared import is_interactive_maya
-    interactive = is_interactive_maya()
     import mb.log
+
+    interactive = is_interactive_maya()
     if interactive:
         mb.log.configure(use_colors=False)
     else:

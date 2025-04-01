@@ -1,6 +1,7 @@
 import mb
 from mb.exceptions import MayaBrewException
 
+
 class SceneException(MayaBrewException):
     """Base class for scene-related exceptions."""
     pass

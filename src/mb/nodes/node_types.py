@@ -22,7 +22,6 @@ class Node:
 
 
 class DagNode(Node):
-
     def __init__(self, node_path: str):
         super().__init__(node_path)
         self.dag_path = cast.get_dag_path_from_string(node_path)

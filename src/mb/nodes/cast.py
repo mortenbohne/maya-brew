@@ -1,6 +1,7 @@
 from mb import OpenMaya2, cmds
 import mb.exceptions
 
+
 class NodeCastingException(mb.exceptions.MayaBrewException):
     """Base class for node casting exceptions."""
     pass
@@ -10,13 +11,16 @@ class InvalidDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
     """Exception raised when a DAG path is invalid."""
     pass
 
+
 class NonExistingDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
     """Exception raised when a DAG path is invalid."""
     pass
 
+
 class MultipleMatchingNodes(NodeCastingException):
     """Exception raised when multiple nodes match a given name."""
     pass
+
 
 class NoMatchingNodes(NodeCastingException):
     """Exception raised when no nodes match a given name."""
@@ -42,7 +46,7 @@ def get_dag_path_from_string(node_path: str) -> OpenMaya2.MDagPath:
     return dag_path
 
 
-def get_long_name_from_maya_string(name: str)-> str:
+def get_long_name_from_maya_string(name: str) -> str:
     """
     Convert a unique maya.cmds node string to a long name.
     """
@@ -51,5 +55,6 @@ def get_long_name_from_maya_string(name: str)-> str:
         raise NoMatchingNodes(f"No objects matching '{name}' in scene")
     num_nodes = len(matching_nodes)
     if num_nodes > 1:
-        raise MultipleMatchingNodes(f"Multiple objects matching '{name}' in scene. Found {num_nodes} nodes: {matching_nodes}")
+        raise MultipleMatchingNodes(
+            f"Multiple objects matching '{name}' in scene. Found {num_nodes} nodes: {matching_nodes}")
     return matching_nodes[0]

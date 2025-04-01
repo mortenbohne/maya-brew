@@ -38,4 +38,3 @@ def test_get_long_name_from_maya_string(test_cube, test_namespace, test_cube_sho
     assert test_namespace not in new_cube_full_path
     with pytest.raises(mb.nodes.cast.NoMatchingNodes):
         mb.nodes.cast.get_long_name_from_maya_string("invalid_name")
-

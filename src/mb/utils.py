@@ -2,8 +2,10 @@ import importlib
 from pathlib import Path
 import sys
 from mb.log import get_logger
+
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
+
 
 def reload_mb():
     """
