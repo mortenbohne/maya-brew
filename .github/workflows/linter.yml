@@ -1,6 +1,6 @@
 ---
 # This GitHub Actions workflow is triggered by pull requests, pushes to the
-# development branch, and manual dispatch events. It sets up the necessary
+# default branch, and manual dispatch events. It sets up the necessary
 # environment, and then runs a linter on the codebase.
 # The workflow supports an option to lint the entire codebase
 # or just the changes in the pull request. It uses the Super-Linter GitHub
@@ -20,7 +20,7 @@ on:
   pull_request:
   push:
     branches:
-      - development
+      - ${{ github.event.repository.default_branch }}
 
 permissions:
   contents: read
@@ -69,4 +69,4 @@ jobs:
           PYTHONPATH: "${{ github.workspace }}/dependencies"
           SAVE_SUPER_LINTER_SUMMARY: true
           SAVE_SUPER_LINTER_OUTPUT: true
-          DEFAULT_BRANCH: development
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
