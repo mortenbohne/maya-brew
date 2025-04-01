@@ -5,6 +5,7 @@ import maya.cmds as cmds  # noqa: F401
 
 PACKAGE_NAME = "MAYA_BREW"
 
+
 def get_bool_env_variable(name: str, default=True):
     value = os.getenv(name)
     if value is None:

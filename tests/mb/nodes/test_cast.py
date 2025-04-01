@@ -19,7 +19,8 @@ def test_invalid_string_to_dag_path(test_cube, test_cube_short_name):
         mb.nodes.cast.get_dag_path_from_string("lambert1")
 
 
-def test_get_long_name_from_maya_string(test_cube, test_namespace, test_cube_short_name):
+def test_get_long_name_from_maya_string(
+        test_cube, test_namespace, test_cube_short_name):
     cube_full_name = f"{test_namespace}:{test_cube_short_name}"
     cube_full_path = mb.nodes.cast.get_long_name_from_maya_string(cube_full_name)
     assert cube_full_path == f"|{cube_full_name}"
