@@ -1,8 +1,9 @@
+import importlib
 from pathlib import Path
 import sys
 from mb.log import get_logger
 logger = get_logger(__name__)
-# logger.setLevel("DEBUG")
+logger.setLevel("DEBUG")
 
 def reload_mb():
     """
@@ -19,4 +20,4 @@ def reload_mb():
         sys.modules.pop(m)
     for m in mb_modules:
         logger.debug(f"re-importing {m}")
-        __import__(m)
+        importlib.import_module(m)
