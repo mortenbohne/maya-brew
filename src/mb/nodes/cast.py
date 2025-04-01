@@ -4,26 +4,31 @@ import mb.exceptions
 
 class NodeCastingException(mb.exceptions.MayaBrewException):
     """Base class for node casting exceptions."""
+
     pass
 
 
 class InvalidDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
     """Exception raised when a DAG path is invalid."""
+
     pass
 
 
 class NonExistingDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
     """Exception raised when a DAG path is invalid."""
+
     pass
 
 
 class MultipleMatchingNodes(NodeCastingException):
     """Exception raised when multiple nodes match a given name."""
+
     pass
 
 
 class NoMatchingNodes(NodeCastingException):
     """Exception raised when no nodes match a given name."""
+
     pass
 
 
