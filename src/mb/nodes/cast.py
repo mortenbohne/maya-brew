@@ -1,4 +1,4 @@
-from mb import OpenMaya2
+from mb import OpenMaya2, cmds
 import mb.exceptions
 
 class NodeCastingException(mb.exceptions.MayaBrewException):
@@ -12,6 +12,14 @@ class InvalidDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
 
 class NonExistingDagPath(NodeCastingException, RuntimeError, ValueError, TypeError):
     """Exception raised when a DAG path is invalid."""
+    pass
+
+class MultipleMatchingNodes(NodeCastingException):
+    """Exception raised when multiple nodes match a given name."""
+    pass
+
+class NoMatchingNodes(NodeCastingException):
+    """Exception raised when no nodes match a given name."""
     pass
 
 
@@ -33,3 +41,11 @@ def get_dag_path_from_string(node_path: str) -> OpenMaya2.MDagPath:
         raise
     return dag_path
 
+
+def get_long_name_from_maya_string(name: str)-> str:
+    matching_nodes = cmds.ls(name, long=True)
+    if not matching_nodes:
+        raise NoMatchingNodes(f"No objects matching '{name}' in scene")
+    if len(matching_nodes) > 1:
+        raise MultipleMatchingNodes(f"Multiple objects matching '{name}' in scene. Found {len(matching_nodes)} nodes: {matching_nodes}")
+    return matching_nodes[0]
