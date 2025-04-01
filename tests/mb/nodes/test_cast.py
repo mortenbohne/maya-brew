@@ -11,7 +11,9 @@ def test_string_to_dag_path(test_cube, test_namespace, test_cube_name):
 
 
 def test_invalid_string_to_dag_path(test_cube, test_cube_name):
-    with pytest.raises(mb.nodes.cast.InvalidDagPath):
+    with pytest.raises(mb.nodes.cast.NonExistingDagPath):
         mb.nodes.cast.get_dag_path_from_string("invalid_name")
-    with pytest.raises(mb.nodes.cast.InvalidDagPath):
+    with pytest.raises(mb.nodes.cast.NonExistingDagPath):
         mb.nodes.cast.get_dag_path_from_string(test_cube_name)
+    with pytest.raises(mb.nodes.cast.InvalidDagPath):
+        mb.nodes.cast.get_dag_path_from_string("lambert1")
