@@ -30,3 +30,13 @@ def test_dag_node_rename(test_cube, caplog):
     another_dag_node_full_path = f"|{another_cube_new_name}"
     assert str(another_dag_node) == another_dag_node_full_path
     assert another_dag_node.dag_path.fullPathName() == another_dag_node_full_path
+
+
+def test_Transform_repr():
+    name = "hello"
+    dag_node = mb.nodes.node_types.Transform.create(name)
+    repr = dag_node.__repr__()
+    assert name in repr
+    assert dag_node.get_full_path() in repr
+    assert type(dag_node).__name__ in repr
+

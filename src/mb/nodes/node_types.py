@@ -1,3 +1,4 @@
+from typing import Callable, Self
 from mb.log import get_logger
 import mb.nodes.cast as cast
 from mb import OpenMaya2, cmds
@@ -7,8 +8,16 @@ logger.setLevel("DEBUG")
 
 
 class Node:
+    _cmds_creator: Callable[..., str] = Callable
+    _cmds_creator_args = {}
     def __init__(self, node_path: str):
         self.node_path = node_path
+
+    def __str__(self):
+        return self.node_path
+
+    def __repr__(self):
+        return f"{type(self).__name__}(\"{str(self)}\”)"
 
     def rename(self, new_name: str, *args, **kwargs) -> str:
         """
@@ -19,6 +28,23 @@ class Node:
         actual_new_name = cmds.rename(str(self), new_name, *args, **kwargs)
         self.node_path = actual_new_name
         return actual_new_name
+
+    def _cmd_caller(self, func_name, *args, **kwargs):
+        return cmds.attr(func_name, self.node_path, *args, **kwargs)
+
+    @classmethod
+    def create(cls, name: str, **kwargs) -> Self:
+        """
+        Create a new transform node.
+        :param name: The name of the new transform node.
+        :return: The new transform node.
+        """
+        kwargs.update(cls._cmds_creator_args)
+        kwargs["name"] = name
+        cmds_value = cls._cmds_creator(**kwargs)
+        if cmds_value != name:
+            logger.debug(f"Name was not unique. New name: {cmds_value}.")
+        return cls(cmds_value)
 
 
 class DagNode(Node):
@@ -45,3 +71,8 @@ class DagNode(Node):
         if not full_path:
             logger.warning(f"Node has been deleted. Original path: {self.node_path}")
         return full_path
+
+
+class Transform(DagNode):
+    _cmds_creator = cmds.group
+    _cmds_creator_args = {"empty": True}
