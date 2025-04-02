@@ -10,6 +10,7 @@ logger.setLevel("DEBUG")
 class Node:
     _cmds_creator: Callable[..., str] = Callable
     _cmds_creator_args = {}
+
     def __init__(self, node_path: str):
         self.node_path = node_path
 
@@ -17,7 +18,7 @@ class Node:
         return self.node_path
 
     def __repr__(self):
-        return f"{type(self).__name__}(\"{str(self)}\”)"
+        return f'{type(self).__name__}("{str(self)}")'
 
     def rename(self, new_name: str, *args, **kwargs) -> str:
         """

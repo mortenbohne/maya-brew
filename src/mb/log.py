@@ -1,6 +1,7 @@
 """
 Utilities for setting up logging in modules
 """
+
 import fnmatch
 import os
 import sys
@@ -17,7 +18,6 @@ import structlog
 import datetime
 
 PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
-
 
 
 TELEMETRY_PROCESSORS = []
@@ -138,11 +138,14 @@ class SuppressStdOutStdErr:
     exited (at least, I think that is why it lets exceptions through).
 
     """
+
     def __init__(self, filter_list: Optional[List[str]] = None, enable=True) -> None:
         self.enable = enable
         if self.enable:
             filter_list = filter_list or []
-            self.filter_words = [filter_list] if isinstance(filter_list, str) else filter_list
+            self.filter_words = (
+                [filter_list] if isinstance(filter_list, str) else filter_list
+            )
 
     def __enter__(self):
         if self.enable:
@@ -179,7 +182,7 @@ class SuppressStdOutStdErr:
         line = line.strip()
         for pattern in self.filter_words:
             pattern = pattern
-            if '*' in pattern:
+            if "*" in pattern:
                 if fnmatch.fnmatch(line, pattern):
                     return True
             else:
@@ -243,8 +246,8 @@ class CustomLogger(structlog.stdlib.BoundLogger):
         return LogAllLevelsContextManager(min_level)
 
     @staticmethod
-    def silence(*args, **kwargs):
-        return SilenceContextManager(*args, **kwargs)
+    def silence(filter_list: Optional[List[str]] = None, enable=True):
+        return SilenceContextManager(filter_list=filter_list, enable=enable)
 
     @staticmethod
     def at_level(target_logger, level):
@@ -325,6 +328,9 @@ if __name__ == "__main__":
         "This is a debug message and shouldn't be displayed as logging level is set to info"
     )
     example_logger.setLevel("DEBUG")
+    with example_logger.silence(filter_list=["filtered"]):
+        example_logger.info("this should be filtered out")
+        example_logger.info("this should not be silenced!")
     example_logger.debug(
         "This is a debug message and should be displayed as logging level is set to debug"
     )
