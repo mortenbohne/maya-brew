@@ -61,5 +61,6 @@ def get_long_name_from_maya_string(name: str) -> str:
     num_nodes = len(matching_nodes)
     if num_nodes > 1:
         raise MultipleMatchingNodes(
-            f"Multiple objects matching '{name}' in scene. Found {num_nodes} nodes: {matching_nodes}")
+            f"Multiple objects matching '{name}' in scene. Found {num_nodes} nodes: {matching_nodes}"
+        )
     return matching_nodes[0]

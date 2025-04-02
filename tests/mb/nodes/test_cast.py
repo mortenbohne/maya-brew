@@ -20,7 +20,8 @@ def test_invalid_string_to_dag_path(test_cube, test_cube_short_name):
 
 
 def test_get_long_name_from_maya_string(
-        test_cube, test_namespace, test_cube_short_name):
+        test_cube, test_namespace, test_cube_short_name
+):
     cube_full_name = f"{test_namespace}:{test_cube_short_name}"
     cube_full_path = mb.nodes.cast.get_long_name_from_maya_string(cube_full_name)
     assert cube_full_path == f"|{cube_full_name}"
@@ -32,7 +33,9 @@ def test_get_long_name_from_maya_string(
     assert group_name in grouped_cube_full_path
     new_cube_with_same_short_name = mb.cmds.polyCube(name=test_cube_short_name)[0]
     # we can cast it from maya's return value
-    new_cube_full_path = mb.nodes.cast.get_long_name_from_maya_string(new_cube_with_same_short_name)
+    new_cube_full_path = mb.nodes.cast.get_long_name_from_maya_string(
+        new_cube_with_same_short_name
+    )
     # if we try to cast it based on short name we should get two matches
     with pytest.raises(mb.nodes.cast.MultipleMatchingNodes):
         mb.nodes.cast.get_long_name_from_maya_string(test_cube_short_name)

@@ -27,7 +27,8 @@ def init():
         mb.log.configure(use_colors=False)
     else:
         mb.log.configure(
-            use_colors=get_bool_env_variable(f"{PACKAGE_NAME}_USE_LOG_COLORS", True))
+            use_colors=get_bool_env_variable(f"{PACKAGE_NAME}_USE_LOG_COLORS", True)
+        )
     logger = mb.log.get_logger(__name__)
     logger.info("Initializing maya...")
     os.environ["MAYA_NO_WARNING_FOR_MISSING_DEFAULT_RENDERER"] = "1"

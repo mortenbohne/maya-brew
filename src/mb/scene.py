@@ -4,11 +4,13 @@ from mb.exceptions import MayaBrewException
 
 class SceneException(MayaBrewException):
     """Base class for scene-related exceptions."""
+
     pass
 
 
 class UnsavedChanges(SceneException, RuntimeError):
     """Exception raised when there are unsaved changes in the scene."""
+
     pass
 
 
