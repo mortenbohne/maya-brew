@@ -14,7 +14,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
-    "maya-stubs"
+    "maya-stubs",
+    "structlog",
+    "colorama"
 ]
 
 [tool.pytest.ini_options]
