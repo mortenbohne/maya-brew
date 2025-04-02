@@ -1,4 +1,4 @@
-from typing import Callable, Self
+from typing import Callable, Self, Optional
 from mb.log import get_logger
 import mb.nodes.cast as cast
 from mb import OpenMaya2, cmds
@@ -8,7 +8,7 @@ logger.setLevel("DEBUG")
 
 
 class Node:
-    _cmds_creator: Callable[..., str] = Callable
+    _cmds_creator: Optional[Callable[..., str]] = None
     _cmds_creator_args = {}
 
     def __init__(self, node_path: str):
@@ -40,6 +40,10 @@ class Node:
         :param name: The name of the new transform node.
         :return: The new transform node.
         """
+        if cls._cmds_creator is None:
+            raise NotImplementedError(
+                f"{cls.__name__} must define a _cmds_creator method"
+            )
         kwargs.update(cls._cmds_creator_args)
         kwargs["name"] = name
         cmds_value = cls._cmds_creator(**kwargs)
