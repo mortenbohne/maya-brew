@@ -129,14 +129,23 @@ class LogAllLevelsContextManager:
 
 
 class SuppressStdOutStdErr:
-    def __init__(self, filter_list: Optional[List[str]] = None, enabled=True) -> None:
-        self.enabled = enabled
-        if enabled:
+    """
+    A context manager for doing a "deep suppression" of stdout and stderr in
+    Python, i.e. will suppress all print, even if the print originates in a
+    compiled C/Fortran sub-function.
+       This will not suppress raised exceptions, since exceptions are printed
+    to stderr just before a script exits, and after the context manager has
+    exited (at least, I think that is why it lets exceptions through).
+
+    """
+    def __init__(self, filter_list: Optional[List[str]] = None, enable=True) -> None:
+        self.enable = enable
+        if self.enable:
             filter_list = filter_list or []
             self.filter_words = [filter_list] if isinstance(filter_list, str) else filter_list
 
     def __enter__(self):
-        if self.enabled:
+        if self.enable:
             self._stdout = sys.stdout
             self._stderr = sys.stderr
             self._stdout_pipe = os.pipe()
@@ -152,7 +161,7 @@ class SuppressStdOutStdErr:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.enabled:
+        if self.enable:
             os.dup2(self._stdout_fd, 1)
             os.dup2(self._stderr_fd, 2)
 
