@@ -129,36 +129,40 @@ class LogAllLevelsContextManager:
 
 
 class SuppressStdOutStdErr:
-    def __init__(self, filter_list: Optional[List[str]] = None) -> None:
-        filter_list = filter_list or []
-        self.filter_words = [filter_list] if isinstance(filter_list, str) else filter_list
+    def __init__(self, filter_list: Optional[List[str]] = None, enabled=True) -> None:
+        self.enabled = enabled
+        if enabled:
+            filter_list = filter_list or []
+            self.filter_words = [filter_list] if isinstance(filter_list, str) else filter_list
 
     def __enter__(self):
-        self._stdout = sys.stdout
-        self._stderr = sys.stderr
-        self._stdout_pipe = os.pipe()
-        self._stderr_pipe = os.pipe()
-        self._stdout_fd = os.dup(1)
-        self._stderr_fd = os.dup(2)
-        os.dup2(self._stdout_pipe[1], 1)
-        os.dup2(self._stderr_pipe[1], 2)
-        self._stdout_thread = self._start_thread(self._stdout_pipe[0], self._stdout)
-        self._stderr_thread = self._start_thread(self._stderr_pipe[0], self._stderr)
-        os.close(self._stdout_pipe[1])
-        os.close(self._stderr_pipe[1])
+        if self.enabled:
+            self._stdout = sys.stdout
+            self._stderr = sys.stderr
+            self._stdout_pipe = os.pipe()
+            self._stderr_pipe = os.pipe()
+            self._stdout_fd = os.dup(1)
+            self._stderr_fd = os.dup(2)
+            os.dup2(self._stdout_pipe[1], 1)
+            os.dup2(self._stderr_pipe[1], 2)
+            self._stdout_thread = self._start_thread(self._stdout_pipe[0], self._stdout)
+            self._stderr_thread = self._start_thread(self._stderr_pipe[0], self._stderr)
+            os.close(self._stdout_pipe[1])
+            os.close(self._stderr_pipe[1])
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        os.dup2(self._stdout_fd, 1)
-        os.dup2(self._stderr_fd, 2)
+        if self.enabled:
+            os.dup2(self._stdout_fd, 1)
+            os.dup2(self._stderr_fd, 2)
 
-        os.close(self._stdout_fd)
-        os.close(self._stderr_fd)
+            os.close(self._stdout_fd)
+            os.close(self._stderr_fd)
 
-        if self._stdout_thread.is_alive():
-            self._stdout_thread.join()
-        if self._stderr_thread.is_alive():
-            self._stderr_thread.join()
+            if self._stdout_thread.is_alive():
+                self._stdout_thread.join()
+            if self._stderr_thread.is_alive():
+                self._stderr_thread.join()
 
     def _should_filter(self, line) -> bool:
         if not self.filter_words:
