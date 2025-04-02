@@ -24,8 +24,7 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 
 [tool.pylint]
-ignored-modules = ["maya", "pymel", "pxr"]
-disable = ["missing-docstring", "too-few-public-methods", "duplicate-code", "C", "R", "W", "I"]
+disable = ["too-few-public-methods", "C", "R", "W", "I"]
 
 [build-system]
 requires = ["setuptools"]
