@@ -1,5 +1,5 @@
 import mb
-from mb.exceptions import MayaBrewException
+from .exceptions import MayaBrewException
 
 
 class SceneException(MayaBrewException):

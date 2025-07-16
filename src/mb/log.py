@@ -7,7 +7,7 @@ import os
 import sys
 import threading
 from typing import Optional, List
-from mb import get_bool_env_variable, PACKAGE_NAME
+from . import get_bool_env_variable, PACKAGE_NAME
 
 import logging
 import time

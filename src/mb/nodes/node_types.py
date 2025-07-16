@@ -1,7 +1,7 @@
 from typing import Callable, Self
-from mb.log import get_logger
-import mb.nodes.cast as cast
-from mb import OpenMaya2, cmds
+from .. log import get_logger
+from .. nodes import cast
+from .. import OpenMaya2, cmds
 
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
