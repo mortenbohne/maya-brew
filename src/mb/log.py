@@ -1,6 +1,7 @@
 """
 Utilities for setting up logging in modules
 """
+
 import fnmatch
 import os
 import sys
@@ -17,7 +18,6 @@ import structlog
 import datetime
 
 PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
-
 
 
 TELEMETRY_PROCESSORS = []
@@ -129,36 +129,52 @@ class LogAllLevelsContextManager:
 
 
 class SuppressStdOutStdErr:
-    def __init__(self, filter_list: Optional[List[str]] = None) -> None:
-        filter_list = filter_list or []
-        self.filter_words = [filter_list] if isinstance(filter_list, str) else filter_list
+    """
+    A context manager for doing a "deep suppression" of stdout and stderr in
+    Python, i.e. will suppress all print, even if the print originates in a
+    compiled C/Fortran sub-function.
+       This will not suppress raised exceptions, since exceptions are printed
+    to stderr just before a script exits, and after the context manager has
+    exited (at least, I think that is why it lets exceptions through).
+
+    """
+
+    def __init__(self, filter_list: Optional[List[str]] = None, enable=True) -> None:
+        self.enable = enable
+        if self.enable:
+            filter_list = filter_list or []
+            self.filter_words = (
+                [filter_list] if isinstance(filter_list, str) else filter_list
+            )
 
     def __enter__(self):
-        self._stdout = sys.stdout
-        self._stderr = sys.stderr
-        self._stdout_pipe = os.pipe()
-        self._stderr_pipe = os.pipe()
-        self._stdout_fd = os.dup(1)
-        self._stderr_fd = os.dup(2)
-        os.dup2(self._stdout_pipe[1], 1)
-        os.dup2(self._stderr_pipe[1], 2)
-        self._stdout_thread = self._start_thread(self._stdout_pipe[0], self._stdout)
-        self._stderr_thread = self._start_thread(self._stderr_pipe[0], self._stderr)
-        os.close(self._stdout_pipe[1])
-        os.close(self._stderr_pipe[1])
+        if self.enable:
+            self._stdout = sys.stdout
+            self._stderr = sys.stderr
+            self._stdout_pipe = os.pipe()
+            self._stderr_pipe = os.pipe()
+            self._stdout_fd = os.dup(1)
+            self._stderr_fd = os.dup(2)
+            os.dup2(self._stdout_pipe[1], 1)
+            os.dup2(self._stderr_pipe[1], 2)
+            self._stdout_thread = self._start_thread(self._stdout_pipe[0], self._stdout)
+            self._stderr_thread = self._start_thread(self._stderr_pipe[0], self._stderr)
+            os.close(self._stdout_pipe[1])
+            os.close(self._stderr_pipe[1])
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        os.dup2(self._stdout_fd, 1)
-        os.dup2(self._stderr_fd, 2)
+        if self.enable:
+            os.dup2(self._stdout_fd, 1)
+            os.dup2(self._stderr_fd, 2)
 
-        os.close(self._stdout_fd)
-        os.close(self._stderr_fd)
+            os.close(self._stdout_fd)
+            os.close(self._stderr_fd)
 
-        if self._stdout_thread.is_alive():
-            self._stdout_thread.join()
-        if self._stderr_thread.is_alive():
-            self._stderr_thread.join()
+            if self._stdout_thread.is_alive():
+                self._stdout_thread.join()
+            if self._stderr_thread.is_alive():
+                self._stderr_thread.join()
 
     def _should_filter(self, line) -> bool:
         if not self.filter_words:
@@ -166,7 +182,7 @@ class SuppressStdOutStdErr:
         line = line.strip()
         for pattern in self.filter_words:
             pattern = pattern
-            if '*' in pattern:
+            if "*" in pattern:
                 if fnmatch.fnmatch(line, pattern):
                     return True
             else:
@@ -230,8 +246,8 @@ class CustomLogger(structlog.stdlib.BoundLogger):
         return LogAllLevelsContextManager(min_level)
 
     @staticmethod
-    def silence(*args, **kwargs):
-        return SilenceContextManager(*args, **kwargs)
+    def silence(filter_list: Optional[List[str]] = None, enable=True):
+        return SilenceContextManager(filter_list=filter_list, enable=enable)
 
     @staticmethod
     def at_level(target_logger, level):
@@ -312,6 +328,9 @@ if __name__ == "__main__":
         "This is a debug message and shouldn't be displayed as logging level is set to info"
     )
     example_logger.setLevel("DEBUG")
+    with example_logger.silence(filter_list=["filtered"]):
+        example_logger.info("this should be filtered out")
+        example_logger.info("this should not be silenced!")
     example_logger.debug(
         "This is a debug message and should be displayed as logging level is set to debug"
     )

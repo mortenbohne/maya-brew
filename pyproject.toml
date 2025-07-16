@@ -14,6 +14,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "maya-stubs",
+    "structlog",
+    "colorama"
 ]
 
 [tool.pytest.ini_options]
@@ -21,8 +24,8 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 
 [tool.pylint]
-ignored-modules = ["maya", "pymel", "pxr"]
-disable = ["missing-docstring", "too-few-public-methods", "duplicate-code", "C", "R", "W", "I"]
+ignored-modules = ["maya"]
+disable = ["too-few-public-methods", "C", "R", "W", "I"]
 
 [build-system]
 requires = ["setuptools"]

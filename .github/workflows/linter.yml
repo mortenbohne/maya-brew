@@ -54,7 +54,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install --target ./dependencies .
+          pip install --target ./dependencies .[dev]
 
       - name: Lint Code Base
         uses: github/super-linter@latest
