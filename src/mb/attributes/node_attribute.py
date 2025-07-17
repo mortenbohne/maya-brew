@@ -39,7 +39,7 @@ class Attribute:
         node_path, attr_name = path.rsplit(".", 1)
         node_dag_path = cast.get_dag_path_from_string(node_path)
         node = DagNode(node_dag_path.fullPathName())
-        plug = Attribute.get_plug_from_node(node, attr_name)
+        plug = Attribute._get_plug_from_node(node, attr_name)
         return plug
 
     def __str__(self):
@@ -48,43 +48,29 @@ class Attribute:
     def get(self):
         return self._get_plug_value(self.plug)
 
-    @classmethod
-    def _get_value(cls, node: DagNode, attr_name: str):
-        """
-        Get the value of the attribute from the node.
-        :param node: The node to get the attribute from.
-        :param attr_name: The name of the attribute.
-        :return: The value of the attribute.
-        """
-        plug = cls.get_plug_from_node(node, attr_name)
-        return cls._get_plug_value(plug)
+    def node(self):
+        return self._get_node_from_plug(self.plug)
+
+    def name(self):
+        raise NotImplementedError
 
     @classmethod
-    def get_plug_from_node(cls, node: DagNode, attr_name: str) -> OpenMaya2.MPlug:
-        """
-        Get the plug of the attribute from the node.
-        :param node: The node to get the plug from.
-        :param attr_name: The name of the attribute.
-        :return: The plug of the attribute.
-        """
+    def _get_value(cls, node: DagNode, attr_name: str):
+        plug = cls._get_plug_from_node(node, attr_name)
+        return cls._get_plug_value(plug)
+
+    @staticmethod
+    def _get_plug_from_node(node: DagNode, attr_name: str) -> OpenMaya2.MPlug:
         fn_dep = node.get_mfndependency_node()
         return fn_dep.findPlug(attr_name, False)
 
-    def get_node_from_plug(self) -> DagNode:
-        """
-        Get the node from the plug.
-        :return: The node that the plug belongs to.
-        """
-        fn_dep = self.plug.node()
+    @staticmethod
+    def _get_node_from_plug(plug: OpenMaya2.MPlug) -> DagNode:
+        fn_dep = plug.node()
         return DagNode(fn_dep.fullPathName())
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        """
-        Get the value of the plug.
-        :param plug: The plug to get the value from.
-        :return: The value of the plug.
-        """
         attribute = plug.attribute()
         type_str = attribute.apiTypeStr
         getter_name = api_type_str_getter_map.get(type_str)
@@ -104,6 +90,3 @@ class Attribute:
             if type_str == "kMessage":
                 raise AttributeError("Message attributes do not hold data.")
             raise ValueError(f"Unsupported attribute type: {attribute.apiTypeStr}")
-
-    def name(self):
-        raise NotImplementedError
