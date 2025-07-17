@@ -73,6 +73,13 @@ class DagNode(Node):
             logger.warning(f"Node has been deleted. Original path: {self.node_path}")
         return full_path
 
+    def get_mfndependency_node(self) -> OpenMaya2.MFnDependencyNode:
+        """
+        Get the MFnDependencyNode of the current node.
+        :return: The MFnDependencyNode of the current node.
+        """
+        return OpenMaya2.MFnDependencyNode(self.get_depend_node())
+
 
 class Transform(DagNode):
     _cmds_creator = cmds.group
