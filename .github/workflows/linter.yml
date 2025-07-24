@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install -e .[dev] --target ./dependencies
+          pip install -e .[dev] --target .venv
 
       - name: Lint Code Base
         uses: super-linter/super-linter@latest
@@ -49,7 +49,7 @@ jobs:
           VALIDATE_PYTHON_ISORT: false
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
-          PYTHONPATH: "${{ github.workspace }}/dependencies"
+          PYTHONPATH: "${{ github.workspace }}/.venv"
           SAVE_SUPER_LINTER_SUMMARY: true
           SAVE_SUPER_LINTER_OUTPUT: true
           IGNORE_GENERATED_FILES: true
