@@ -6,7 +6,7 @@ import fnmatch
 import os
 import sys
 import threading
-from typing import Optional, List
+from typing import Optional, List, Callable
 from . import get_bool_env_variable, PACKAGE_NAME
 
 import logging
@@ -20,7 +20,7 @@ import datetime
 PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
 
 
-TELEMETRY_PROCESSORS = []
+TELEMETRY_PROCESSORS: List[Callable] = []
 
 
 def telemetry_runner(target_logger, method_name, event_dict):
