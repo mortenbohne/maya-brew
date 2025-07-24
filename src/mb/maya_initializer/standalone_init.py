@@ -16,7 +16,7 @@ def initialize_maya():
 
 def cmds_about_exists():
     try:
-        from maya.cmds import about
+        from maya.cmds import about  # noqa: F401
 
         return True
     except ImportError:
