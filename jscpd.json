@@ -1,14 +1,5 @@
 {
   "ignore": [
-    ".venv/**",
-    "venv/**",
-    "**/.venv/**",
-    "**/venv/**"
-  ],
-  "exclude": [
-    ".venv/**",
-    "venv/**",
-    "**/.venv/**",
-    "**/venv/**"
+    "/github/workspace/.venv/**"
   ]
 }
