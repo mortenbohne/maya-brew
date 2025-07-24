@@ -55,4 +55,4 @@ jobs:
           IGNORE_GENERATED_FILES: true
           IGNORE_GITIGNORED_FILES: true
           VALIDATE_GIT_COMMITLINT: false
-          JSCODEPDUPLICATES_CONFIG: "${{ github.workspace }}/jscpd.json"
+          JSCPD_CONFIG_FILE: "${{ github.workspace }}/jscpd.json"
