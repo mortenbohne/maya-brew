@@ -27,6 +27,7 @@ def empty_transform():
     """
     yield mb.nodes.node_types.Transform.create("test_transform")
 
+
 @pytest.fixture(autouse=True)
 def new_scene():
     return mb.scene.new_file()

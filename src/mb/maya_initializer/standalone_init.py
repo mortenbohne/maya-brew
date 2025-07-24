@@ -1,4 +1,4 @@
-from .. log import get_logger
+from ..log import get_logger
 
 logger = get_logger(__name__)
 # logger.setLevel("DEBUG")
@@ -9,6 +9,7 @@ def initialize_maya():
         return
     with logger.silence(["This plugin does not support createPlatformOpenGLContext!"]):
         import maya.standalone
+
         maya.standalone.initialize(name="initialized_by_maya_brew")
     logger.debug("initialized maya standalone")
 
@@ -16,6 +17,7 @@ def initialize_maya():
 def cmds_about_exists():
     try:
         from maya.cmds import about
+
         return True
     except ImportError:
         return False
