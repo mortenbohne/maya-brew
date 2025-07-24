@@ -51,6 +51,7 @@ jobs:
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
           PYTHONPATH: "${{ github.workspace }}/.venv"
           SAVE_SUPER_LINTER_SUMMARY: true
-          SAVE_SUPER_LINTER_OUTPUT: true
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           IGNORE_GENERATED_FILES: true
+          IGNORE_GITIGNORED_FILES: true
           VALIDATE_GIT_COMMITLINT: false
