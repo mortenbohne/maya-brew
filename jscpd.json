@@ -1,5 +1,8 @@
 {
   "ignore": [
-    "/github/workspace/.venv/**"
+    ".venv/**",
+    "venv/**",
+    "**/.venv/**",
+    "**/venv/**"
   ]
 }
