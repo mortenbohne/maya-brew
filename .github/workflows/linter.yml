@@ -52,3 +52,4 @@ jobs:
           PYTHONPATH: "${{ github.workspace }}/dependencies"
           SAVE_SUPER_LINTER_SUMMARY: true
           SAVE_SUPER_LINTER_OUTPUT: true
+          IGNORE_GENERATED_FILES: true
