@@ -1,5 +1,5 @@
 from .. import log
-from . interactive_utils import SuppressScriptEditorOutput
+from .interactive_utils import SuppressScriptEditorOutput
 
 # note this logger is defined before SilenceMayaContextManager is added so will not
 # silence script editor output

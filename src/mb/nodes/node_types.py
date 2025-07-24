@@ -1,6 +1,6 @@
 from typing import Callable, Self
-from .. log import get_logger
-from .. nodes import cast
+from ..log import get_logger
+from ..nodes import cast
 from .. import OpenMaya2, cmds
 
 logger = get_logger(__name__)
