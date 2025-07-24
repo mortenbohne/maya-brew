@@ -26,14 +26,6 @@ jobs:
     name: Lint Code Base
     runs-on: ubuntu-latest
     steps:
-      - name: Set VALIDATE_ALL_CODEBASE Environment Variable
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "VALIDATE_ALL_CODEBASE=${{ github.event.inputs.lint_entire_codebase }}" \
-              >> "$GITHUB_ENV"
-          else
-            echo "VALIDATE_ALL_CODEBASE=false" >> "$GITHUB_ENV"
-          fi
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -51,7 +43,7 @@ jobs:
         uses: super-linter/super-linter@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_ALL_CODEBASE: ${{ env.VALIDATE_ALL_CODEBASE }}
+          VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_ISORT: false
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
