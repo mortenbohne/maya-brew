@@ -42,7 +42,7 @@ jobs:
           pip install -e .[dev] --target .venv
 
       - name: Lint Code Base
-        uses: super-linter/super-linter@latest
+        uses: super-linter/super-linter/slim@@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
@@ -55,4 +55,3 @@ jobs:
           IGNORE_GENERATED_FILES: true
           IGNORE_GITIGNORED_FILES: true
           VALIDATE_GIT_COMMITLINT: false
-          JSCPD_CONFIG_FILE: ".jscpd.json"
