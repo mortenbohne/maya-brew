@@ -1,4 +1,4 @@
-from typing import Callable, Self
+from typing import Callable, Self, Dict, Any
 from ..log import get_logger
 from ..nodes import cast
 from .. import OpenMaya2, cmds
@@ -9,7 +9,7 @@ logger.setLevel("DEBUG")
 
 class Node:
     _cmds_creator: Callable[..., str]
-    _cmds_creator_args = {}
+    _cmds_creator_args: Dict[str:Any] = {}
 
     def __init__(self, node_path: str):
         self.node_path = node_path
