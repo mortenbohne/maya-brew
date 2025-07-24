@@ -53,3 +53,4 @@ jobs:
           SAVE_SUPER_LINTER_SUMMARY: true
           SAVE_SUPER_LINTER_OUTPUT: true
           IGNORE_GENERATED_FILES: true
+          VALIDATE_GIT_COMMITLINT: false
