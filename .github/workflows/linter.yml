@@ -42,7 +42,7 @@ jobs:
           pip install -e .[dev] --target .venv
 
       - name: Lint Code Base
-        uses: super-linter/super-linter/slim@@latest
+        uses: super-linter/super-linter/slim@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
