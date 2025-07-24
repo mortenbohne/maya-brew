@@ -1,6 +1,5 @@
 {
-  "exclude": [
-    "build/**",
-    "dependencies/**"
+  "ignore": [
+    ".venv/**"
   ]
 }
