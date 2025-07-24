@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install --target ./dependencies .[dev]
+          pip install -e --target ./dependencies .[dev]
 
       - name: Lint Code Base
         uses: super-linter/super-linter@latest
