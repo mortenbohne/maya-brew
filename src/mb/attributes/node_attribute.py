@@ -12,6 +12,7 @@ class Attribute:
     def __init__(self, plug: OpenMaya2.MPlug): ...
     @overload
     def __init__(self, plug_path: str): ...
+
     def __init__(self, plug_or_path: Union[OpenMaya2.MPlug, str]):
         """
         Initialize the Attribute with a plug or a string path.
