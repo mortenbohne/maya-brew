@@ -9,7 +9,7 @@ logger.setLevel("DEBUG")
 
 class Node:
     _cmds_creator: Callable[..., str]
-    _cmds_creator_args: Dict[str:Any] = {}
+    _cmds_creator_args: Dict[str, Any] = {}
 
     def __init__(self, node_path: str):
         self.node_path = node_path
