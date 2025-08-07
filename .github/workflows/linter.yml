@@ -1,11 +1,10 @@
 ---
 # This GitHub Actions workflow is triggered by pull requests, pushes to the
-# default branch, and manual dispatch events. It sets up the necessary
-# environment, and then runs a linter on the codebase.
-# The workflow supports an option to lint the entire codebase
-# or just the changes in the pull request. It uses the Super-Linter GitHub
-# Action to perform the linting and saves the linter output and summary as
-# artifacts.
+# develop branch, and manual dispatch events. It sets up a Python environment,
+# installs project dependencies, and then runs Super-Linter on the codebase.
+# The workflow is configured to validate the entire codebase with custom
+# linting rules and saves the linter output and summary as artifacts.
+
 
 name: Lint Code Base
 
