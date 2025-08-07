@@ -8,6 +8,7 @@ api_type_str_getter_map = {"kDoubleLinearAttribute": "asDouble"}
 
 
 class Attribute:
+
     @overload
     def __init__(self, plug_or_path: str): ...
 
