@@ -9,11 +9,12 @@ api_type_str_getter_map = {"kDoubleLinearAttribute": "asDouble"}
 
 class Attribute:
     @overload
-    def __init__(self, plug_or_path: OpenMaya2.MPlug): ...
-    @overload
-    def __init__(self, plug_or_path: str): ...
+    def __init__(self, plug_or_path: OpenMaya2.MPlug) -> None: ...
 
-    def __init__(self, plug_or_path: Union[OpenMaya2.MPlug, str]):
+    @overload
+    def __init__(self, plug_or_path: str) -> None: ...
+
+    def __init__(self, plug_or_path: Union[OpenMaya2.MPlug, str]) -> None:
         """
         Initialize the Attribute with a plug or a string path.
         :param plug_or_path: The plug of the attribute or a string path.
