@@ -31,3 +31,10 @@ def empty_transform():
 @pytest.fixture(autouse=True)
 def new_scene():
     return mb.scene.new_file()
+
+
+@pytest.fixture()
+def translateX_plug(empty_transform):
+    """Provide the MPlug for translateX on the empty_transform."""
+    fn = empty_transform.get_mfndependency_node()
+    return fn.findPlug("translateX", False)
