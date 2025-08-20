@@ -1,4 +1,4 @@
-from typing import overload, Union
+import typing
 from .. import OpenMaya2
 from ..nodes.node_types import DagNode
 from ..nodes import cast
@@ -7,25 +7,72 @@ from ..nodes import cast
 api_type_str_getter_map = {"kDoubleLinearAttribute": "asDouble"}
 
 
+PlugInput = typing.Union[OpenMaya2.MPlug, str]
+A = typing.TypeVar("A", bound="Attribute")
+
+
 class Attribute:
+    _getter_type: str
 
-    @overload
-    def __init__(self, plug_or_path: str): ...
+    def __new__(cls: type[A], plug_or_path: PlugInput) -> A:
+        if cls is not Attribute:
+            return typing.cast(A, super().__new__(cls))
 
-    @overload
-    def __init__(self, plug_or_path: OpenMaya2.MPlug): ...
+        if isinstance(plug_or_path, OpenMaya2.MPlug):
+            plug = plug_or_path
+        elif isinstance(plug_or_path, str):
+            plug = cls._plug_from_path(plug_or_path)
+        else:
+            raise ValueError("plug_or_path must be an MPlug or attribute path string.")
 
-    def __init__(self, plug_or_path: Union[OpenMaya2.MPlug, str]):
-        """
-        Initialize the Attribute with a plug or a string path.
-        :param plug_or_path: The plug of the attribute or a string path.
-        """
+        try:
+            mobj_attr = plug.attribute()
+        except (RuntimeError, ValueError) as e:
+            raise RuntimeError(
+                f"Failed to obtain MObject attribute for plug {plug}"
+            ) from e
+
+        api_type = getattr(mobj_attr, "apiTypeStr", None)
+        if not api_type:
+            raise RuntimeError(
+                f"Attribute object for plug {plug} has no apiTypeStr; cannot dispatch."
+            )
+
+        try:
+            subclass: type[Attribute] = _API_TYPE_SUBCLASS_MAP[api_type]
+        except KeyError:
+            raise NotImplementedError(
+                f"Unsupported attribute apiTypeStr '{api_type}'. "
+                f"Known types: {sorted(_API_TYPE_SUBCLASS_MAP)}"
+            )
+
+        instance = super().__new__(subclass)
+        setattr(instance, "_pre_init_plug", plug)
+        return typing.cast(A, instance)
+
+    @typing.overload
+    def __init__(self, plug_or_path: OpenMaya2.MPlug) -> None: ...
+
+    @typing.overload
+    def __init__(self, plug_or_path: str) -> None: ...
+
+    def __init__(self, plug_or_path: PlugInput):
+        # _pre_init_plug is injected by Attribute.__new__ ONLY when the user called
+        # Attribute(...) (base class factory dispatch). Direct subclass construction
+        # (e.g. FloatAttribute(...)) bypasses that path, so pre will be None and we
+        # must resolve plug_or_path here.
+        pre = getattr(self, "_pre_init_plug", None)
+        if pre is not None:
+            self.plug = pre
+            delattr(self, "_pre_init_plug")
+            return
+
         if isinstance(plug_or_path, OpenMaya2.MPlug):
             self.plug = plug_or_path
         elif isinstance(plug_or_path, str):
             self.plug = self._plug_from_path(plug_or_path)
         else:
-            raise TypeError("Attribute expects an MPlug or a string path.")
+            raise ValueError("plug_or_path must be an MPlug or attribute path string.")
 
     @staticmethod
     def _plug_from_path(path: str) -> OpenMaya2.MPlug:
@@ -74,22 +121,22 @@ class Attribute:
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        attribute = plug.attribute()
-        type_str = attribute.apiTypeStr
-        getter_name = api_type_str_getter_map.get(type_str)
-        if getter_name:
-            try:
-                return getattr(plug, getter_name)()
-            except AttributeError as e:
-                raise ValueError(
-                    f"Attribute type '{type_str}' does not support '{getter_name}'"
-                ) from e
-        else:
-            if type_str == "kCompound":
-                return tuple(
-                    cls._get_plug_value(plug.child(i))
-                    for i in range(plug.numChildren())
-                )
-            if type_str == "kMessage":
-                raise AttributeError("Message attributes do not hold data.")
-            raise ValueError(f"Unsupported attribute type: {attribute.apiTypeStr}")
+        return getattr(plug, cls._getter_type)()
+
+
+class FloatAttribute(Attribute):
+    _getter_type = "asDouble"
+
+
+class MessageAttribute(Attribute):
+    _getter_type = "kMessage"
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        raise AttributeError("Message attributes do not hold data.")
+
+
+_API_TYPE_SUBCLASS_MAP = {
+    "kDoubleLinearAttribute": FloatAttribute,
+    "kMessageAttribute": MessageAttribute,
+}
