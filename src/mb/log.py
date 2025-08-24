@@ -6,8 +6,8 @@ import fnmatch
 import os
 import sys
 import threading
-from typing import Optional, List
-from mb import get_bool_env_variable, PACKAGE_NAME
+from typing import Optional, List, Callable
+from . import get_bool_env_variable, PACKAGE_NAME
 
 import logging
 import time
@@ -20,7 +20,7 @@ import datetime
 PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
 
 
-TELEMETRY_PROCESSORS = []
+TELEMETRY_PROCESSORS: List[Callable] = []
 
 
 def telemetry_runner(target_logger, method_name, event_dict):
@@ -238,7 +238,7 @@ class SingleLevelFilter(logging.Filter):
 
 
 class CustomLogger(structlog.stdlib.BoundLogger):
-    timer: ExecutionTimer()
+    timer: ExecutionTimer
     info_handler: logging.StreamHandler
 
     @staticmethod
@@ -266,7 +266,7 @@ class CustomLogger(structlog.stdlib.BoundLogger):
         raise NotImplementedError
 
     def setLevel(self, level: Union[int, str]) -> None:
-        super().setLevel(level)
+        super().setLevel(level)  # type: ignore[arg-type]
 
 
 class TelemetryHandler:
@@ -309,7 +309,7 @@ def get_logger(name) -> CustomLogger:
         return CustomLogger.at_level(logger, level)
 
     setattr(logger, "at_level", at_level)
-    return logger  # noqa
+    return logger  # type: ignore[return-value]
 
 
 def mock_telemetry_processor(logger, method_name, event_dict):

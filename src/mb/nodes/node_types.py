@@ -1,7 +1,7 @@
-from typing import Callable, Self
-from mb.log import get_logger
-import mb.nodes.cast as cast
-from mb import OpenMaya2, cmds
+from typing import Callable, Self, Dict, Any
+from ..log import get_logger
+from ..nodes import cast
+from .. import OpenMaya2, cmds
 
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
@@ -9,7 +9,7 @@ logger.setLevel("DEBUG")
 
 class Node:
     _cmds_creator: Callable[..., str]
-    _cmds_creator_args = {}
+    _cmds_creator_args: Dict[str, Any] = {}
 
     def __init__(self, node_path: str):
         self.node_path = node_path
@@ -72,6 +72,13 @@ class DagNode(Node):
         if not full_path:
             logger.warning(f"Node has been deleted. Original path: {self.node_path}")
         return full_path
+
+    def get_mfndependency_node(self) -> OpenMaya2.MFnDependencyNode:
+        """
+        Get the MFnDependencyNode of the current node.
+        :return: The MFnDependencyNode of the current node.
+        """
+        return OpenMaya2.MFnDependencyNode(self.get_depend_node())
 
 
 class Transform(DagNode):

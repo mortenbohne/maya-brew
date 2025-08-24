@@ -1,11 +1,9 @@
 ---
 # This GitHub Actions workflow is triggered by pull requests, pushes to the
-# default branch, and manual dispatch events. It sets up the necessary
-# environment, and then runs a linter on the codebase.
-# The workflow supports an option to lint the entire codebase
-# or just the changes in the pull request. It uses the Super-Linter GitHub
-# Action to perform the linting and saves the linter output and summary as
-# artifacts.
+# develop branch, and manual dispatch events. It sets up a Python environment,
+# installs project dependencies, and then runs Super-Linter on the codebase.
+# The workflow is configured to validate the entire codebase with custom
+# linting rules and saves the linter output and summary as artifacts.
 
 name: Lint Code Base
 
@@ -26,23 +24,23 @@ jobs:
     name: Lint Code Base
     runs-on: ubuntu-latest
     steps:
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Install Dependencies
         run: |
           pip install -e .[dev] --target .venv
 
       - name: Lint Code Base
-        uses: super-linter/super-linter/slim@latest
+        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true

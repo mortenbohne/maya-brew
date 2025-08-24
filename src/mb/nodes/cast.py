@@ -1,8 +1,8 @@
-from mb import OpenMaya2, cmds
-import mb.exceptions
+from .. import OpenMaya2, cmds
+from .. import exceptions
 
 
-class NodeCastingException(mb.exceptions.MayaBrewException):
+class NodeCastingException(exceptions.MayaBrewException):
     """Base class for node casting exceptions."""
 
     pass

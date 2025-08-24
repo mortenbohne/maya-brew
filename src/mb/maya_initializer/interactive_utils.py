@@ -1,5 +1,6 @@
 import maya.OpenMaya as OpenMaya1
 
+
 class SuppressScriptEditorOutput:
     """
     Suppresses output to the scriptEditor
