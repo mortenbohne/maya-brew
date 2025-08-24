@@ -1,10 +1,7 @@
 import typing
 from .. import OpenMaya2
-from ..nodes.node_types import DagNode
+from ..nodes.node_types import DagNode, Node
 from ..nodes import cast
-
-
-api_type_str_getter_map = {"kDoubleLinearAttribute": "asDouble"}
 
 
 PlugInput = typing.Union[OpenMaya2.MPlug, str]
@@ -115,9 +112,13 @@ class Attribute:
         return fn_dep.findPlug(attr_name, False)
 
     @staticmethod
-    def _get_node_from_plug(plug: OpenMaya2.MPlug) -> DagNode:
-        fn_dep = plug.node()
-        return DagNode(fn_dep.fullPathName())
+    def _get_node_from_plug(plug: OpenMaya2.MPlug) -> Node:
+        mobj = plug.node()
+        if mobj.hasFn(OpenMaya2.MFn.kDagNode):
+            return DagNode(OpenMaya2.MFnDagNode(mobj).fullPathName())
+        else:
+            name = OpenMaya2.MFnDependencyNode(mobj).name()
+            return Node(name)
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):

@@ -1,6 +1,8 @@
 from mb.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
 import maya.cmds as cmds
 import pytest
+from mb.nodes.node_types import DagNode, Node
+from mb import OpenMaya2
 
 
 def test_cast_attributes(empty_transform):
@@ -24,14 +26,14 @@ def test_attribute_get_value(empty_transform):
     assert value == 5
 
 
-def test_factory_with_mplug(translateX_plug):
-    a = Attribute(translateX_plug)
+def test_factory_with_mplug(translatex_plug):
+    a = Attribute(translatex_plug)
     assert isinstance(a, FloatAttribute)
     assert a.get() == 0
 
 
-def test_subclass_with_mplug(translateX_plug):
-    fa = FloatAttribute(translateX_plug)
+def test_subclass_with_mplug(translatex_plug):
+    fa = FloatAttribute(translatex_plug)
     assert fa.get() == 0
 
 
@@ -43,3 +45,17 @@ def test_invalid_path_missing_dot():
 def test_invalid_plug_type():
     with pytest.raises(ValueError):
         Attribute(123)  # type: ignore
+
+
+def test_get_node_from_plug_dag_and_non_dag(translatex_plug, non_dag_plug):
+    dag = Attribute._get_node_from_plug(translatex_plug)
+    assert isinstance(dag, DagNode)
+    expected_dag_path = OpenMaya2.MFnDagNode(translatex_plug.node()).fullPathName()
+    assert str(dag) == expected_dag_path
+
+    non_dag = Attribute._get_node_from_plug(non_dag_plug)
+    assert isinstance(non_dag, Node)
+    assert not isinstance(non_dag, DagNode)
+    expected_non_dag_name = OpenMaya2.MFnDependencyNode(non_dag_plug.node()).name()
+    non_dag_name = str(non_dag)
+    assert non_dag_name == expected_non_dag_name

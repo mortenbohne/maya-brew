@@ -2,6 +2,7 @@ import pytest
 import mb
 import mb.scene
 import mb.nodes.node_types
+from mb import OpenMaya2
 
 
 @pytest.fixture()
@@ -34,7 +35,19 @@ def new_scene():
 
 
 @pytest.fixture()
-def translateX_plug(empty_transform):
+def translatex_plug(empty_transform):
     """Provide the MPlug for translateX on the empty_transform."""
     fn = empty_transform.get_mfndependency_node()
     return fn.findPlug("translateX", False)
+
+
+@pytest.fixture()
+def non_dag_plug():
+    """Provide the MPlug for a non-DAG dependency node (multiplyDivide.input1X)."""
+    name = "test_multiplyDivide"
+    mb.cmds.createNode("multiplyDivide", name=name)
+    sel = OpenMaya2.MSelectionList()
+    sel.add(name)
+    mobj = sel.getDependNode(0)
+    fn = OpenMaya2.MFnDependencyNode(mobj)
+    return fn.findPlug("input1X", False)
