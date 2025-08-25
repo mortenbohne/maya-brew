@@ -59,3 +59,15 @@ def test_get_node_from_plug_dag_and_non_dag(translatex_plug, non_dag_plug):
     expected_non_dag_name = OpenMaya2.MFnDependencyNode(non_dag_plug.node()).name()
     non_dag_name = str(non_dag)
     assert non_dag_name == expected_non_dag_name
+
+
+def test_attribute_set_instance(empty_transform):
+    tx = Attribute(f"{empty_transform.node_path}.translateX")
+    tx.set(3.14)
+    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == 3.14
+
+
+def test_message_attribute_set_value_error(empty_transform):
+    message_attr = Attribute(f"{empty_transform}.message")
+    with pytest.raises(AttributeError):
+        message_attr.set(1)
