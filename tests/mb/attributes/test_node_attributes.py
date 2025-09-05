@@ -1,8 +1,11 @@
-from mb.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
 import maya.cmds as cmds
 import pytest
-from mb.nodes.node_types import DagNode, Node
 from mb import OpenMaya2
+from mb.log import get_logger
+from mb.nodes.node_types import DagNode, Node
+from mb.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
+
+logger = get_logger(__name__)
 
 
 def test_cast_attributes(empty_transform):
@@ -59,3 +62,27 @@ def test_get_node_from_plug_dag_and_non_dag(translatex_plug, non_dag_plug):
     expected_non_dag_name = OpenMaya2.MFnDependencyNode(non_dag_plug.node()).name()
     non_dag_name = str(non_dag)
     assert non_dag_name == expected_non_dag_name
+
+
+def test_attribute_set_instance(empty_transform):
+    tx = Attribute(f"{empty_transform.node_path}.translateX")
+    tx.set(3.14)
+    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == 3.14
+
+
+def test_attribute_set_redo(empty_transform):
+    tx = Attribute(f"{empty_transform.node_path}.translateX")
+    initial = cmds.getAttr(f"{empty_transform.node_path}.translateX")
+    tx.set(8.88)
+    with logger.silence():
+        cmds.undo()
+    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == initial
+    with logger.silence():
+        cmds.redo()
+    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == 8.88
+
+
+def test_message_attribute_set_value_error(empty_transform):
+    message_attr = Attribute(f"{empty_transform}.message")
+    with pytest.raises(AttributeError):
+        message_attr.set(1)
