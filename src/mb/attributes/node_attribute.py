@@ -1,5 +1,6 @@
 import typing
 from .. import OpenMaya2
+import maya.cmds
 from ..nodes.node_types import DagNode, Node
 from ..nodes import cast
 
@@ -10,7 +11,6 @@ A = typing.TypeVar("A", bound="Attribute")
 
 class Attribute:
     _getter_type: str
-    _setter_type: str
 
     def __new__(cls: type[A], plug_or_path: PlugInput) -> A:
         if cls is not Attribute:
@@ -97,10 +97,8 @@ class Attribute:
         return self._get_plug_value(self.plug)
 
     def set(self, value) -> None:
-        """
-        Set the value of this attribute using the subclass-defined setter.
-        """
-        self._set_plug_value(self.plug, value)
+        attr_name = self.plug.name()
+        maya.cmds.setAttr(attr_name, value)
 
     def node(self):
         return self._get_node_from_plug(self.plug)
@@ -112,11 +110,6 @@ class Attribute:
     def _get_value(cls, node: DagNode, attr_name: str):
         plug = cls._get_plug_from_node(node, attr_name)
         return cls._get_plug_value(plug)
-
-    @classmethod
-    def _set_value(cls, node: DagNode, attr_name: str, value) -> None:
-        plug = cls._get_plug_from_node(node, attr_name)
-        cls._set_plug_value(plug, value)
 
     @staticmethod
     def _get_plug_from_node(node: DagNode, attr_name: str) -> OpenMaya2.MPlug:
@@ -136,14 +129,9 @@ class Attribute:
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         return getattr(plug, cls._getter_type)()
 
-    @classmethod
-    def _set_plug_value(cls, plug: OpenMaya2.MPlug, value) -> None:
-        return getattr(plug, cls._setter_type)(value)
-
 
 class FloatAttribute(Attribute):
     _getter_type = "asDouble"
-    _setter_type = "setDouble"
 
 
 class MessageAttribute(Attribute):
@@ -154,8 +142,8 @@ class MessageAttribute(Attribute):
         raise AttributeError("Message attributes do not hold data.")
 
     @classmethod
-    def _set_plug_value(cls, plug: OpenMaya2.MPlug, value) -> None:
-        raise AttributeError("Message attributes are not settable. ")
+    def set(cls, value) -> None:
+        raise AttributeError("Message attributes are not settable.")
 
 
 _API_TYPE_SUBCLASS_MAP = {
