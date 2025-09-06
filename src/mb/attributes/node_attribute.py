@@ -1,5 +1,6 @@
 import typing
 from .. import OpenMaya2
+import maya.cmds
 from ..nodes.node_types import DagNode, Node
 from ..nodes import cast
 
@@ -95,6 +96,10 @@ class Attribute:
     def get(self):
         return self._get_plug_value(self.plug)
 
+    def set(self, value) -> None:
+        attr_name = self.plug.name()
+        maya.cmds.setAttr(attr_name, value)
+
     def node(self):
         return self._get_node_from_plug(self.plug)
 
@@ -135,6 +140,10 @@ class MessageAttribute(Attribute):
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         raise AttributeError("Message attributes do not hold data.")
+
+    @classmethod
+    def set(cls, value) -> None:
+        raise AttributeError("Message attributes are not settable.")
 
 
 _API_TYPE_SUBCLASS_MAP = {
