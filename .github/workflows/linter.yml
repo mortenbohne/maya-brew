@@ -15,7 +15,7 @@ on:
       - develop
 
 permissions:
-  contents: write   # allow pushing auto-fix commits
+  contents: write # allow pushing auto-fix commits
   packages: read
   statuses: write
 
@@ -30,7 +30,7 @@ jobs:
           python-version: "3.11"
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -47,9 +47,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: develop
-          APPLY_FIXES: true           # enable auto-fixes
-          APPLY_FIXES_EVENT: push     # only attempt fixes on push (not PR)
-          APPLY_FIXES_MODE: commit    # commit directly to the branch
+          APPLY_FIXES: true
+          APPLY_FIXES_EVENT: push
+          APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_ISORT: false
           LINTER_RULES_PATH: /
@@ -61,5 +61,3 @@ jobs:
           IGNORE_GITIGNORED_FILES: true
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_JSCPD: false
-
-
