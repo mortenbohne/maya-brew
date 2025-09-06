@@ -1,7 +1,7 @@
-import pytest
 import mb
-import mb.scene
 import mb.nodes.node_types
+import mb.scene
+import pytest
 from mb import OpenMaya2
 
 

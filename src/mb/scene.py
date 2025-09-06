@@ -1,4 +1,5 @@
 import mb
+
 from .exceptions import MayaBrewException
 
 

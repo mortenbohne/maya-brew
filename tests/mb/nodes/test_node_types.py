@@ -1,6 +1,7 @@
-import mb.nodes.node_types
-import mb.nodes.cast
 import logging
+
+import mb.nodes.cast
+import mb.nodes.node_types
 
 
 def test_dag_node_string(test_cube, caplog):

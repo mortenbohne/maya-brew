@@ -174,3 +174,6 @@ cython_debug/
 .pypirc
 
 .idea/*
+
+# Super-Linter generated GitHub config snapshot (do not commit)
+github_conf/

@@ -1,6 +1,6 @@
-import pytest
 import mb
 import mb.nodes.cast
+import pytest
 
 
 def test_string_to_dag_path(test_cube, test_namespace, test_cube_short_name):
