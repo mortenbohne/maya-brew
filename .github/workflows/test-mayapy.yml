@@ -15,7 +15,7 @@ jobs:
   mayapy-tests:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/maya-brew:latest
+      image: ghcr.io/${{ github.repository_owner }}/maya-brew:sha-9daa1a4
       options: --user root
     steps:
       - name: Checkout
@@ -34,3 +34,4 @@ jobs:
       - name: Summary
         if: success()
         run: echo "mayapy pytest run succeeded." >> "$GITHUB_STEP_SUMMARY"
+
