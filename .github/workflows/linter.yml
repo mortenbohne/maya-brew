@@ -15,9 +15,7 @@ on:
       - develop
 
 permissions:
-  contents: write # allow pushing auto-fix commits
-  packages: read
-  statuses: write
+  contents: read
 
 jobs:
   build:
@@ -28,21 +26,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
       - name: Checkout Code
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Configure git for auto-fix commits
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Install Dependencies
         run: |
           pip install -e .[dev] --target .venv
-
       - name: Lint Code Base
+        permissions:
+          contents: write
+          statuses: write
         uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,7 +46,6 @@ jobs:
           APPLY_FIXES_EVENT: push
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_PYTHON_ISORT: false
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
           PYTHONPATH: "${{ github.workspace }}/.venv"
@@ -61,3 +55,25 @@ jobs:
           IGNORE_GITIGNORED_FILES: true
           VALIDATE_GIT_COMMITLINT: false
           VALIDATE_JSCPD: false
+          FIX_ENV: true
+          FIX_GITHUB_ACTIONS_ZIZMOR: true
+          FIX_JSON_PRETTIER: true
+          FIX_JSON: true
+          FIX_MARKDOWN_PRETTIER: true
+          FIX_MARKDOWN: true
+          FIX_NATURAL_LANGUAGE: true
+          FIX_POWERSHELL: true
+          FIX_PYTHON_BLACK: true
+          FIX_PYTHON_ISORT: true
+          FIX_PYTHON_RUFF: true
+          FIX_YAML_PRETTIER: true
+      - name: Commit and push linting fixes
+        if: >
+          github.event_name == 'pull_request' &&
+          github.ref_name != github.event.repository.default_branch
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "chore: fix linting issues"
+          commit_user_name: super-linter
+          commit_user_email: super-linter@super-linter.dev
