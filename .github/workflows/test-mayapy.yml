@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository_owner }}/maya-brew:latest
+      options: --user root
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
@@ -27,7 +28,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
 
       - name: Install requirements
-        run: mayapy -m pip install --pre .[dev]
+        run: mayapy -m pip install .[dev]
 
       - name: Run pytest
         shell: bash
