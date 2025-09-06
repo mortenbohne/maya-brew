@@ -4,6 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     MAYA_LOCATION=/usr/autodesk/maya2026 \
     PATH=/usr/autodesk/maya2026/bin:$PATH
 
+# hadolint ignore=DL3041
 RUN set -eux; \
     dnf install -y epel-release && \
     dnf install -y --allowerasing \
@@ -26,9 +27,17 @@ RUN set -eux; \
     tar -xf /maya.tgz -C /maya_install && \
     rpm --force -ivh /maya_install/Packages/Maya2026_64-*.x86_64.rpm && \
     rm -rf /maya.tgz /maya_install && \
-    rm -rf /usr/autodesk/maya2026/{Examples,brushImages,icons,include,presets,qml,synColor,translations}
+    rm -rf /usr/autodesk/maya2026/Examples \
+           /usr/autodesk/maya2026/brushImages \
+           /usr/autodesk/maya2026/icons \
+           /usr/autodesk/maya2026/include \
+           /usr/autodesk/maya2026/presets \
+           /usr/autodesk/maya2026/qml \
+           /usr/autodesk/maya2026/synColor \
+           /usr/autodesk/maya2026/translations
 
 # Add healthcheck script and non-root user
+# hadolint ignore=SC2016
 RUN set -eux; \
     printf '#!/usr/bin/env bash\nset -e\n[ -x "$MAYA_LOCATION/bin/maya" ] || exit 1\nexit 0\n' >/usr/local/bin/healthcheck && \
     chmod +x /usr/local/bin/healthcheck && \
