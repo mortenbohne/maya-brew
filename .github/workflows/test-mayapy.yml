@@ -24,9 +24,6 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
 
-      - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
-
       - name: Install requirements
         run: mayapy -m pip install .[dev]
 
