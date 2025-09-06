@@ -2,15 +2,6 @@ name: Build & Publish Docker (GHCR)
 
 on:
   workflow_dispatch:
-    inputs:
-      extra_tag:
-        description: 'Optional additional tag (e.g. v1.2.3)'
-        required: false
-        default: ''
-      push:
-        description: 'Push image to GHCR (true/false)'
-        required: true
-        default: 'true'
 
 permissions:
   contents: read
@@ -40,22 +31,20 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/maya-brew
           tags: |
             type=raw,value=latest
-            type=raw,value=${{ github.event.inputs.extra_tag }},enable=${{ github.event.inputs.extra_tag != '' }}
             type=sha
 
-      - name: Build & (optionally) push
+      - name: Build & Push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile
-          push: ${{ github.event.inputs.push == 'true' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Summary
-        if: ${{ github.event.inputs.push == 'true' }}
         run: |
           echo "Published tags:"
           echo "${{ steps.meta.outputs.tags }}" | tr ' ' '\n'
