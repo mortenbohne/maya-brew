@@ -1,6 +1,7 @@
 import importlib
-from pathlib import Path
 import sys
+from pathlib import Path
+
 from .log import get_logger
 
 logger = get_logger(__name__)

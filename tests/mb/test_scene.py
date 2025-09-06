@@ -1,6 +1,6 @@
-import pytest
 import mb
 import mb.scene
+import pytest
 
 
 def test_new_scene():

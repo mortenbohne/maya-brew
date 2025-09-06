@@ -1,5 +1,4 @@
-from .. import OpenMaya2, cmds
-from .. import exceptions
+from .. import OpenMaya2, cmds, exceptions
 
 
 class NodeCastingException(exceptions.MayaBrewException):

@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
 import maya.cmds as cmds  # noqa: F401
 
@@ -19,8 +20,8 @@ MAYA_BREW_AUTOINIT = get_bool_env_variable(f"{PACKAGE_NAME}_AUTOINIT", True)
 def init():
     old_handlers = logging.root.handlers[:]
     old_log_level = logging.getLogger().level
-    from mb.maya_initializer.shared import is_interactive_maya
     import mb.log
+    from mb.maya_initializer.shared import is_interactive_maya
 
     interactive = is_interactive_maya()
     if interactive:

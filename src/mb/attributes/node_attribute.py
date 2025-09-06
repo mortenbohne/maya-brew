@@ -1,9 +1,10 @@
 import typing
-from .. import OpenMaya2
-import maya.cmds
-from ..nodes.node_types import DagNode, Node
-from ..nodes import cast
 
+import maya.cmds
+
+from .. import OpenMaya2
+from ..nodes import cast
+from ..nodes.node_types import DagNode, Node
 
 PlugInput = typing.Union[OpenMaya2.MPlug, str]
 A = typing.TypeVar("A", bound="Attribute")

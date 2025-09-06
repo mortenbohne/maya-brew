@@ -2,20 +2,18 @@
 Utilities for setting up logging in modules
 """
 
+import datetime
 import fnmatch
+import logging
 import os
 import sys
 import threading
-from typing import Optional, List, Callable
-from . import get_bool_env_variable, PACKAGE_NAME
-
-import logging
 import time
-from typing import Union
+from typing import Callable, List, Optional, Union
 
 import structlog
 
-import datetime
+from . import PACKAGE_NAME, get_bool_env_variable
 
 PROPAGATE = get_bool_env_variable(f"{PACKAGE_NAME}_LOG_PROPAGATE", False)
 
