@@ -23,15 +23,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-
       - name: Install requirements
         run: mayapy -m pip install .[dev]
-
       - name: Run pytest
         shell: bash
         run: mayapy -m pytest tests/
-
       - name: Summary
         if: success()
         run: echo "mayapy pytest run succeeded." >> "$GITHUB_STEP_SUMMARY"
-
