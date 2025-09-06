@@ -27,3 +27,14 @@ RUN set -eux; \
     rpm --force -ivh /maya_install/Packages/Maya2026_64-*.x86_64.rpm && \
     rm -rf /maya.tgz /maya_install && \
     rm -rf /usr/autodesk/maya2026/{Examples,brushImages,icons,include,presets,qml,synColor,translations}
+
+# Add healthcheck script and non-root user
+RUN set -eux; \
+    printf '#!/usr/bin/env bash\nset -e\n[ -x "$MAYA_LOCATION/bin/maya" ] || exit 1\nexit 0\n' >/usr/local/bin/healthcheck && \
+    chmod +x /usr/local/bin/healthcheck && \
+    groupadd -r maya && useradd -r -g maya -d /home/maya -m maya
+
+HEALTHCHECK --interval=30m --timeout=30s --start-period=30s --retries=3 CMD ["/usr/local/bin/healthcheck"]
+
+WORKDIR /home/maya
+USER maya
