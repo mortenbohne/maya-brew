@@ -1,8 +1,6 @@
 import typing
 
-import maya.cmds
-
-from .. import OpenMaya2
+from .. import OpenMaya2, cmds
 from ..nodes import cast
 from ..nodes.node_types import DagNode, Node
 
@@ -99,7 +97,7 @@ class Attribute:
 
     def set(self, value) -> None:
         attr_name = self.plug.name()
-        maya.cmds.setAttr(attr_name, value)
+        cmds.setAttr(attr_name, value)
 
     def node(self):
         return self._get_node_from_plug(self.plug)
