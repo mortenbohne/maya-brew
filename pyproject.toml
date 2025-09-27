@@ -2,22 +2,45 @@
 name = "maya-brew"
 version = "0.1.0"
 description = "Safe interaction with python in maya"
-authors = [
-    {name = "Morten Bøhne", email = "github@mortenbohne.dk"}
-]
-license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.7"
+license = "MIT"
+keywords = ["maya", "autodesk", "3d", "pipeline"]
+requires-python = ">=3.11"
+authors = [
+    { name = "Morten Bøhne", email = "github@mortenbohne.dk" }
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+# PEP 621 dependency list (runtime only)
 dependencies = [
+    "structlog",
+    "colorama",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "maya-stubs",
-    "structlog",
-    "colorama"
+[project.urls]
+Homepage = "https://github.com/mortenbohne/maya-brew"
+Repository = "https://github.com/mortenbohne/maya-brew"
+Documentation = "https://github.com/mortenbohne/maya-brew#readme"
+Issues = "https://github.com/mortenbohne/maya-brew/issues"
+Changelog = "https://github.com/mortenbohne/maya-brew/releases"
+
+# Poetry-specific configuration that is not part of PEP 621 remains under [tool.poetry]
+[tool.poetry]
+packages = [
+    { include = "mb", from = "src" }
 ]
+
+# Dev / tool-specific dependencies stay in Poetry groups
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+maya-stubs = "*"
+mypy = "*"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -29,7 +52,4 @@ disable = ["too-few-public-methods", "C", "R", "W", "I"]
 
 [tool.mypy]
 mypy_path = ["src"]
-
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+# disallow_untyped_defs = true  # Uncomment when ready to enforce everywhere
