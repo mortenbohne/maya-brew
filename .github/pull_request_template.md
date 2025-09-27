@@ -8,6 +8,8 @@ Briefly describe your changes.
 
 Link to issue (if any):
 
+mortenbohne/maya-brew#XX
+
 ## Testing
 
 How did you test your changes? (Leave blank if not needed)
