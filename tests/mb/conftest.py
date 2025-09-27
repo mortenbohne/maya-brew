@@ -22,7 +22,7 @@ def test_cube(test_namespace, test_cube_short_name):
 
 
 @pytest.fixture()
-def empty_transform():
+def brew_transform():
     """
     Fixture to return the node object of the test cube.
     """
@@ -35,9 +35,9 @@ def new_scene():
 
 
 @pytest.fixture()
-def translatex_plug(empty_transform):
+def translatex_plug(brew_transform):
     """Provide the MPlug for translateX on the empty_transform."""
-    fn = empty_transform.get_mfndependency_node()
+    fn = brew_transform.get_mfndependency_node()
     return fn.findPlug("translateX", False)
 
 
