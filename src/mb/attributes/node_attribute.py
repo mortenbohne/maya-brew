@@ -48,12 +48,10 @@ class Attribute:
         return typing.cast(A, instance)
 
     @typing.overload
-    def __init__(self, plug_or_path: str):
-        ...
+    def __init__(self, plug_or_path: str): ...
 
     @typing.overload
-    def __init__(self, plug_or_path: OpenMaya2.MPlug):
-        ...
+    def __init__(self, plug_or_path: OpenMaya2.MPlug): ...
 
     def __init__(self, plug_or_path: PlugInput):
         # _pre_init_plug is injected by Attribute.__new__ ONLY when the user called

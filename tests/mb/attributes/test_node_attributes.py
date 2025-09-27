@@ -1,5 +1,4 @@
 import pytest
-
 from mb import OpenMaya2, cmds
 from mb.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
 from mb.log import get_logger
