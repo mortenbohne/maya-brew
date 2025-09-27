@@ -27,6 +27,9 @@ pythonpath = ["src"]
 ignored-modules = ["maya"]
 disable = ["too-few-public-methods", "C", "R", "W", "I"]
 
+[tool.mypy]
+mypy_path = ["src"]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"

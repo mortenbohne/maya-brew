@@ -1,6 +1,6 @@
-import maya.cmds as cmds
 import pytest
-from mb import OpenMaya2
+
+from mb import OpenMaya2, cmds
 from mb.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
 from mb.log import get_logger
 from mb.nodes.node_types import DagNode, Node
@@ -8,24 +8,24 @@ from mb.nodes.node_types import DagNode, Node
 logger = get_logger(__name__)
 
 
-def test_cast_attributes(empty_transform):
-    tx = Attribute(f"{empty_transform.node_path}.translateX")
+def test_cast_attributes(brew_transform):
+    tx = Attribute(f"{brew_transform.node_path}.translateX")
     assert isinstance(tx, FloatAttribute)
-    message = Attribute(f"{empty_transform}.message")
+    message = Attribute(f"{brew_transform}.message")
     assert isinstance(message, MessageAttribute)
 
 
-def test_message_attribute_get_value_error(empty_transform):
+def test_message_attribute_get_value_error(brew_transform):
     with pytest.raises(AttributeError):
-        Attribute._get_value(empty_transform, "message")
+        Attribute._get_value(brew_transform, "message")
 
 
-def test_attribute_get_value(empty_transform):
-    tx = Attribute(f"{empty_transform.node_path}.translateX")
+def test_attribute_get_value(brew_transform):
+    tx = Attribute(f"{brew_transform.node_path}.translateX")
     value = tx.get()
     assert value == 0
-    cmds.setAttr(f"{empty_transform.node_path}.translateX", 5)
-    value = FloatAttribute._get_value(empty_transform, "translateX")
+    cmds.setAttr(f"{brew_transform.node_path}.translateX", 5)
+    value = FloatAttribute._get_value(brew_transform, "translateX")
     assert value == 5
 
 
@@ -64,25 +64,62 @@ def test_get_node_from_plug_dag_and_non_dag(translatex_plug, non_dag_plug):
     assert non_dag_name == expected_non_dag_name
 
 
-def test_attribute_set_instance(empty_transform):
-    tx = Attribute(f"{empty_transform.node_path}.translateX")
+def test_attribute_set_instance(brew_transform):
+    tx = Attribute(f"{brew_transform.node_path}.translateX")
     tx.set(3.14)
-    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == 3.14
+    assert cmds.getAttr(f"{brew_transform.node_path}.translateX") == 3.14
 
 
-def test_attribute_set_redo(empty_transform):
-    tx = Attribute(f"{empty_transform.node_path}.translateX")
-    initial = cmds.getAttr(f"{empty_transform.node_path}.translateX")
+def test_attribute_set_redo(brew_transform):
+    tx = Attribute(f"{brew_transform.node_path}.translateX")
+    initial = cmds.getAttr(f"{brew_transform.node_path}.translateX")
     tx.set(8.88)
     with logger.silence():
         cmds.undo()
-    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == initial
+    assert cmds.getAttr(f"{brew_transform.node_path}.translateX") == initial
     with logger.silence():
         cmds.redo()
-    assert cmds.getAttr(f"{empty_transform.node_path}.translateX") == 8.88
+    assert cmds.getAttr(f"{brew_transform.node_path}.translateX") == 8.88
 
 
-def test_message_attribute_set_value_error(empty_transform):
-    message_attr = Attribute(f"{empty_transform}.message")
+def test_message_attribute_set_value_error(brew_transform):
+    message_attr = Attribute(f"{brew_transform}.message")
     with pytest.raises(AttributeError):
         message_attr.set(1)
+
+
+def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
+    tx_attr = Attribute(f"{brew_transform.node_path}.translateX")
+    ty_attr = Attribute(f"{brew_transform.node_path}.translateY")
+    cube_ty = Attribute(f"{test_cube}.translateY")
+
+    def get_ty_connections():
+        return cmds.listConnections(cube_ty.plug.name(), source=True, plugs=True)
+
+    tx_attr.connect(cube_ty)
+    connections = get_ty_connections()
+    expected_connection = tx_attr.plug.name()
+    assert connections == [expected_connection]
+
+    cmds.undo()
+    assert not get_ty_connections()
+    cmds.redo()
+    assert get_ty_connections() == [expected_connection]
+
+    ty_attr.connect(cube_ty, force=True)
+    connections = get_ty_connections()
+    expected_connection = ty_attr.plug.name()
+    assert connections == [expected_connection]
+
+    cmds.undo()
+    assert get_ty_connections() == [tx_attr.plug.name()]
+    cmds.redo()
+    assert get_ty_connections() == [expected_connection]
+
+    ty_attr.disconnect(cube_ty)
+    assert not get_ty_connections()
+
+    cmds.undo()
+    assert get_ty_connections() == [ty_attr.plug.name()]
+    cmds.redo()
+    assert not get_ty_connections()

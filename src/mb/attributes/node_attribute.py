@@ -1,8 +1,6 @@
 import typing
 
-import maya.cmds
-
-from .. import OpenMaya2
+from .. import OpenMaya2, cmds
 from ..nodes import cast
 from ..nodes.node_types import DagNode, Node
 
@@ -50,10 +48,12 @@ class Attribute:
         return typing.cast(A, instance)
 
     @typing.overload
-    def __init__(self, plug_or_path: str) -> None: ...
+    def __init__(self, plug_or_path: str):
+        ...
 
     @typing.overload
-    def __init__(self, plug_or_path: OpenMaya2.MPlug) -> None: ...
+    def __init__(self, plug_or_path: OpenMaya2.MPlug):
+        ...
 
     def __init__(self, plug_or_path: PlugInput):
         # _pre_init_plug is injected by Attribute.__new__ ONLY when the user called
@@ -97,15 +97,40 @@ class Attribute:
     def get(self):
         return self._get_plug_value(self.plug)
 
-    def set(self, value) -> None:
+    def set(self, value):
         attr_name = self.plug.name()
-        maya.cmds.setAttr(attr_name, value)
+        cmds.setAttr(attr_name, value)
 
     def node(self):
         return self._get_node_from_plug(self.plug)
 
     def name(self):
         raise NotImplementedError
+
+    def connect(self, dest: "Attribute", force: bool = False, next_available=False):
+        """
+        Connect this attribute to another attribute.
+        :param dest: The destination attribute to connect to.
+        :param force: Whether to force the connection if the destination is already connected.
+        :param next_available: Whether to connect to the next available index if the destination is an array attribute.
+        """
+        cmds.connectAttr(
+            self.plug.name(),
+            dest.plug.name(),
+            force=force,
+            nextAvailable=next_available,
+        )
+
+    def disconnect(self, dest: "Attribute", next_available=False):
+        """
+        Disconnect this attribute from another attribute.
+        :param dest: The destination attribute to disconnect from.
+        :param next_available: Whether to disconnect from the next available index if the destination is an
+        array attribute.
+        """
+        cmds.disconnectAttr(
+            self.plug.name(), dest.plug.name(), nextAvailable=next_available
+        )
 
     @classmethod
     def _get_value(cls, node: DagNode, attr_name: str):
@@ -143,7 +168,7 @@ class MessageAttribute(Attribute):
         raise AttributeError("Message attributes do not hold data.")
 
     @classmethod
-    def set(cls, value) -> None:
+    def set(cls, value):
         raise AttributeError("Message attributes are not settable.")
 
 
