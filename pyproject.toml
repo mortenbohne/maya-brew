@@ -1,6 +1,6 @@
 [project]
 name = "maya-brew"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Safe interaction with python in maya"
 readme = "README.md"
 license = "MIT"
@@ -17,7 +17,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-# PEP 621 dependency list (runtime only)
 dependencies = [
     "structlog",
     "colorama",
@@ -30,13 +29,14 @@ Documentation = "https://github.com/mortenbohne/maya-brew#readme"
 Issues = "https://github.com/mortenbohne/maya-brew/issues"
 Changelog = "https://github.com/mortenbohne/maya-brew/releases"
 
-# Poetry-specific configuration that is not part of PEP 621 remains under [tool.poetry]
 [tool.poetry]
 packages = [
     { include = "mb", from = "src" }
 ]
 
-# Dev / tool-specific dependencies stay in Poetry groups
+[tool.poetry.repositories]
+testpypi = { url = "https://test.pypi.org/legacy/" }
+
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
 maya-stubs = "*"
@@ -52,4 +52,16 @@ disable = ["too-few-public-methods", "C", "R", "W", "I"]
 
 [tool.mypy]
 mypy_path = ["src"]
-# disallow_untyped_defs = true  # Uncomment when ready to enforce everywhere
+disallow_untyped_defs = true
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+format = "{tag}"
+tagged-metadata = false
+strict = true
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
