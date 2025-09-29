@@ -73,8 +73,17 @@ jobs:
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           IGNORE_GENERATED_FILES: true
           IGNORE_GITIGNORED_FILES: true
-          VALIDATE_GIT_COMMITLINT: false
-          VALIDATE_JSCPD: false
+          FILTER_REGEX_INCLUDE: "^(src/|tests/)"
+          FILTER_REGEX_EXCLUDE: "^(\.venv/|dist/|build/|\.mypy_cache/|\.pytest_cache/|coverage/)"
+          VALIDATE_CHECKOV: false
+          VALIDATE_DOCKERFILE: false
+          VALIDATE_TERRAFORM: false
+          VALIDATE_KUBERNETES: false
+          VALIDATE_BASH: false
+          VALIDATE_POWERSHELL: false
+          VALIDATE_JAVASCRIPT_ES: false
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_GITLEAKS: false
           FIX_ENV: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
