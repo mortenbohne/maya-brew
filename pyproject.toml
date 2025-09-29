@@ -1,6 +1,6 @@
 [project]
 name = "maya-brew"
-dynamic = ["version"]
+version = "0.0.0"
 description = "Safe interaction with python in maya"
 readme = "README.md"
 license = "MIT"
@@ -33,9 +33,6 @@ Changelog = "https://github.com/mortenbohne/maya-brew/releases"
 packages = [
     { include = "mb", from = "src" }
 ]
-
-[tool.poetry.repositories]
-testpypi = { url = "https://test.pypi.org/legacy/" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
