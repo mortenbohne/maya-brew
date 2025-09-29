@@ -19,7 +19,7 @@ jobs:
       options: --user root
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
           fetch-depth: 1
@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install Poetry
-        uses: snok/install-poetry@v1
+        uses: snok/install-poetry@56b0cd341142dac1891eb3e08ba47a22799bbd05
         with:
           version: 2.2.1
           virtualenvs-create: true

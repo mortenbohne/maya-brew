@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -23,7 +23,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install Poetry
-        uses: snok/install-poetry@v1
+        uses: snok/install-poetry@56b0cd341142dac1891eb3e08ba47a22799bbd05
         with:
           version: 2.2.1
           virtualenvs-create: true
@@ -55,8 +55,8 @@ jobs:
           name: dist-artifacts
           path: dist/*
 
-      - name: Publish to TestPyPI (OIDC Trusted Publisher)
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@ab69e431e9c9f48a3310be0a56527c679f56e04d
         with:
           repository-url: https://test.pypi.org/legacy/
           packages-dir: dist
