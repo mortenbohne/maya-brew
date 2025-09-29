@@ -53,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           mkdir -p wheelhouse
           pip download -r requirements-dev.txt -d wheelhouse
-          echo "Wheelhouse contents (truncated):" && ls -1 wheelhouse | head -n 40 || true
+          echo "Wheelhouse contents (truncated):" && find wheelhouse -mindepth 1 -maxdepth 1 -type f | sed 's#.*/##' | head -n 40 || true
       - name: Install deps into mayapy from wheelhouse (offline)
         run: |
           mayapy -m pip install --upgrade pip
