@@ -30,17 +30,14 @@ jobs:
         with:
           path: |
             ~/.cache/pip
-            uv.lock
-            requirements.lock
-          key: mayapy-${{ runner.os }}-${{ hashFiles('uv.lock', 'requirements.lock') }}
-      - name: Sync dependencies (mayapy)
+            ~/.cache/uv
+          key: mayapy-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            mayapy-${{ runner.os }}-
+      - name: Install project (runtime + dev extras) with uv
         run: |
-          mayapy -m uv pip sync requirements.lock
-      - name: Install project with dev extras
-        run: |
-          mayapy -m pip install ".[dev]"
+          mayapy -m uv pip install ".[dev]"
       - name: Run pytest
-        shell: bash
         run: mayapy -m pytest tests/ -q
       - name: Summary
         if: success()
