@@ -29,16 +29,6 @@ Documentation = "https://github.com/mortenbohne/maya-brew#readme"
 Issues = "https://github.com/mortenbohne/maya-brew/issues"
 Changelog = "https://github.com/mortenbohne/maya-brew/releases"
 
-[tool.poetry]
-packages = [
-    { include = "mb", from = "src" }
-]
-
-[tool.poetry.group.dev.dependencies]
-pytest = "*"
-maya-stubs = "*"
-mypy = "*"
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
@@ -51,14 +41,6 @@ disable = ["too-few-public-methods", "C", "R", "W", "I"]
 mypy_path = ["src"]
 disallow_untyped_defs = true
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
-format = "{tag}"
-tagged-metadata = false
-strict = true
-
 [build-system]
-requires = ["poetry-core>=1.9.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build"]
+build-backend = "uv_build"

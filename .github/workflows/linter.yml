@@ -32,23 +32,20 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Install Poetry
-        uses: snok/install-poetry@56b0cd341142dac1891eb3e08ba47a22799bbd05
-        with:
-          version: 2.2.1
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      - name: Cache virtualenv
-        id: cache-venv
+      - name: Cache Python dependencies
         uses: actions/cache@v4
         with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-      - name: Install dependencies (dev + project)
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          poetry install --with dev --no-interaction
+          path: |
+            .venv
+            requirements.lock
+            uv.lock
+          key: ${{ runner.os }}-uv-${{ hashFiles('requirements.lock', 'uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+      - name: Install uv
+        run: pip install uv
+      - name: Sync dependencies
+        run: uv pip install --system --no-deps
       - name: Prepare credentials for auto-fix (push only)
         if: github.event_name == 'push'
         env:

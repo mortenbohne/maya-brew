@@ -23,37 +23,21 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-      - name: Install Poetry into mayapy
-        run: |
-          set -eux
-          # pip already available in mayapy; just upgrade tooling and install Poetry
-          mayapy -m pip install --upgrade pip setuptools wheel
-          mayapy -m pip install "poetry==1.8.3"
-          mayapy -m poetry --version
-      - name: Cache wheelhouse
-        id: cache-deps
+      - name: Install uv
+        run: pip install uv
+      - name: Cache Python dependencies
         uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
-            wheelhouse
-          key: mayapy-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-      - name: Export pinned requirements (including dev)
+            uv.lock
+            requirements.lock
+          key: mayapy-${{ runner.os }}-${{ hashFiles('uv.lock', 'requirements.lock') }}
+      - name: Sync dependencies (mayapy)
         run: |
           set -eux
-          mayapy -m poetry export -f requirements.txt --with dev --without-hashes -o requirements-dev.txt
-          echo "Exported requirements (first lines):" && head -n 20 requirements-dev.txt || true
-      - name: Download dependency wheels (mayapy Python)
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          set -eux
-          mkdir -p wheelhouse
-          mayapy -m pip download -r requirements-dev.txt -d wheelhouse
-          echo "Wheelhouse contents (truncated):" && find wheelhouse -mindepth 1 -maxdepth 1 -type f | sed 's#.*/##' | head -n 40 || true
-      - name: Install deps into mayapy from wheelhouse (offline)
-        run: |
-          set -eux
-          mayapy -m pip install --no-index --find-links wheelhouse -r requirements-dev.txt
+          mayapy -m pip install --upgrade pip setuptools wheel
+          mayapy -m uv pip install --system --no-deps
       - name: Install project (source)
         run: |
           set -eux
@@ -63,4 +47,4 @@ jobs:
         run: mayapy -m pytest tests/ -q
       - name: Summary
         if: success()
-        run: echo "mayapy pytest run succeeded (offline wheelhouse install)." >> "$GITHUB_STEP_SUMMARY"
+        run: echo "mayapy pytest run succeeded." >> "$GITHUB_STEP_SUMMARY"
