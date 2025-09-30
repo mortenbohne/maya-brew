@@ -35,12 +35,10 @@ jobs:
           key: mayapy-${{ runner.os }}-${{ hashFiles('uv.lock', 'requirements.lock') }}
       - name: Sync dependencies (mayapy)
         run: |
-          set -eux
           mayapy -m uv pip sync requirements.lock
-      - name: Install project (source)
+      - name: Install project with dev extras
         run: |
-          set -eux
-          mayapy -m pip install .
+          mayapy -m pip install ".[dev]"
       - name: Run pytest
         shell: bash
         run: mayapy -m pytest tests/ -q
