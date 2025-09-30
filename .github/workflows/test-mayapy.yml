@@ -36,8 +36,7 @@ jobs:
       - name: Sync dependencies (mayapy)
         run: |
           set -eux
-          mayapy -m pip install --upgrade pip setuptools wheel
-          mayapy -m uv pip install --system --no-deps
+          mayapy -m uv pip sync requirements.lock
       - name: Install project (source)
         run: |
           set -eux
