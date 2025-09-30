@@ -22,6 +22,12 @@ dependencies = [
     "colorama",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "maya-stubs"
+]
+
 [project.urls]
 Homepage = "https://github.com/mortenbohne/maya-brew"
 Repository = "https://github.com/mortenbohne/maya-brew"
