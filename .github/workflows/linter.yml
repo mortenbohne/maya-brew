@@ -37,15 +37,14 @@ jobs:
         with:
           path: |
             .venv
-            requirements.lock
             uv.lock
-          key: ${{ runner.os }}-uv-${{ hashFiles('requirements.lock', 'uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
       - name: Install uv
         run: pip install uv
       - name: Sync dependencies
-        run: uv pip sync --system requirements.lock
+        run: uv sync --extra dev
       - name: Prepare credentials for auto-fix (push only)
         if: github.event_name == 'push'
         env:
