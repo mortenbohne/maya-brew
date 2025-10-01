@@ -157,6 +157,9 @@ class Attribute:
 class FloatAttribute(Attribute):
     _getter_type = "asDouble"
 
+class BoolAttribute(Attribute):
+    _getter_type = "asBool"
+
 
 class MessageAttribute(Attribute):
     _getter_type = "kMessage"
@@ -173,4 +176,5 @@ class MessageAttribute(Attribute):
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
     "kMessageAttribute": MessageAttribute,
+    "kNumericAttribute": BoolAttribute
 }
