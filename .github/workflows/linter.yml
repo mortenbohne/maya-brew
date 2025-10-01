@@ -70,6 +70,7 @@ jobs:
           VALIDATE_CHECKOV: true
           VALIDATE_GITLEAKS: true
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
+          VALIDATE_JSON: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
           FIX_JSON: true
