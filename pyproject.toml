@@ -1,6 +1,7 @@
 [project]
 name = "maya-brew"
-version = "0.0.0"
+# dynamic version provided by hatch-vcs from git tagsy
+dynamic = ["version"]
 description = "Safe interaction with python in maya"
 readme = "README.md"
 license = "MIT"
@@ -47,10 +48,11 @@ disable = ["too-few-public-methods", "C", "R", "W", "I"]
 mypy_path = ["src"]
 disallow_untyped_defs = true
 
-[tool.uv-dynamic-versioning]
-enable = true
+[tool.hatch.version]
+source = "vcs"
+# Accept tags with or without leading 'v': v1.2.3 or 1.2.3 (+ optional suffixes)
 pattern = "^v?(?P<version>\\d+\\.\\d+\\.\\d+(?:[\\w\\.-]*)?)$"
 
 [build-system]
-requires = ["hatchling", "uv-dynamic-versioning"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
