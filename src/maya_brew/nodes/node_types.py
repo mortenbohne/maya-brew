@@ -1,8 +1,10 @@
-from typing import Any, Callable, Dict, Self
+from typing import Any, Callable, Dict, Self, TYPE_CHECKING
 
 from .. import OpenMaya2, cmds
 from ..log import get_logger
 from ..nodes import cast
+if TYPE_CHECKING:
+    from ..attributes.node_attribute import Attribute
 
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
@@ -47,6 +49,15 @@ class Node:
         if cmds_value != name:
             logger.debug(f"Name was not unique. New name: {cmds_value}.")
         return cls(cmds_value)
+
+    def list_attributes(self, **kwargs) -> list["Attribute"]:
+        """
+        List all attributes of the current node.
+        :return: A list of all attributes of the current node.
+        """
+        from maya_brew.attributes.node_attribute import Attribute
+        return [Attribute(f"{self}.{cmds_attr}") for cmds_attr in cmds.listAttr(str(self), **kwargs)] or []
+
 
 
 class DagNode(Node):
