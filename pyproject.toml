@@ -1,6 +1,6 @@
 [project]
 name = "maya-brew"
-dynamic = ["version"]
+version = "0.0.0"
 description = "Safe interaction with python in maya"
 readme = "README.md"
 license = "MIT"
