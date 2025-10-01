@@ -14,9 +14,9 @@ def reload_mb():
     Removes all maya-brew modules from 'sys.modules' and imports it again
     """
 
-    import mb
+    import maya_brew
 
-    mb_path = Path(mb.__file__)
+    mb_path = Path(maya_brew.__file__)
     mb_modules = list()
     for m in [p for p in sys.modules if p.startswith(mb_path.parent.name)]:
         mb_modules.append(m)
