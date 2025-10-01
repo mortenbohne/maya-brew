@@ -17,7 +17,9 @@ def test_cube_short_name():
 
 @pytest.fixture()
 def test_cube(test_namespace, test_cube_short_name):
-    cube, history = maya_brew.cmds.polyCube(name=f"{test_namespace}:{test_cube_short_name}")
+    cube, history = maya_brew.cmds.polyCube(
+        name=f"{test_namespace}:{test_cube_short_name}"
+    )
     yield cube
 
 

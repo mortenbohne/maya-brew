@@ -1,6 +1,10 @@
 import pytest
 from maya_brew import OpenMaya2, cmds
-from maya_brew.attributes.node_attribute import Attribute, FloatAttribute, MessageAttribute
+from maya_brew.attributes.node_attribute import (
+    Attribute,
+    FloatAttribute,
+    MessageAttribute,
+)
 from maya_brew.log import get_logger
 from maya_brew.nodes.node_types import DagNode, Node
 
