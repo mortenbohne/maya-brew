@@ -29,9 +29,13 @@ def test_get_long_name_from_maya_string(
     group_name = "my_group"
     maya_brew.cmds.group(name=group_name, empty=True)
     maya_brew.cmds.parent(grouped_cube, group_name)
-    grouped_cube_full_path = maya_brew.nodes.cast.get_long_name_from_maya_string(grouped_cube)
+    grouped_cube_full_path = maya_brew.nodes.cast.get_long_name_from_maya_string(
+        grouped_cube
+    )
     assert group_name in grouped_cube_full_path
-    new_cube_with_same_short_name = maya_brew.cmds.polyCube(name=test_cube_short_name)[0]
+    new_cube_with_same_short_name = maya_brew.cmds.polyCube(name=test_cube_short_name)[
+        0
+    ]
     # we can cast it from maya's return value
     new_cube_full_path = maya_brew.nodes.cast.get_long_name_from_maya_string(
         new_cube_with_same_short_name
