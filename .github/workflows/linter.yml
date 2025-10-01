@@ -75,6 +75,10 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_MARKDOWN_PRETTIER: true
           VALIDATE_NATURAL_LANGUAGE: true
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_ISORT: true
+          VALIDATE_PYTHON_RUFF: true
+          VALIDATE_YAML_PRETTIER: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
           FIX_JSON: true
