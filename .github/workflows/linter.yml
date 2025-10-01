@@ -67,15 +67,7 @@ jobs:
           PYTHONPATH: "${{ github.workspace }}/.venv/lib/python3.11/site-packages:${{ github.workspace }}/src"
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
-          IGNORE_GENERATED_FILES: true
-          IGNORE_GITIGNORED_FILES: true
           VALIDATE_CHECKOV: true
-          VALIDATE_TERRAFORM: false
-          VALIDATE_KUBERNETES: false
-          VALIDATE_BASH: false
-          VALIDATE_POWERSHELL: false
-          VALIDATE_JAVASCRIPT_ES: false
-          VALIDATE_TYPESCRIPT_ES: false
           VALIDATE_GITLEAKS: true
           FIX_ENV: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
