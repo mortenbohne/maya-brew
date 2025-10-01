@@ -2,6 +2,7 @@ import logging
 
 import maya_brew.nodes.cast
 import maya_brew.nodes.node_types
+from maya_brew.attributes.node_attribute import Attribute
 
 
 def test_dag_node_string(test_cube, caplog):
@@ -40,3 +41,7 @@ def test_Transform_repr():
     assert name in repr
     assert dag_node.get_full_path() in repr
     assert type(dag_node).__name__ in repr
+
+def test_list_attributes(brew_transform):
+    for a in brew_transform.list_attributes():
+        assert isinstance(a, Attribute)
