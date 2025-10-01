@@ -1,6 +1,6 @@
 [project]
 name = "maya-brew"
-version = "0.0.0"
+dynamic = ["version"]
 description = "Safe interaction with python in maya"
 readme = "README.md"
 license = "MIT"
@@ -47,6 +47,10 @@ disable = ["too-few-public-methods", "C", "R", "W", "I"]
 mypy_path = ["src"]
 disallow_untyped_defs = true
 
+[tool.uv-dynamic-versioning]
+enable = true
+pattern = "^v?(?P<version>\\d+\\.\\d+\\.\\d+(?:[\\w\\.-]*)?)$"
+
 [build-system]
-requires = ["uv_build"]
-build-backend = "uv_build"
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
