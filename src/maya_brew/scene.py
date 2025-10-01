@@ -1,4 +1,4 @@
-import mb
+import maya_brew
 
 from .exceptions import MayaBrewException
 
@@ -17,7 +17,7 @@ class UnsavedChanges(SceneException, RuntimeError):
 
 def new_file(force=True):
     try:
-        return mb.cmds.file(newFile=True, force=force)
+        return maya_brew.cmds.file(newFile=True, force=force)
     except RuntimeError as e:
         message = str(e).strip()
         if message == "Unsaved changes.":

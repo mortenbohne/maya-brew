@@ -137,13 +137,17 @@ class SuppressStdOutStdErr:
 
     """
 
-    def __init__(self, filter_list: Optional[List[str]] = None, enable=True) -> None:
+    def __init__(
+        self, filter_list: Optional[Union[List[str], str]] = None, enable=True
+    ) -> None:
         self.enable = enable
         if self.enable:
-            filter_list = filter_list or []
-            self.filter_words = (
-                [filter_list] if isinstance(filter_list, str) else filter_list
-            )
+            if filter_list is None:
+                self.filter_words = []
+            elif isinstance(filter_list, str):
+                self.filter_words = [filter_list]
+            else:
+                self.filter_words = filter_list
 
     def __enter__(self):
         if self.enable:

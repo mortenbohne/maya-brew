@@ -1,5 +1,8 @@
 # maya-brew
 
+> **Status: Pre-Alpha** – Interfaces are experimental and may change without notice. Pin exact versions if using in
+> automation.
+
 What you need after a long day of wrestling with Maya Python.
 
 [![Super-Linter](https://github.com/mortenbohne/maya-brew/actions/workflows/linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
