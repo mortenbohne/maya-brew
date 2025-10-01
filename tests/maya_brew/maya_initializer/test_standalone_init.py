@@ -1,4 +1,4 @@
-from mb.maya_initializer import standalone_init
+from maya_brew.maya_initializer import standalone_init
 
 
 def test_standalone_can_use_cmds():
@@ -11,6 +11,6 @@ def test_standalone_can_use_cmds():
 
 
 def test_standalone_not_interactive():
-    from mb.maya_initializer.shared import is_interactive_maya
+    from maya_brew.maya_initializer.shared import is_interactive_maya
 
     assert not is_interactive_maya()

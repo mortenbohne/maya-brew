@@ -28,23 +28,33 @@ jobs:
         with:
           python-version: "3.11"
       - name: Checkout Code
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .venv
+            uv.lock
+          key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+      - name: Install uv
+        run: pip install uv
+      - name: Sync dependencies
+        run: uv sync --extra dev
       - name: Prepare credentials for auto-fix (push only)
         if: github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}"
-      - name: Install Dependencies
-        run: |
-          pip install -e .[dev] --target .venv
       - name: Lint Code Base
-        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
+        uses: super-linter/super-linter/slim@7bba2eeb89d01dc9bfd93c497477a57e72c83240
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: develop
@@ -54,21 +64,27 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
-          PYTHONPATH: "${{ github.workspace }}/.venv"
+          PYTHONPATH: "${{ github.workspace }}/.venv/lib/python3.11/site-packages:${{ github.workspace }}/src"
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
-          IGNORE_GENERATED_FILES: true
-          IGNORE_GITIGNORED_FILES: true
-          VALIDATE_GIT_COMMITLINT: false
-          VALIDATE_JSCPD: false
-          FIX_ENV: true
+          VALIDATE_CHECKOV: true
+          VALIDATE_GITLEAKS: true
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
+          VALIDATE_JSON: true
+          VALIDATE_JSON_PRETTIER: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_MARKDOWN_PRETTIER: true
+          VALIDATE_NATURAL_LANGUAGE: true
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_ISORT: true
+          VALIDATE_PYTHON_RUFF: true
+          VALIDATE_YAML_PRETTIER: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
           FIX_JSON: true
           FIX_MARKDOWN_PRETTIER: true
           FIX_MARKDOWN: true
           FIX_NATURAL_LANGUAGE: true
-          FIX_POWERSHELL: true
           FIX_PYTHON_BLACK: true
           FIX_PYTHON_ISORT: true
           FIX_PYTHON_RUFF: true

@@ -19,15 +19,26 @@ jobs:
       options: --user root
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
           fetch-depth: 1
-      - name: Install requirements
-        run: mayapy -m pip install .[dev]
+      - name: Install uv
+        run: mayapy -m pip install uv
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/uv
+          key: mayapy-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            mayapy-${{ runner.os }}-
+      - name: Install project (runtime + dev extras) with uv
+        run: |
+          mayapy -m uv pip install ".[dev]"
       - name: Run pytest
-        shell: bash
-        run: mayapy -m pytest tests/
+        run: mayapy -m pytest tests/ -q
       - name: Summary
         if: success()
         run: echo "mayapy pytest run succeeded." >> "$GITHUB_STEP_SUMMARY"

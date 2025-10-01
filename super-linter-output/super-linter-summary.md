@@ -2,12 +2,11 @@
 
 | Language                   | Validation result |
 | -------------------------- | ----------------- |
-| CHECKOV                    | Pass ✅           |
 | DOCKERFILE_HADOLINT        | Pass ✅           |
 | GITHUB_ACTIONS             | Pass ✅           |
 | GITHUB_ACTIONS_ZIZMOR      | Pass ✅           |
-| GITLEAKS                   | Pass ✅           |
 | GIT_MERGE_CONFLICT_MARKERS | Pass ✅           |
+| JSCPD                      | Pass ✅           |
 | MARKDOWN                   | Pass ✅           |
 | MARKDOWN_PRETTIER          | Pass ✅           |
 | NATURAL_LANGUAGE           | Pass ✅           |
