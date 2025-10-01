@@ -1,6 +1,5 @@
 [project]
 name = "maya-brew"
-# dynamic version provided by hatch-vcs from git tagsy
 dynamic = ["version"]
 description = "Safe interaction with python in maya"
 readme = "README.md"
@@ -52,6 +51,7 @@ disallow_untyped_defs = true
 source = "vcs"
 # Accept tags with or without leading 'v': v1.2.3 or 1.2.3 (+ optional suffixes)
 pattern = "^v?(?P<version>\\d+\\.\\d+\\.\\d+(?:[\\w\\.-]*)?)$"
+fallback-version = "0.0.0"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
