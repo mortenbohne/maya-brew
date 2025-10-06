@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Self, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, Self
 
 from .. import OpenMaya2, cmds
 from ..log import get_logger
@@ -57,11 +57,16 @@ class Node:
         :return: A list of all attributes of the current node.
         """
         from maya_brew.attributes.node_attribute import Attribute
-        return [Attribute(f"{self}.{cmds_attr}") for cmds_attr in cmds.listAttr(str(self), **kwargs)] or []
+
+        return [
+            Attribute(f"{self}.{cmds_attr}")
+            for cmds_attr in cmds.listAttr(str(self), **kwargs)
+        ] or []
 
     @property
     def at(self) -> "AttributeAccessor":
         from ..attributes.node_attribute import AttributeAccessor
+
         return AttributeAccessor(self)
 
 

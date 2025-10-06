@@ -2,7 +2,6 @@ import typing
 
 from .. import OpenMaya2, cmds
 from ..exceptions import MayaBrewAttributeError
-from ..nodes import cast
 from ..nodes.node_types import DagNode, Node
 
 PlugInput = typing.Union[OpenMaya2.MPlug, str]
@@ -81,7 +80,9 @@ class Attribute:
         :return: The MPlug for the attribute.
         """
         if "." not in path:
-            raise ValueError("Attribute path must include a '.' separating node and attribute.")
+            raise ValueError(
+                "Attribute path must include a '.' separating node and attribute."
+            )
         node_path, attr_name = path.rsplit(".", 1)
         selection_list = OpenMaya2.MSelectionList()
         selection_list.add(node_path)
@@ -167,6 +168,7 @@ class Attribute:
 class FloatAttribute(Attribute):
     _getter_type = "asDouble"
 
+
 class BoolAttribute(Attribute):
     _getter_type = "asBool"
 
@@ -182,6 +184,7 @@ class MessageAttribute(Attribute):
     def set(cls, value):
         raise MayaBrewAttributeError("Message attributes are not settable.")
 
+
 class EnumAttribute(Attribute):
     _getter_type = "asShort"
 
@@ -191,6 +194,7 @@ class TypedAttribute(Attribute):
     Handles Maya kTypedAttribute types. By default, returns the MObject stored in the plug.
     Extend this class if you need to handle specific typed data (e.g., strings, matrices).
     """
+
     _getter_type = "asMObject"
 
 
@@ -198,6 +202,7 @@ class CompoundAttribute(Attribute):
     """
     Handles Maya kCompoundAttribute types. Returns a list of child Attribute instances.
     """
+
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         children = []
@@ -206,34 +211,43 @@ class CompoundAttribute(Attribute):
             children.append(Attribute(child_plug))
         return children
 
+
 class MultiFloatAttribute(Attribute):
     _num_children: int
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         if plug.numChildren() != cls._num_children:
-            raise MayaBrewAttributeError(f"Expected {cls._num_children} children for kAttribute3Double, got {plug.numChildren()} on '{plug.name()}'")
+            raise MayaBrewAttributeError(
+                f"Expected {cls._num_children} children for kAttribute3Double, got {plug.numChildren()} on '{plug.name()}'"
+            )
         return tuple(plug.child(i).asDouble() for i in range(cls._num_children))
+
 
 class Float2Attribute(Attribute):
     """
     Handles Maya kAttribute2Double types (e.g., UV coordinates).
     Returns a tuple of two float values (u, v).
     """
+
     _num_children = 2
+
 
 class Float3Attribute(Attribute):
     """
     Handles Maya kAttribute3Double types (e.g., translate, rotate, scale).
     Returns a tuple of three float values (x, y, z).
     """
+
     _num_children = 3
+
 
 class Float4Attribute(Attribute):
     """
     Handles Maya kAttribute4Double types (e.g., quaternions).
     Returns a tuple of four float values (x, y, z, w).
     """
+
     _num_children = 4
 
 
@@ -241,6 +255,7 @@ class MatrixAttribute(Attribute):
     """
     Handles Maya kMatrixAttribute types. Returns an OpenMaya2.MMatrix instance.
     """
+
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         mobj = plug.asMObject()
@@ -252,9 +267,11 @@ class GenericAttribute(Attribute):
     """
     Handles Maya kGenericAttribute types. Returns the MObject stored in the plug, or raises an error if not supported.
     """
+
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         return plug.asMObject()
+
 
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,

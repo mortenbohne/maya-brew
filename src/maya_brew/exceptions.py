@@ -3,6 +3,7 @@ class MayaBrewException(Exception):
 
     pass
 
+
 class MayaBrewAttributeError(MayaBrewException, AttributeError):
     """Raised when there is an attribute-related error in MayaBrew."""
 
