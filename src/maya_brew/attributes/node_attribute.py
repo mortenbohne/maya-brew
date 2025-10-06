@@ -184,15 +184,18 @@ class TypedAttribute(Attribute):
     """
     _getter_type = "asMObject"
 
+
+class CompoundAttribute(Attribute):
+    """
+    Handles Maya kCompoundAttribute types. Returns a list of child Attribute instances.
+    """
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        try:
-            # Try to extract as MObject (generic typed data)
-            return plug.asMObject()
-        except Exception as e:
-            raise MayaBrewAttributeError(
-                f"Failed to extract value from kTypedAttribute plug '{plug.name()}'."
-            ) from e
+        children = []
+        for i in range(plug.numChildren()):
+            child_plug = plug.child(i)
+            children.append(Attribute(child_plug))
+        return children
 
 
 _API_TYPE_SUBCLASS_MAP = {
@@ -201,6 +204,7 @@ _API_TYPE_SUBCLASS_MAP = {
     "kNumericAttribute": BoolAttribute,
     "kEnumAttribute": EnumAttribute,
     "kTypedAttribute": TypedAttribute,
+    "kCompoundAttribute": CompoundAttribute,
 }
 
 
