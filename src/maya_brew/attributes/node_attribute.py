@@ -1,6 +1,7 @@
 import typing
 
 from .. import OpenMaya2, cmds
+from ..exceptions import MayaBrewAttributeError
 from ..nodes import cast
 from ..nodes.node_types import DagNode, Node
 
@@ -39,7 +40,7 @@ class Attribute:
             subclass: type[Attribute] = _API_TYPE_SUBCLASS_MAP[api_type]
         except KeyError:
             raise NotImplementedError(
-                f"Unsupported attribute apiTypeStr '{api_type}'. "
+                f"Unsupported attribute apiTypeStr '{api_type}'. Could cast attribute for '{plug}'. "
                 f"Known types: {sorted(_API_TYPE_SUBCLASS_MAP)}"
             )
 
@@ -103,7 +104,7 @@ class Attribute:
         return self._get_node_from_plug(self.plug)
 
     def name(self):
-        raise NotImplementedError
+        return self.plug.name()
 
     def connect(self, dest: "Attribute", force: bool = False, next_available=False):
         """
@@ -166,11 +167,11 @@ class MessageAttribute(Attribute):
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        raise AttributeError("Message attributes do not hold data.")
+        raise MayaBrewAttributeError("Message attributes do not hold data.")
 
     @classmethod
     def set(cls, value):
-        raise AttributeError("Message attributes are not settable.")
+        raise MayaBrewAttributeError("Message attributes are not settable.")
 
 
 _API_TYPE_SUBCLASS_MAP = {
@@ -178,3 +179,16 @@ _API_TYPE_SUBCLASS_MAP = {
     "kMessageAttribute": MessageAttribute,
     "kNumericAttribute": BoolAttribute
 }
+
+
+class AttributeAccessor:
+    def __init__(self, node: "Node"):
+        self._node = node
+
+    def __getattr__(self, attr_name: str):
+        try:
+            return Attribute(f"{self._node}.{attr_name}")
+        except (ValueError, RuntimeError, NotImplementedError, AttributeError) as e:
+            raise MayaBrewAttributeError(
+                f"Failed to access attribute '{attr_name}' on node '{self._node}'"
+            ) from e
