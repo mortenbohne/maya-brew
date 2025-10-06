@@ -206,6 +206,29 @@ class CompoundAttribute(Attribute):
             children.append(Attribute(child_plug))
         return children
 
+class MultiFloatAttribute(Attribute):
+    _num_children: int
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        if plug.numChildren() != cls._num_children:
+            raise MayaBrewAttributeError(f"Expected {cls._num_children} children for kAttribute3Double, got {plug.numChildren()} on '{plug.name()}'")
+        return tuple(plug.child(i).asDouble() for i in range(cls._num_children))
+
+class Float2Attribute(Attribute):
+    """
+    Handles Maya kAttribute2Double types (e.g., UV coordinates).
+    Returns a tuple of two float values (u, v).
+    """
+    _num_children = 2
+
+class Float3Attribute(Attribute):
+    """
+    Handles Maya kAttribute3Double types (e.g., translate, rotate, scale).
+    Returns a tuple of three float values (x, y, z).
+    """
+    _num_children = 3
+
 
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
@@ -214,6 +237,10 @@ _API_TYPE_SUBCLASS_MAP = {
     "kEnumAttribute": EnumAttribute,
     "kTypedAttribute": TypedAttribute,
     "kCompoundAttribute": CompoundAttribute,
+    "kAttribute3Double": Float3Attribute,
+    "kAttribute2Float": Float2Attribute,
+    "kAttribute3Float": Float3Attribute,
+    "kDoubleAngleAttribute": FloatAttribute,
 }
 
 
