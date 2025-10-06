@@ -1,6 +1,7 @@
 import typing
 
 from .. import OpenMaya2, cmds
+from ..exceptions import MayaBrewAttributeError
 from ..nodes import cast
 from ..nodes.node_types import DagNode, Node
 
@@ -39,7 +40,7 @@ class Attribute:
             subclass: type[Attribute] = _API_TYPE_SUBCLASS_MAP[api_type]
         except KeyError:
             raise NotImplementedError(
-                f"Unsupported attribute apiTypeStr '{api_type}'. "
+                f"Unsupported attribute apiTypeStr '{api_type}'. Could cast attribute for '{plug}'. "
                 f"Known types: {sorted(_API_TYPE_SUBCLASS_MAP)}"
             )
 
@@ -74,20 +75,19 @@ class Attribute:
     @staticmethod
     def _plug_from_path(path: str) -> OpenMaya2.MPlug:
         """
-        Resolve a string path to an MPlug.
+        Resolve a string path to an MPlug using MSelectionList and MFnDependencyNode.
+        Works for both DAG and dependency nodes without casting.
         :param path: The full path to the attribute, e.g. '|grp|node|nodeShape.visibility'
         :return: The MPlug for the attribute.
         """
-        # Split path into node path and attribute name
         if "." not in path:
-            raise ValueError(
-                "Attribute path must include a '.' separating node and attribute."
-            )
+            raise ValueError("Attribute path must include a '.' separating node and attribute.")
         node_path, attr_name = path.rsplit(".", 1)
-        node_dag_path = cast.get_dag_path_from_string(node_path)
-        node = DagNode(node_dag_path.fullPathName())
-        plug = Attribute._get_plug_from_node(node, attr_name)
-        return plug
+        selection_list = OpenMaya2.MSelectionList()
+        selection_list.add(node_path)
+        mobj = selection_list.getDependNode(0)
+        fn_dep = OpenMaya2.MFnDependencyNode(mobj)
+        return fn_dep.findPlug(attr_name, False)
 
     def __str__(self):
         return self.name()
@@ -103,7 +103,7 @@ class Attribute:
         return self._get_node_from_plug(self.plug)
 
     def name(self):
-        raise NotImplementedError
+        return self.plug.name()
 
     def connect(self, dest: "Attribute", force: bool = False, next_available=False):
         """
@@ -131,13 +131,23 @@ class Attribute:
         )
 
     @classmethod
-    def _get_value(cls, node: DagNode, attr_name: str):
+    def _get_value(cls, node: Node, attr_name: str):
         plug = cls._get_plug_from_node(node, attr_name)
         return cls._get_plug_value(plug)
 
     @staticmethod
-    def _get_plug_from_node(node: DagNode, attr_name: str) -> OpenMaya2.MPlug:
-        fn_dep = node.get_mfndependency_node()
+    def _get_plug_from_node(node: Node, attr_name: str) -> OpenMaya2.MPlug:
+        """
+        Get the MPlug for the given attribute name from a Node or DagNode.
+        """
+        if hasattr(node, "get_mfndependency_node"):
+            fn_dep = node.get_mfndependency_node()
+        else:
+            # For non-DAG nodes, resolve node.node_path to MObject
+            selection_list = OpenMaya2.MSelectionList()
+            selection_list.add(node.node_path)
+            mobj = selection_list.getDependNode(0)
+            fn_dep = OpenMaya2.MFnDependencyNode(mobj)
         return fn_dep.findPlug(attr_name, False)
 
     @staticmethod
@@ -157,20 +167,120 @@ class Attribute:
 class FloatAttribute(Attribute):
     _getter_type = "asDouble"
 
+class BoolAttribute(Attribute):
+    _getter_type = "asBool"
+
 
 class MessageAttribute(Attribute):
     _getter_type = "kMessage"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        raise AttributeError("Message attributes do not hold data.")
+        raise MayaBrewAttributeError("Message attributes do not hold data.")
 
     @classmethod
     def set(cls, value):
-        raise AttributeError("Message attributes are not settable.")
+        raise MayaBrewAttributeError("Message attributes are not settable.")
 
+class EnumAttribute(Attribute):
+    _getter_type = "asShort"
+
+
+class TypedAttribute(Attribute):
+    """
+    Handles Maya kTypedAttribute types. By default, returns the MObject stored in the plug.
+    Extend this class if you need to handle specific typed data (e.g., strings, matrices).
+    """
+    _getter_type = "asMObject"
+
+
+class CompoundAttribute(Attribute):
+    """
+    Handles Maya kCompoundAttribute types. Returns a list of child Attribute instances.
+    """
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        children = []
+        for i in range(plug.numChildren()):
+            child_plug = plug.child(i)
+            children.append(Attribute(child_plug))
+        return children
+
+class MultiFloatAttribute(Attribute):
+    _num_children: int
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        if plug.numChildren() != cls._num_children:
+            raise MayaBrewAttributeError(f"Expected {cls._num_children} children for kAttribute3Double, got {plug.numChildren()} on '{plug.name()}'")
+        return tuple(plug.child(i).asDouble() for i in range(cls._num_children))
+
+class Float2Attribute(Attribute):
+    """
+    Handles Maya kAttribute2Double types (e.g., UV coordinates).
+    Returns a tuple of two float values (u, v).
+    """
+    _num_children = 2
+
+class Float3Attribute(Attribute):
+    """
+    Handles Maya kAttribute3Double types (e.g., translate, rotate, scale).
+    Returns a tuple of three float values (x, y, z).
+    """
+    _num_children = 3
+
+class Float4Attribute(Attribute):
+    """
+    Handles Maya kAttribute4Double types (e.g., quaternions).
+    Returns a tuple of four float values (x, y, z, w).
+    """
+    _num_children = 4
+
+
+class MatrixAttribute(Attribute):
+    """
+    Handles Maya kMatrixAttribute types. Returns an OpenMaya2.MMatrix instance.
+    """
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        mobj = plug.asMObject()
+        matrix_data = OpenMaya2.MFnMatrixData(mobj)
+        return matrix_data.matrix()
+
+
+class GenericAttribute(Attribute):
+    """
+    Handles Maya kGenericAttribute types. Returns the MObject stored in the plug, or raises an error if not supported.
+    """
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        return plug.asMObject()
 
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
     "kMessageAttribute": MessageAttribute,
+    "kNumericAttribute": BoolAttribute,
+    "kEnumAttribute": EnumAttribute,
+    "kTypedAttribute": TypedAttribute,
+    "kCompoundAttribute": CompoundAttribute,
+    "kAttribute3Double": Float3Attribute,
+    "kAttribute4Double": Float4Attribute,
+    "kAttribute2Float": Float2Attribute,
+    "kAttribute3Float": Float3Attribute,
+    "kDoubleAngleAttribute": FloatAttribute,
+    "kMatrixAttribute": MatrixAttribute,
+    "kGenericAttribute": GenericAttribute,
 }
+
+
+class AttributeAccessor:
+    def __init__(self, node: "Node"):
+        self._node = node
+
+    def __getattr__(self, attr_name: str):
+        try:
+            return Attribute(f"{self._node}.{attr_name}")
+        except (ValueError, RuntimeError, NotImplementedError, AttributeError) as e:
+            raise MayaBrewAttributeError(
+                f"Failed to access attribute '{attr_name}' on node '{self._node}'"
+            ) from e
