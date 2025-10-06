@@ -75,20 +75,19 @@ class Attribute:
     @staticmethod
     def _plug_from_path(path: str) -> OpenMaya2.MPlug:
         """
-        Resolve a string path to an MPlug.
+        Resolve a string path to an MPlug using MSelectionList and MFnDependencyNode.
+        Works for both DAG and dependency nodes without casting.
         :param path: The full path to the attribute, e.g. '|grp|node|nodeShape.visibility'
         :return: The MPlug for the attribute.
         """
-        # Split path into node path and attribute name
         if "." not in path:
-            raise ValueError(
-                "Attribute path must include a '.' separating node and attribute."
-            )
+            raise ValueError("Attribute path must include a '.' separating node and attribute.")
         node_path, attr_name = path.rsplit(".", 1)
-        node_dag_path = cast.get_dag_path_from_string(node_path)
-        node = DagNode(node_dag_path.fullPathName())
-        plug = Attribute._get_plug_from_node(node, attr_name)
-        return plug
+        selection_list = OpenMaya2.MSelectionList()
+        selection_list.add(node_path)
+        mobj = selection_list.getDependNode(0)
+        fn_dep = OpenMaya2.MFnDependencyNode(mobj)
+        return fn_dep.findPlug(attr_name, False)
 
     def __str__(self):
         return self.name()
@@ -132,13 +131,23 @@ class Attribute:
         )
 
     @classmethod
-    def _get_value(cls, node: DagNode, attr_name: str):
+    def _get_value(cls, node: Node, attr_name: str):
         plug = cls._get_plug_from_node(node, attr_name)
         return cls._get_plug_value(plug)
 
     @staticmethod
-    def _get_plug_from_node(node: DagNode, attr_name: str) -> OpenMaya2.MPlug:
-        fn_dep = node.get_mfndependency_node()
+    def _get_plug_from_node(node: Node, attr_name: str) -> OpenMaya2.MPlug:
+        """
+        Get the MPlug for the given attribute name from a Node or DagNode.
+        """
+        if hasattr(node, "get_mfndependency_node"):
+            fn_dep = node.get_mfndependency_node()
+        else:
+            # For non-DAG nodes, resolve node.node_path to MObject
+            selection_list = OpenMaya2.MSelectionList()
+            selection_list.add(node.node_path)
+            mobj = selection_list.getDependNode(0)
+            fn_dep = OpenMaya2.MFnDependencyNode(mobj)
         return fn_dep.findPlug(attr_name, False)
 
     @staticmethod
