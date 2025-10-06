@@ -173,11 +173,34 @@ class MessageAttribute(Attribute):
     def set(cls, value):
         raise MayaBrewAttributeError("Message attributes are not settable.")
 
+class EnumAttribute(Attribute):
+    _getter_type = "asShort"
+
+
+class TypedAttribute(Attribute):
+    """
+    Handles Maya kTypedAttribute types. By default, returns the MObject stored in the plug.
+    Extend this class if you need to handle specific typed data (e.g., strings, matrices).
+    """
+    _getter_type = "asMObject"
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        try:
+            # Try to extract as MObject (generic typed data)
+            return plug.asMObject()
+        except Exception as e:
+            raise MayaBrewAttributeError(
+                f"Failed to extract value from kTypedAttribute plug '{plug.name()}'."
+            ) from e
+
 
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
     "kMessageAttribute": MessageAttribute,
-    "kNumericAttribute": BoolAttribute
+    "kNumericAttribute": BoolAttribute,
+    "kEnumAttribute": EnumAttribute,
+    "kTypedAttribute": TypedAttribute,
 }
 
 
