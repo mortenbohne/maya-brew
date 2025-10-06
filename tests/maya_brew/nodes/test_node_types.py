@@ -1,8 +1,10 @@
 import logging
 
+import pytest
 import maya_brew.nodes.cast
 import maya_brew.nodes.node_types
 from maya_brew.attributes.node_attribute import Attribute
+from maya_brew.exceptions import MayaBrewAttributeError
 
 
 def test_dag_node_string(test_cube, caplog):
@@ -42,6 +44,41 @@ def test_Transform_repr():
     assert dag_node.get_full_path() in repr
     assert type(dag_node).__name__ in repr
 
+
 def test_list_attributes(brew_transform):
     for a in brew_transform.list_attributes():
         assert isinstance(a, Attribute)
+
+
+def test_node_at_returns_attribute(brew_transform):
+    attr = brew_transform.at.visibility
+    from maya_brew.attributes.node_attribute import Attribute
+    assert isinstance(attr, Attribute)
+    assert 'visibility' in str(attr)
+    assert brew_transform.node_path in str(attr)
+
+
+def test_node_at_invalid_attribute_raises(brew_transform):
+    with pytest.raises(MayaBrewAttributeError):
+        _ = brew_transform.at.non_existent_attr
+
+
+def test_node_at_on_dagnode(test_cube):
+    from maya_brew.nodes.node_types import DagNode
+    dag_node = DagNode(test_cube)
+    attr = dag_node.at.visibility
+    from maya_brew.attributes.node_attribute import Attribute
+    assert isinstance(attr, Attribute)
+    assert 'visibility' in str(attr)
+    assert dag_node.node_path in str(attr)
+
+
+def test_node_at_on_transform():
+    from maya_brew.nodes.node_types import Transform
+    name = "test_transform"
+    transform = Transform.create(name)
+    attr = transform.at.visibility
+    from maya_brew.attributes.node_attribute import Attribute
+    assert isinstance(attr, Attribute)
+    assert 'visibility' in str(attr)
+    assert transform.node_path in str(attr)

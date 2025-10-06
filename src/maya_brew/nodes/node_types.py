@@ -3,8 +3,9 @@ from typing import Any, Callable, Dict, Self, TYPE_CHECKING
 from .. import OpenMaya2, cmds
 from ..log import get_logger
 from ..nodes import cast
+
 if TYPE_CHECKING:
-    from ..attributes.node_attribute import Attribute
+    from ..attributes.node_attribute import Attribute, AttributeAccessor
 
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
@@ -58,6 +59,10 @@ class Node:
         from maya_brew.attributes.node_attribute import Attribute
         return [Attribute(f"{self}.{cmds_attr}") for cmds_attr in cmds.listAttr(str(self), **kwargs)] or []
 
+    @property
+    def at(self) -> "AttributeAccessor":
+        from ..attributes.node_attribute import AttributeAccessor
+        return AttributeAccessor(self)
 
 
 class DagNode(Node):
