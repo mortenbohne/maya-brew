@@ -230,6 +230,17 @@ class Float3Attribute(Attribute):
     _num_children = 3
 
 
+class MatrixAttribute(Attribute):
+    """
+    Handles Maya kMatrixAttribute types. Returns an OpenMaya2.MMatrix instance.
+    """
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        mobj = plug.asMObject()
+        matrix_data = OpenMaya2.MFnMatrixData(mobj)
+        return matrix_data.matrix()
+
+
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
     "kMessageAttribute": MessageAttribute,
@@ -241,6 +252,7 @@ _API_TYPE_SUBCLASS_MAP = {
     "kAttribute2Float": Float2Attribute,
     "kAttribute3Float": Float3Attribute,
     "kDoubleAngleAttribute": FloatAttribute,
+    "kMatrixAttribute": MatrixAttribute,
 }
 
 
