@@ -229,6 +229,13 @@ class Float3Attribute(Attribute):
     """
     _num_children = 3
 
+class Float4Attribute(Attribute):
+    """
+    Handles Maya kAttribute4Double types (e.g., quaternions).
+    Returns a tuple of four float values (x, y, z, w).
+    """
+    _num_children = 4
+
 
 class MatrixAttribute(Attribute):
     """
@@ -241,6 +248,14 @@ class MatrixAttribute(Attribute):
         return matrix_data.matrix()
 
 
+class GenericAttribute(Attribute):
+    """
+    Handles Maya kGenericAttribute types. Returns the MObject stored in the plug, or raises an error if not supported.
+    """
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        return plug.asMObject()
+
 _API_TYPE_SUBCLASS_MAP = {
     "kDoubleLinearAttribute": FloatAttribute,
     "kMessageAttribute": MessageAttribute,
@@ -249,10 +264,12 @@ _API_TYPE_SUBCLASS_MAP = {
     "kTypedAttribute": TypedAttribute,
     "kCompoundAttribute": CompoundAttribute,
     "kAttribute3Double": Float3Attribute,
+    "kAttribute4Double": Float4Attribute,
     "kAttribute2Float": Float2Attribute,
     "kAttribute3Float": Float3Attribute,
     "kDoubleAngleAttribute": FloatAttribute,
     "kMatrixAttribute": MatrixAttribute,
+    "kGenericAttribute": GenericAttribute,
 }
 
 
