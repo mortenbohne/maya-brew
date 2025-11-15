@@ -126,3 +126,21 @@ def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
     assert get_ty_connections() == [ty_attr.plug.name()]
     cmds.redo()
     assert not get_ty_connections()
+
+
+def test_float_attribute_creation(brew_transform):
+    float_attr = FloatAttribute.create(
+        node_name=brew_transform.node_path,
+        attr_name="my_float",
+        default_value=0.1,
+        category="my_attributes",
+    )
+    assert float_attr.get() == 0.1
+    assert cmds.attributeQuery("my_float", node=brew_transform.node_path, exists=True)
+    assert "my_attributes" in cmds.attributeQuery(
+        "my_float", node=brew_transform.node_path, categories=True
+    )
+    float_attr.delete()
+    assert not cmds.attributeQuery(
+        "my_float", node=brew_transform.node_path, exists=True
+    )

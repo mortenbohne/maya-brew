@@ -1,5 +1,5 @@
 import typing
-
+from typing import Optional, Any
 from .. import OpenMaya2, cmds
 from ..exceptions import MayaBrewAttributeError
 from ..nodes.node_types import DagNode, Node
@@ -10,6 +10,7 @@ A = typing.TypeVar("A", bound="Attribute")
 
 class Attribute:
     _getter_type: str
+    _creator_type: str
 
     def __new__(cls: type[A], plug_or_path: PlugInput) -> A:
         if cls is not Attribute:
@@ -164,17 +165,253 @@ class Attribute:
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
         return getattr(plug, cls._getter_type)()
 
+    def delete(self):
+        """
+        Delete a custom attribute from the specified node.
+        """
+        name = self.plug.name()
+        try:
+            cmds.deleteAttr(name)
+        except Exception as e:
+            raise MayaBrewAttributeError(f"Failed to delete attribute '{name}': {e}")
 
-class FloatAttribute(Attribute):
+    @classmethod
+    def create(cls, *args, **kwargs):
+        raise NotImplementedError
+
+    @classmethod
+    def _create(
+        cls,
+        node_name: str,
+        attr_name: str,
+        cached_internally: Optional[bool] = None,
+        category: Optional[str] = None,
+        default_value: Optional[Any] = None,
+        disconnect_behaviour: Optional[int] = None,
+        enum_name: Optional[str] = None,
+        index_matters: Optional[bool] = None,
+        keyable: bool = True,
+        max_value: int | float | None = None,
+        min_value: int | float | None = None,
+        multi: Optional[bool] = None,
+        nice_name: Optional[str] = None,
+        number_of_children: Optional[int] = None,
+        parent: Optional[str] = None,
+        proxy: Optional[str] = None,
+        readable: Optional[bool] = None,
+        short_name: Optional[str] = None,
+        soft_max_value: int | float | None = None,
+        soft_min_value: int | float | None = None,
+        storable: Optional[bool] = None,
+        used_as_color: Optional[bool] = None,
+        used_as_filename: Optional[bool] = None,
+        used_as_proxy: Optional[bool] = None,
+        writeable: Optional[bool] = None,
+    ) -> A:
+        """
+        Create an attribute on the specified node.
+        :param node_name: Name of the Maya node.
+        :param attr_name: Name of the custom attribute to create.
+        """
+        kwargs = dict()
+        if cached_internally is not None:
+            kwargs["cachedInternally"] = cached_internally
+        if category is not None:
+            kwargs["category"] = category
+        if default_value is not None:
+            kwargs["defaultValue"] = default_value
+        if disconnect_behaviour is not None:
+            kwargs["disconnectBehaviour"] = disconnect_behaviour
+        if enum_name is not None:
+            kwargs["enumName"] = enum_name
+        if index_matters is not None:
+            kwargs["indexMatters"] = index_matters
+        if keyable is not None:
+            kwargs["keyable"] = keyable
+        if max_value is not None:
+            kwargs["maxValue"] = max_value
+        if min_value is not None:
+            kwargs["minValue"] = min_value
+        if multi is not None:
+            kwargs["multi"] = multi
+        if nice_name is not None:
+            kwargs["niceName"] = nice_name
+        if number_of_children is not None:
+            kwargs["numberOfChildren"] = number_of_children
+        if parent is not None:
+            kwargs["parent"] = parent
+        if proxy is not None:
+            kwargs["proxy"] = proxy
+        if readable is not None:
+            kwargs["readable"] = readable
+        if short_name is not None:
+            kwargs["shortName"] = short_name
+        if soft_max_value is not None:
+            kwargs["softMaxValue"] = soft_max_value
+        if soft_min_value is not None:
+            kwargs["softMinValue"] = soft_min_value
+        if storable is not None:
+            kwargs["storable"] = storable
+        if used_as_color is not None:
+            kwargs["usedAsColor"] = used_as_color
+        if used_as_filename is not None:
+            kwargs["usedAsFilename"] = used_as_filename
+        if used_as_proxy is not None:
+            kwargs["usedAsProxy"] = used_as_proxy
+        if writeable is not None:
+            kwargs["writeable"] = writeable
+        full_attr = f"{node_name}.{attr_name}"
+        if cmds.objExists(full_attr):
+            raise MayaBrewAttributeError(f"Attribute '{full_attr}' already exists.")
+        attr_type = cls._creator_type
+        try:
+            cmds.addAttr(
+                node_name, longName=attr_name, attributeType=attr_type, **kwargs
+            )
+        except Exception as e:
+            raise MayaBrewAttributeError(
+                f"Failed to create attribute '{full_attr}': {e}"
+            )
+        return typing.cast(A, cls(full_attr))
+
+
+class _Attribute(Attribute):
+    @classmethod
+    def create(
+        cls,
+        node_name: str,
+        attr_name: str,
+        cached_internally: Optional[bool] = None,
+        category: Optional[str] = None,
+        disconnect_behaviour: Optional[int] = None,
+        keyable: bool = True,
+        nice_name: Optional[str] = None,
+        parent: Optional[str] = None,
+        proxy: Optional[str] = None,
+        readable: Optional[bool] = None,
+        short_name: Optional[str] = None,
+        storable: Optional[bool] = None,
+        used_as_proxy: Optional[bool] = None,
+        writeable: Optional[bool] = None,
+    ):
+        return super()._create(
+            node_name=node_name,
+            attr_name=attr_name,
+            cached_internally=cached_internally,
+            category=category,
+            disconnect_behaviour=disconnect_behaviour,
+            keyable=keyable,
+            nice_name=nice_name,
+            parent=parent,
+            proxy=proxy,
+            readable=readable,
+            short_name=short_name,
+            storable=storable,
+            used_as_proxy=used_as_proxy,
+            writeable=writeable,
+        )
+
+
+class _NumericAttribute(Attribute):
+    @classmethod
+    def create(
+        cls,
+        node_name: str,
+        attr_name: str,
+        cached_internally: Optional[bool] = None,
+        category: Optional[str] = None,
+        default_value: Optional[Any] = None,
+        disconnect_behaviour: Optional[int] = None,
+        keyable: bool = True,
+        max_value: int | float | None = None,
+        min_value: int | float | None = None,
+        nice_name: Optional[str] = None,
+        parent: Optional[str] = None,
+        proxy: Optional[str] = None,
+        readable: Optional[bool] = None,
+        short_name: Optional[str] = None,
+        soft_max_value: int | float | None = None,
+        soft_min_value: int | float | None = None,
+        storable: Optional[bool] = None,
+        used_as_proxy: Optional[bool] = None,
+        writeable: Optional[bool] = None,
+    ):
+
+        return super()._create(
+            node_name,
+            attr_name,
+            cached_internally=cached_internally,
+            category=category,
+            default_value=default_value,
+            disconnect_behaviour=disconnect_behaviour,
+            keyable=keyable,
+            max_value=max_value,
+            min_value=min_value,
+            nice_name=nice_name,
+            parent=parent,
+            proxy=proxy,
+            readable=readable,
+            short_name=short_name,
+            soft_max_value=soft_max_value,
+            soft_min_value=soft_min_value,
+            storable=storable,
+            used_as_proxy=used_as_proxy,
+            writeable=writeable,
+        )
+
+
+class _AttributeWithCreatedChildren(Attribute):
+    @classmethod
+    def create(
+        cls,
+        node_name: str,
+        attr_name: str,
+        number_of_children: int,
+        cached_internally: Optional[bool] = None,
+        category: Optional[str] = None,
+        disconnect_behaviour: Optional[int] = None,
+        keyable: bool = True,
+        nice_name: Optional[str] = None,
+        parent: Optional[str] = None,
+        proxy: Optional[str] = None,
+        readable: Optional[bool] = None,
+        short_name: Optional[str] = None,
+        storable: Optional[bool] = None,
+        used_as_proxy: Optional[bool] = None,
+        writeable: Optional[bool] = None,
+    ):
+        return super()._create(
+            node_name=node_name,
+            attr_name=attr_name,
+            cached_internally=cached_internally,
+            category=category,
+            disconnect_behaviour=disconnect_behaviour,
+            keyable=keyable,
+            nice_name=nice_name,
+            number_of_children=number_of_children,
+            parent=parent,
+            proxy=proxy,
+            readable=readable,
+            short_name=short_name,
+            storable=storable,
+            used_as_proxy=used_as_proxy,
+            writeable=writeable,
+        )
+
+
+class FloatAttribute(_NumericAttribute):
     _getter_type = "asDouble"
+    _creator_type = "double"
 
 
-class BoolAttribute(Attribute):
+class BoolAttribute(_Attribute):
     _getter_type = "asBool"
+    _creator_type = "bool"
 
 
-class MessageAttribute(Attribute):
+class MessageAttribute(_Attribute):
     _getter_type = "kMessage"
+    _creator_type = "message"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
@@ -187,21 +424,89 @@ class MessageAttribute(Attribute):
 
 class EnumAttribute(Attribute):
     _getter_type = "asShort"
+    _creator_type = "enum"
+
+    @classmethod
+    def create(
+        cls,
+        node_name: str,
+        attr_name: str,
+        enum_data: dict[str, Any],
+        cached_internally: Optional[bool] = None,
+        category: Optional[str] = None,
+        disconnect_behaviour: Optional[int] = None,
+        enum_name: Optional[str] = None,
+        index_matters: Optional[bool] = None,
+        keyable: bool = True,
+        max_value: int | float | None = None,
+        min_value: int | float | None = None,
+        multi: Optional[bool] = None,
+        nice_name: Optional[str] = None,
+        number_of_children: Optional[int] = None,
+        parent: Optional[str] = None,
+        proxy: Optional[str] = None,
+        readable: Optional[bool] = None,
+        short_name: Optional[str] = None,
+        soft_max_value: int | float | None = None,
+        soft_min_value: int | float | None = None,
+        storable: Optional[bool] = None,
+        used_as_color: Optional[bool] = None,
+        used_as_filename: Optional[bool] = None,
+        used_as_proxy: Optional[bool] = None,
+        writeable: Optional[bool] = None,
+    ):
+        maya_enum_string = cls._convert_to_maya_enum_string(enum_data)
+        return super()._create(
+            node_name=node_name,
+            attr_name=attr_name,
+            cached_internally=cached_internally,
+            category=category,
+            disconnect_behaviour=disconnect_behaviour,
+            enum_name=maya_enum_string,
+            keyable=keyable,
+            nice_name=nice_name,
+            parent=parent,
+            proxy=proxy,
+            readable=readable,
+            short_name=short_name,
+            storable=storable,
+            used_as_proxy=used_as_proxy,
+            writeable=writeable,
+        )
+
+    @staticmethod
+    def _convert_to_maya_enum_string(data: dict[str, int]):
+        result = []
+        used_values = set(v for v in data.values() if v is not None)
+        next_value = 0
+        for name, value in data.items():
+            if value is None:
+                while next_value in used_values:
+                    next_value += 1
+                result.append(f"{name}={next_value}")
+                used_values.add(next_value)
+                next_value += 1
+            else:
+                result.append(f"{name}={value}")
+        return ":".join(result)
 
 
-class TypedAttribute(Attribute):
+class TypedAttribute(_Attribute):
     """
     Handles Maya kTypedAttribute types. By default, returns the MObject stored in the plug.
     Extend this class if you need to handle specific typed data (e.g., strings, matrices).
     """
 
     _getter_type = "asMObject"
+    _creator_type = "typed"
 
 
-class CompoundAttribute(Attribute):
+class CompoundAttribute(_AttributeWithCreatedChildren):
     """
     Handles Maya kCompoundAttribute types. Returns a list of child Attribute instances.
     """
+
+    _creator_type = "compound"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
@@ -212,8 +517,9 @@ class CompoundAttribute(Attribute):
         return children
 
 
-class MultiFloatAttribute(Attribute):
+class MultiFloatAttribute(_AttributeWithCreatedChildren):
     _num_children: int
+    _creator_type = "double3"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
@@ -224,37 +530,42 @@ class MultiFloatAttribute(Attribute):
         return tuple(plug.child(i).asDouble() for i in range(cls._num_children))
 
 
-class Float2Attribute(Attribute):
+class Float2Attribute(_Attribute):
     """
     Handles Maya kAttribute2Double types (e.g., UV coordinates).
     Returns a tuple of two float values (u, v).
     """
 
     _num_children = 2
+    _creator_type = "double2"
 
 
-class Float3Attribute(Attribute):
+class Float3Attribute(_Attribute):
     """
     Handles Maya kAttribute3Double types (e.g., translate, rotate, scale).
     Returns a tuple of three float values (x, y, z).
     """
 
     _num_children = 3
+    _creator_type = "double3"
 
 
-class Float4Attribute(Attribute):
+class Float4Attribute(_Attribute):
     """
     Handles Maya kAttribute4Double types (e.g., quaternions).
     Returns a tuple of four float values (x, y, z, w).
     """
 
     _num_children = 4
+    _creator_type = "double4"
 
 
-class MatrixAttribute(Attribute):
+class MatrixAttribute(_Attribute):
     """
     Handles Maya kMatrixAttribute types. Returns an OpenMaya2.MMatrix instance.
     """
+
+    _creator_type = "matrix"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
@@ -263,10 +574,12 @@ class MatrixAttribute(Attribute):
         return matrix_data.matrix()
 
 
-class GenericAttribute(Attribute):
+class GenericAttribute(_Attribute):
     """
     Handles Maya kGenericAttribute types. Returns the MObject stored in the plug, or raises an error if not supported.
     """
+
+    _creator_type = "generic"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
