@@ -9,6 +9,7 @@ from maya_brew.attributes.node_attribute import (
     Float4Attribute,
     Float2Attribute,
     MatrixAttribute,
+    EnumAttribute,
 )
 from maya_brew.log import get_logger
 from maya_brew.nodes.node_types import DagNode, Node
@@ -133,18 +134,26 @@ def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
     assert not get_ty_connections()
 
 
-def test_float_attribute_creation(brew_transform):
-
+def test_attribute_creation(brew_transform):
+    identity = OpenMaya2.MMatrix()
+    enum_data = {"Red": 0, "Green": 1, "Blue": 2}
+    green = enum_data["Green"]
     data = [
-        (Float2Attribute, (2.0, 1)),
-        (Float3Attribute, (1.1, 2, 3.3)),
+        (Float2Attribute, (2.0, 1.0), {}),
+        (Float3Attribute, (1.1, 2.0, 3.3), {}),
+        (Float4Attribute, (1.0, 2.0, 3.0, 4.0), {}),
+        (FloatAttribute, 3.14, {}),
+        (BoolAttribute, True, {}),
+        (EnumAttribute, green, {"enum_data": enum_data}),
+        (MatrixAttribute, identity, {}),
     ]
-    for attr_class, value in data:
+    for attr_class, value, create_kwargs in data:
         attr_name = f"my_{attr_class.__name__}"
         created_attr = attr_class.create(
             node_name=brew_transform.node_path,
             attr_name=attr_name,
             category="my_attributes",
+            **create_kwargs,
         )
         created_attr.set(value)
         assert created_attr.get() == value
