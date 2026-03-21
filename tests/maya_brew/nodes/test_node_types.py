@@ -87,3 +87,14 @@ def test_node_at_on_transform():
     assert isinstance(attr, Attribute)
     assert "visibility" in str(attr)
     assert transform.node_path in str(attr)
+
+
+def test_list_attributes_type_filter(brew_transform):
+    from maya_brew.attributes.node_attribute import FloatAttribute, BoolAttribute
+
+    float_attrs = brew_transform.list_attributes(of_type=FloatAttribute)
+    assert all(isinstance(a, FloatAttribute) for a in float_attrs)
+    assert len(float_attrs) > 0
+
+    bool_attrs = brew_transform.list_attributes(of_type=BoolAttribute)
+    assert all(isinstance(a, BoolAttribute) for a in bool_attrs)
