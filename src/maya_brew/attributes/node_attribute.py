@@ -11,6 +11,9 @@ A = typing.TypeVar("A", bound="Attribute")
 class Attribute:
     _getter_type: str
     _creator_type: str
+    _creator_type_arg = "attributeType"
+    _setter_type_needed = False
+    _setter_unpack = False
 
     def __new__(cls: type[A], plug_or_path: PlugInput) -> A:
         if cls is not Attribute:
@@ -99,7 +102,13 @@ class Attribute:
 
     def set(self, value):
         attr_name = self.plug.name()
-        cmds.setAttr(attr_name, value)
+        if self._setter_type_needed:
+            if self._setter_type_needed:
+                cmds.setAttr(attr_name, *value, type=self._creator_type)
+            else:
+                cmds.setAttr(attr_name, value, type=self._creator_type)
+        else:
+            cmds.setAttr(attr_name, value)
 
     def node(self):
         return self._get_node_from_plug(self.plug)
@@ -214,6 +223,7 @@ class Attribute:
         :param attr_name: Name of the custom attribute to create.
         """
         kwargs = dict()
+        kwargs[cls._creator_type_arg] = cls._creator_type
         if cached_internally is not None:
             kwargs["cachedInternally"] = cached_internally
         if category is not None:
@@ -265,9 +275,7 @@ class Attribute:
             raise MayaBrewAttributeError(f"Attribute '{full_attr}' already exists.")
         attr_type = cls._creator_type
         try:
-            cmds.addAttr(
-                node_name, longName=attr_name, attributeType=attr_type, **kwargs
-            )
+            cmds.addAttr(node_name, longName=attr_name, **kwargs)
         except Exception as e:
             raise MayaBrewAttributeError(
                 f"Failed to create attribute '{full_attr}': {e}"
@@ -310,6 +318,21 @@ class _Attribute(Attribute):
             used_as_proxy=used_as_proxy,
             writeable=writeable,
         )
+
+
+class _NonNumericAttribute(_Attribute):
+    _setter_type_needed = True
+    _setter_unpack = True
+
+
+class _MultiAttribute(_NonNumericAttribute):
+    _num_children: int
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        mobj = plug.asMObject()
+        numeric_data = OpenMaya2.MFnNumericData(mobj)
+        return tuple(numeric_data.getData())
 
 
 class _NumericAttribute(Attribute):
@@ -508,29 +531,13 @@ class CompoundAttribute(_AttributeWithCreatedChildren):
 
     _creator_type = "compound"
 
-    @classmethod
-    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        children = []
-        for i in range(plug.numChildren()):
-            child_plug = plug.child(i)
-            children.append(Attribute(child_plug))
-        return children
-
 
 class MultiFloatAttribute(_AttributeWithCreatedChildren):
     _num_children: int
     _creator_type = "double3"
 
-    @classmethod
-    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
-        if plug.numChildren() != cls._num_children:
-            raise MayaBrewAttributeError(
-                f"Expected {cls._num_children} children for kAttribute3Double, got {plug.numChildren()} on '{plug.name()}'"
-            )
-        return tuple(plug.child(i).asDouble() for i in range(cls._num_children))
 
-
-class Float2Attribute(_Attribute):
+class Float2Attribute(_MultiAttribute):
     """
     Handles Maya kAttribute2Double types (e.g., UV coordinates).
     Returns a tuple of two float values (u, v).
@@ -538,9 +545,11 @@ class Float2Attribute(_Attribute):
 
     _num_children = 2
     _creator_type = "double2"
+    _creator_type_arg = "dataType"
+    _getter_type = "asDouble"
 
 
-class Float3Attribute(_Attribute):
+class Float3Attribute(_MultiAttribute):
     """
     Handles Maya kAttribute3Double types (e.g., translate, rotate, scale).
     Returns a tuple of three float values (x, y, z).
@@ -548,9 +557,11 @@ class Float3Attribute(_Attribute):
 
     _num_children = 3
     _creator_type = "double3"
+    _creator_type_arg = "dataType"
+    _getter_type = "asDouble"
 
 
-class Float4Attribute(_Attribute):
+class Float4Attribute(_MultiAttribute):
     """
     Handles Maya kAttribute4Double types (e.g., quaternions).
     Returns a tuple of four float values (x, y, z, w).
@@ -558,14 +569,17 @@ class Float4Attribute(_Attribute):
 
     _num_children = 4
     _creator_type = "double4"
+    _creator_type_arg = "dataType"
+    _getter_type = "asDouble"
 
 
-class MatrixAttribute(_Attribute):
+class MatrixAttribute(_NonNumericAttribute):
     """
     Handles Maya kMatrixAttribute types. Returns an OpenMaya2.MMatrix instance.
     """
 
     _creator_type = "matrix"
+    _creator_type_arg = "dataType"
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
