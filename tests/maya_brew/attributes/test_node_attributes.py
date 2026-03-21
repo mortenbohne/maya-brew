@@ -4,6 +4,13 @@ from maya_brew.attributes.node_attribute import (
     Attribute,
     FloatAttribute,
     MessageAttribute,
+    BoolAttribute,
+    Float3Attribute,
+    Float4Attribute,
+    Float2Attribute,
+    MatrixAttribute,
+    EnumAttribute,
+    StringAttribute,
 )
 from maya_brew.log import get_logger
 from maya_brew.nodes.node_types import DagNode, Node
@@ -126,3 +133,55 @@ def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
     assert get_ty_connections() == [ty_attr.plug.name()]
     cmds.redo()
     assert not get_ty_connections()
+
+
+def test_string_attribute_factory_dispatch(brew_transform):
+    """
+    Verifies that Attribute("node.attr") dispatches to StringAttribute for string-typed
+    attributes. create/set/get/delete coverage is handled by test_attribute_creation.
+    """
+    node_path = brew_transform.node_path
+    attr_name = "my_string_attr"
+
+    created_attr = StringAttribute.create(node_name=node_path, attr_name=attr_name)
+    created_attr.set("hello")
+
+    cast_attr = Attribute(f"{node_path}.{attr_name}")
+    assert isinstance(cast_attr, StringAttribute)
+    assert cast_attr.get() == "hello"
+
+
+def test_attribute_creation(brew_transform):
+    identity = OpenMaya2.MMatrix()
+    enum_data = {"Red": 0, "Green": 1, "Blue": 2}
+    green = enum_data["Green"]
+    data = [
+        (Float2Attribute, (2.0, 1.0), {}),
+        (Float3Attribute, (1.1, 2.0, 3.3), {}),
+        (Float4Attribute, (1.0, 2.0, 3.0, 4.0), {}),
+        (FloatAttribute, 3.14, {}),
+        (BoolAttribute, True, {}),
+        (EnumAttribute, green, {"enum_data": enum_data}),
+        (MatrixAttribute, identity, {}),
+        (StringAttribute, "hello", {}),
+    ]
+    for attr_class, value, create_kwargs in data:
+        attr_name = f"my_{attr_class.__name__}"
+        created_attr = attr_class.create(
+            node_name=brew_transform.node_path,
+            attr_name=attr_name,
+            category="my_attributes",
+            **create_kwargs,
+        )
+        created_attr.set(value)
+        assert created_attr.get() == value
+        assert cmds.attributeQuery(
+            attr_name, node=brew_transform.node_path, exists=True
+        )
+        assert "my_attributes" in cmds.attributeQuery(
+            attr_name, node=brew_transform.node_path, categories=True
+        )
+        created_attr.delete()
+        assert not cmds.attributeQuery(
+            attr_name, node=brew_transform.node_path, exists=True
+        )
