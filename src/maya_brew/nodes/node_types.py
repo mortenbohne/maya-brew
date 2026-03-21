@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, Self
+from typing import TYPE_CHECKING, Any, Callable, Dict, Self, overload, TypeVar
 
 from .. import OpenMaya2, cmds
 from ..log import get_logger
@@ -6,6 +6,8 @@ from ..nodes import cast
 
 if TYPE_CHECKING:
     from ..attributes.node_attribute import Attribute, AttributeAccessor
+
+A = TypeVar("A", bound="Attribute")
 
 logger = get_logger(__name__)
 logger.setLevel("DEBUG")
@@ -51,17 +53,32 @@ class Node:
             logger.debug(f"Name was not unique. New name: {cmds_value}.")
         return cls(cmds_value)
 
-    def list_attributes(self, **kwargs) -> list["Attribute"]:
+    @overload
+    def list_attributes(self, attr_type: type[A], **kwargs) -> list[A]: ...
+
+    @overload
+    def list_attributes(
+        self, attr_type: None = None, **kwargs
+    ) -> list["Attribute"]: ...
+
+    def list_attributes(
+        self, attr_type: "type[A] | None" = None, **kwargs
+    ) -> "list[A] | list[Attribute]":
         """
-        List all attributes of the current node.
-        :return: A list of all attributes of the current node.
+        List attributes on this node.
+        :param attr_type: If provided, only return attributes of this maya-brew type.
         """
         from maya_brew.attributes.node_attribute import Attribute
 
-        return [
+        attrs = [
             Attribute(f"{self}.{cmds_attr}")
             for cmds_attr in cmds.listAttr(str(self), **kwargs)
-        ] or []
+        ]
+
+        if attr_type is not None:
+            return [a for a in attrs if isinstance(a, attr_type)]
+
+        return attrs
 
     @property
     def at(self) -> "AttributeAccessor":

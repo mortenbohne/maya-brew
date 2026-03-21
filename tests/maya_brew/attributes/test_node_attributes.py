@@ -185,3 +185,22 @@ def test_attribute_creation(brew_transform):
         assert not cmds.attributeQuery(
             attr_name, node=brew_transform.node_path, exists=True
         )
+
+
+def test_is_readable(brew_transform):
+    tx = Attribute(f"{brew_transform.node_path}.translateX")
+    assert tx.is_readable() is True
+
+    created_attr = FloatAttribute.create(
+        node_name=brew_transform.node_path,
+        attr_name="my_readable_float",
+        readable=True,
+    )
+    assert created_attr.is_readable() is True
+
+    created_attr_non_readable = FloatAttribute.create(
+        node_name=brew_transform.node_path,
+        attr_name="my_non_readable_float",
+        readable=False,
+    )
+    assert created_attr_non_readable.is_readable() is False
