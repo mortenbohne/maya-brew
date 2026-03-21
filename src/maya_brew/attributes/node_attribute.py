@@ -122,6 +122,22 @@ class Attribute:
     def name(self):
         return self.plug.name()
 
+    def api_type(self, as_string: bool = True):
+        """
+        Return the underlying OpenMaya API type for this attribute's MObject.
+        :param as_string: If True, return apiTypeStr (e.g. 'kTypedAttribute'),
+                          else return apiType() integer enum.
+        """
+        mobj_attr = self.plug.attribute()
+        if as_string:
+            api_type_str = getattr(mobj_attr, "apiTypeStr", None)
+            if not api_type_str:
+                raise MayaBrewAttributeError(
+                    f"Unable to resolve apiTypeStr for attribute '{self.plug.name()}'."
+                )
+            return api_type_str
+        return mobj_attr.apiType()
+
     def connect(self, dest: "Attribute", force: bool = False, next_available=False):
         """
         Connect this attribute to another attribute.
@@ -547,6 +563,29 @@ class CompoundAttribute(_AttributeWithCreatedChildren):
     """
 
     _creator_type = "compound"
+
+    @classmethod
+    def _get_plug_value(cls, plug: OpenMaya2.MPlug):
+        if not plug.isCompound:
+            raise MayaBrewAttributeError(
+                f"Attribute '{plug.name()}' is not a compound plug."
+            )
+
+        children: list[Attribute] = []
+        for i in range(plug.numChildren()):
+            try:
+                child_plug = plug.child(i)
+            except RuntimeError:
+                # Some Maya internal compound attrs do not expose child plugs.
+                continue
+            children.append(Attribute(child_plug))
+
+        if not children:
+            raise MayaBrewAttributeError(
+                f"Compound attribute '{plug.name()}' has no accessible child plugs."
+            )
+
+        return children
 
 
 class MultiFloatAttribute(_AttributeWithCreatedChildren):
