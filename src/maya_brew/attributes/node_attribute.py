@@ -104,7 +104,12 @@ class Attribute:
         return self.name()
 
     def get(self):
-        return self._get_plug_value(self.plug)
+        try:
+            return self._get_plug_value(self.plug)
+        except RuntimeError as e:
+            raise MayaBrewAttributeError(
+                f"Failed to get value for attribute '{self.plug.name()}': {e}"
+            ) from e
 
     def set(self, value):
         attr_name = self.plug.name()
