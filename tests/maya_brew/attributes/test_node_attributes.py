@@ -136,8 +136,8 @@ def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
 def test_float_attribute_creation(brew_transform):
 
     data = [
-        (Float2Attribute, (2, 1)),
-        (Float3Attribute, (1, 2, 3)),
+        (Float2Attribute, (2.0, 1)),
+        (Float3Attribute, (1.1, 2, 3.3)),
     ]
     for attr_class, value in data:
         attr_name = f"my_{attr_class.__name__}"
