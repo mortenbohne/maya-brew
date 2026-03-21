@@ -279,7 +279,6 @@ class Attribute:
         full_attr = f"{node_name}.{attr_name}"
         if cmds.objExists(full_attr):
             raise MayaBrewAttributeError(f"Attribute '{full_attr}' already exists.")
-        attr_type = cls._creator_type
         try:
             cmds.addAttr(node_name, longName=attr_name, **kwargs)
         except Exception as e:
