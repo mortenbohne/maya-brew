@@ -47,6 +47,12 @@ class Attribute:
                 f"Known types: {sorted(_API_TYPE_SUBCLASS_MAP)}"
             )
 
+        # Refine kTypedAttribute: check the actual data type to pick the right subclass.
+        if api_type == "kTypedAttribute":
+            fn_typed = OpenMaya2.MFnTypedAttribute(mobj_attr)
+            if fn_typed.attrType() == OpenMaya2.MFnData.kString:
+                subclass = StringAttribute  # type: ignore[assignment]
+
         instance = super().__new__(subclass)
         setattr(instance, "_pre_init_plug", plug)
         return typing.cast(A, instance)
@@ -103,7 +109,7 @@ class Attribute:
     def set(self, value):
         attr_name = self.plug.name()
         if self._setter_type_needed:
-            if self._setter_type_needed:
+            if self._setter_unpack:
                 cmds.setAttr(attr_name, *value, type=self._creator_type)
             else:
                 cmds.setAttr(attr_name, value, type=self._creator_type)
@@ -522,6 +528,18 @@ class TypedAttribute(_Attribute):
 
     _getter_type = "asMObject"
     _creator_type = "typed"
+
+
+class StringAttribute(_NonNumericAttribute):
+    """
+    Handles Maya string attributes (kTypedAttribute with dataType="string").
+    Returns a plain Python str.
+    """
+
+    _getter_type = "asString"
+    _creator_type = "string"
+    _creator_type_arg = "dataType"
+    _setter_unpack = False
 
 
 class CompoundAttribute(_AttributeWithCreatedChildren):

@@ -10,6 +10,7 @@ from maya_brew.attributes.node_attribute import (
     Float2Attribute,
     MatrixAttribute,
     EnumAttribute,
+    StringAttribute,
 )
 from maya_brew.log import get_logger
 from maya_brew.nodes.node_types import DagNode, Node
@@ -134,6 +135,22 @@ def test_connect_and_force_overwrite_and_disconnect(brew_transform, test_cube):
     assert not get_ty_connections()
 
 
+def test_string_attribute_factory_dispatch(brew_transform):
+    """
+    Verifies that Attribute("node.attr") dispatches to StringAttribute for string-typed
+    attributes. create/set/get/delete coverage is handled by test_attribute_creation.
+    """
+    node_path = brew_transform.node_path
+    attr_name = "my_string_attr"
+
+    created_attr = StringAttribute.create(node_name=node_path, attr_name=attr_name)
+    created_attr.set("hello")
+
+    cast_attr = Attribute(f"{node_path}.{attr_name}")
+    assert isinstance(cast_attr, StringAttribute)
+    assert cast_attr.get() == "hello"
+
+
 def test_attribute_creation(brew_transform):
     identity = OpenMaya2.MMatrix()
     enum_data = {"Red": 0, "Green": 1, "Blue": 2}
@@ -146,6 +163,7 @@ def test_attribute_creation(brew_transform):
         (BoolAttribute, True, {}),
         (EnumAttribute, green, {"enum_data": enum_data}),
         (MatrixAttribute, identity, {}),
+        (StringAttribute, "hello", {}),
     ]
     for attr_class, value, create_kwargs in data:
         attr_name = f"my_{attr_class.__name__}"
