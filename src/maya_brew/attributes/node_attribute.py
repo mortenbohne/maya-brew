@@ -143,6 +143,12 @@ class Attribute:
             return api_type_str
         return mobj_attr.apiType()
 
+    def is_readable(self) -> bool:
+        """
+        Returns True if the attribute is readable, False otherwise.
+        """
+        return OpenMaya2.MFnAttribute(self.plug.attribute()).readable
+
     def connect(self, dest: "Attribute", force: bool = False, next_available=False):
         """
         Connect this attribute to another attribute.
