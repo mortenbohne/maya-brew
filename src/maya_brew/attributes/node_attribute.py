@@ -1,5 +1,6 @@
 import typing
-from typing import Optional, Any
+from typing import Any, Optional
+
 from .. import OpenMaya2, cmds
 from ..exceptions import MayaBrewAttributeError
 from ..nodes.node_types import DagNode, Node

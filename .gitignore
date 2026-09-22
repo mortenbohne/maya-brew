@@ -177,3 +177,4 @@ cython_debug/
 
 # Super-Linter generated GitHub config snapshot (do not commit)
 github_conf/
+super-linter-output/
