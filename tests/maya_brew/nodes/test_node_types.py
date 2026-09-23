@@ -90,7 +90,7 @@ def test_node_at_on_transform():
 
 
 def test_list_attributes_type_filter(brew_transform):
-    from maya_brew.attributes.node_attribute import FloatAttribute, BoolAttribute
+    from maya_brew.attributes.node_attribute import BoolAttribute, FloatAttribute
 
     float_attrs = brew_transform.list_attributes(attr_type=FloatAttribute)
     assert all(isinstance(a, FloatAttribute) for a in float_attrs)

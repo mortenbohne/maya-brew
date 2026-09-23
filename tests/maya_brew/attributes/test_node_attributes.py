@@ -2,14 +2,14 @@ import pytest
 from maya_brew import OpenMaya2, cmds
 from maya_brew.attributes.node_attribute import (
     Attribute,
-    FloatAttribute,
-    MessageAttribute,
     BoolAttribute,
+    EnumAttribute,
+    Float2Attribute,
     Float3Attribute,
     Float4Attribute,
-    Float2Attribute,
+    FloatAttribute,
     MatrixAttribute,
-    EnumAttribute,
+    MessageAttribute,
     StringAttribute,
 )
 from maya_brew.log import get_logger

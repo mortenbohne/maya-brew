@@ -15,26 +15,26 @@ on:
       - develop
 
 permissions:
-  contents: write
-  pull-requests: write
-  workflows: write
-
+  contents: read
 jobs:
-  build:
+  lint:
     name: Lint Code Base
+    permissions:
+      contents: write
+      statuses: write
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.11"
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
       - name: Cache Python dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             .venv
@@ -55,7 +55,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}"
       - name: Lint Code Base
-        uses: super-linter/super-linter/slim@61abc07d755095a68f4987d1c2c3d1d64408f1f9
+        uses: super-linter/super-linter/slim@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: develop
@@ -66,8 +66,6 @@ jobs:
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
           PYTHONPATH: "${{ github.workspace }}/.venv/lib/python3.11/site-packages:${{ github.workspace }}/src"
-          SAVE_SUPER_LINTER_SUMMARY: true
-          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           VALIDATE_CHECKOV: true
           VALIDATE_GITLEAKS: true
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
@@ -79,8 +77,10 @@ jobs:
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_PYTHON_ISORT: true
           VALIDATE_PYTHON_RUFF: true
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_YAML_PRETTIER: true
-          FIX_GITHUB_ACTIONS_ZIZMOR: true
+          FIX_GITHUB_ACTIONS_ZIZMOR: false
           FIX_JSON_PRETTIER: true
           FIX_JSON: true
           FIX_MARKDOWN_PRETTIER: true
