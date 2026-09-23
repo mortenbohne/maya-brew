@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, Self, overload, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Dict, Self, TypeVar, overload
 
 from .. import OpenMaya2, cmds
 from ..log import get_logger
