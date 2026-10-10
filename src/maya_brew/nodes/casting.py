@@ -4,9 +4,9 @@ from .. import OpenMaya2, cmds
 from ..exceptions import (
     InvalidDagPath,
     MultipleMatchingNodes,
-    NoMatchingNodes,
     NodeCastingException,
     NodeException,
+    NoMatchingNodes,
     NonExistingDagPath,
 )
 

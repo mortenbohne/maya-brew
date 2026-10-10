@@ -5,12 +5,11 @@ Includes abstract types and unlisted ancestors, with optional plug-in types.
 Provides consistent Python class naming for generated and runtime wrappers.
 """
 
-from dataclasses import dataclass
 import keyword
 import re
+from dataclasses import dataclass
 
 import maya.cmds as cmds
-
 from maya_brew.exceptions import NodeTypeInheritanceError
 
 

@@ -3,8 +3,8 @@ from typing import Any, Optional
 
 from .. import OpenMaya2, cmds
 from ..exceptions import MayaBrewAttributeError
-from ..nodes.casting import cast
 from ..nodes._foundation.node_extensions import Node
+from ..nodes.casting import cast
 
 PlugInput = typing.Union[OpenMaya2.MPlug, str]
 A = typing.TypeVar("A", bound="Attribute")

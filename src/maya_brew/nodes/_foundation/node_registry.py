@@ -4,11 +4,11 @@ from ... import cmds
 from ...exceptions import MayaBrewException, NodeTypeInheritanceError
 from ...log import get_logger
 from .. import _generated
+from . import node_extensions
 from .native_node_hierarchy import (
     python_class_name,
     query_node_type,
 )
-from . import node_extensions
 from .node_extensions import Node
 
 logger = get_logger(__name__)
@@ -57,7 +57,9 @@ class NodeRegistry:
         try:
             concrete = set(cmds.allNodeTypes() or [])
         except RuntimeError as e:
-            raise NodeTypeInheritanceError(f"Cannot query concrete node types: {e}") from e
+            raise NodeTypeInheritanceError(
+                f"Cannot query concrete node types: {e}"
+            ) from e
         parent: type[Node] = Node
         for name in chain:
             if name in self._classes:
