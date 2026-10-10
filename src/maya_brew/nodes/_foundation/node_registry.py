@@ -14,6 +14,13 @@ from .node_extensions import Node
 logger = get_logger(__name__)
 
 
+SNAPSHOT_MODULE = "constants"
+
+
+def snapshot_package_name(major_version: str) -> str:
+    return f"{_generated.__name__}.maya_{major_version}"
+
+
 class NodeRegistry:
     def __init__(self, use_generated: bool = True) -> None:
         self._use_generated = use_generated
@@ -30,8 +37,8 @@ class NodeRegistry:
             major_version = cmds.about(majorVersion=True)
         except RuntimeError as e:
             raise MayaBrewException(f"Cannot determine Maya version: {e}") from e
-        package_name = f"{_generated.__name__}.maya_{major_version}"
-        module_name = f"{package_name}.constants"
+        package_name = snapshot_package_name(major_version)
+        module_name = f"{package_name}.{SNAPSHOT_MODULE}"
         try:
             module = importlib.import_module(module_name)
         except ModuleNotFoundError as e:
