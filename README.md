@@ -70,9 +70,9 @@ Offline generation infrastructure lives in `tools/node_hierarchy`, outside the
 installed runtime package. Its versioned outputs live exclusively in
 `src/maya_brew/nodes/_generated/maya_<version>`:
 
-| Artifact | Purpose |
-| --- | --- |
-| `classes.py` | Explicit, importable native classes |
+| Artifact       | Purpose                                                     |
+| -------------- | ----------------------------------------------------------- |
+| `classes.py`   | Explicit, importable native classes                         |
 | `constants.py` | `TYPE_CLASSES` mapping from Maya names to generated classes |
 
 The runtime selects generated classes by Maya's major version, with runtime
