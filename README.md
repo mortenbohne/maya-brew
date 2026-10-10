@@ -42,3 +42,38 @@ extending PyMEL itself:
 PyMEL significantly influenced how many technical artists approach Maya scripting, and this project stands on that
 conceptual foundation. `maya-brew` simply narrows the focus: take the useful ergonomic ideas, shed the heavy wrapping,
 and keep to the canonical APIs.
+
+## Native node wrappers
+
+User-facing exceptions are defined in `maya_brew.exceptions`. Catch specific
+failures such as `NoMatchingNodes`, broader categories such as
+`NodeCastingException`, or `MayaBrewException` for all library-defined errors.
+
+Python node classes follow Maya's node-type inheritance, including intermediate
+ancestors. `cast` selects the exact native class for an existing node;
+direct constructors remain explicit.
+
+```python
+from maya_brew.nodes.casting import cast
+from maya_brew.nodes.node_types import Transform
+
+node = cast("my_transform")
+assert isinstance(node, Transform)
+
+transform = cast("my_transform", Transform)  # Typed and checked as Transform
+
+```
+
+### Generated hierarchies
+
+Offline generation infrastructure lives in `tools/node_hierarchy`, outside the
+installed runtime package. Its versioned outputs live exclusively in
+`src/maya_brew/nodes/_generated/maya_<version>`:
+
+| Artifact | Purpose |
+| --- | --- |
+| `classes.py` | Explicit, importable native classes |
+| `constants.py` | `TYPE_CLASSES` mapping from Maya names to generated classes |
+
+The runtime selects generated classes by Maya's major version, with runtime
+fallback for missing releases or types.
