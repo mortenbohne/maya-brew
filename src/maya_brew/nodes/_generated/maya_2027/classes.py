@@ -1,12 +1,11 @@
 # AUTO-GENERATED; DO NOT EDIT.
+# @generated
 # Generator: tools.node_hierarchy.generate
 # Regenerate: mayapy -m tools.node_hierarchy.generate
 from maya_brew.nodes._foundation import node_extensions as ne
 
 
-class TadskAssetInstanceNode_TdependNode(
-    *ne.get_bases("TadskAssetInstanceNode_TdependNode", ne.Node)
-):
+class TadskAssetInstanceNode_TdependNode(*ne.get_bases("TadskAssetInstanceNode_TdependNode", ne.Node)):
     _maya_type = "TadskAssetInstanceNode_TdependNode"
     _abstract = True
 
@@ -1491,9 +1490,7 @@ class WtAddMatrix(*ne.get_bases("WtAddMatrix", ne.Node)):
     _abstract = False
 
 
-class AbstractBaseNurbsConversion(
-    *ne.get_bases("AbstractBaseNurbsConversion", AbstractBaseCreate)
-):
+class AbstractBaseNurbsConversion(*ne.get_bases("AbstractBaseNurbsConversion", AbstractBaseCreate)):
     _maya_type = "abstractBaseNurbsConversion"
     _abstract = True
 
@@ -1523,65 +1520,47 @@ class AnimBlendNodeAdditive(*ne.get_bases("AnimBlendNodeAdditive", AnimBlendNode
     _abstract = False
 
 
-class AnimBlendNodeAdditiveDA(
-    *ne.get_bases("AnimBlendNodeAdditiveDA", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveDA(*ne.get_bases("AnimBlendNodeAdditiveDA", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveDA"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveDL(
-    *ne.get_bases("AnimBlendNodeAdditiveDL", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveDL(*ne.get_bases("AnimBlendNodeAdditiveDL", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveDL"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveF(
-    *ne.get_bases("AnimBlendNodeAdditiveF", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveF(*ne.get_bases("AnimBlendNodeAdditiveF", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveF"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveFA(
-    *ne.get_bases("AnimBlendNodeAdditiveFA", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveFA(*ne.get_bases("AnimBlendNodeAdditiveFA", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveFA"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveFL(
-    *ne.get_bases("AnimBlendNodeAdditiveFL", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveFL(*ne.get_bases("AnimBlendNodeAdditiveFL", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveFL"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveI16(
-    *ne.get_bases("AnimBlendNodeAdditiveI16", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveI16(*ne.get_bases("AnimBlendNodeAdditiveI16", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveI16"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveI32(
-    *ne.get_bases("AnimBlendNodeAdditiveI32", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveI32(*ne.get_bases("AnimBlendNodeAdditiveI32", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveI32"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveRotation(
-    *ne.get_bases("AnimBlendNodeAdditiveRotation", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveRotation(*ne.get_bases("AnimBlendNodeAdditiveRotation", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveRotation"
     _abstract = False
 
 
-class AnimBlendNodeAdditiveScale(
-    *ne.get_bases("AnimBlendNodeAdditiveScale", AnimBlendNodeBase)
-):
+class AnimBlendNodeAdditiveScale(*ne.get_bases("AnimBlendNodeAdditiveScale", AnimBlendNodeBase)):
     _maya_type = "animBlendNodeAdditiveScale"
     _abstract = False
 
@@ -2066,9 +2045,7 @@ class OffsetSurface(*ne.get_bases("OffsetSurface", AbstractBaseCreate)):
     _abstract = False
 
 
-class PaintableShadingDependNode(
-    *ne.get_bases("PaintableShadingDependNode", ShadingDependNode)
-):
+class PaintableShadingDependNode(*ne.get_bases("PaintableShadingDependNode", ShadingDependNode)):
     _maya_type = "paintableShadingDependNode"
     _abstract = True
 
@@ -2358,9 +2335,7 @@ class AISEnvFacade(*ne.get_bases("AISEnvFacade", EnvFacade)):
     _abstract = False
 
 
-class TadskAssetInstanceNode_TdnTx2D(
-    *ne.get_bases("TadskAssetInstanceNode_TdnTx2D", Texture2d)
-):
+class TadskAssetInstanceNode_TdnTx2D(*ne.get_bases("TadskAssetInstanceNode_TdnTx2D", Texture2d)):
     _maya_type = "TadskAssetInstanceNode_TdnTx2D"
     _abstract = True
 
@@ -2535,16 +2510,12 @@ class MakeNurbPlane(*ne.get_bases("MakeNurbPlane", Primitive)):
     _abstract = False
 
 
-class MakeThreePointCircularArc(
-    *ne.get_bases("MakeThreePointCircularArc", MakeCircularArc)
-):
+class MakeThreePointCircularArc(*ne.get_bases("MakeThreePointCircularArc", MakeCircularArc)):
     _maya_type = "makeThreePointCircularArc"
     _abstract = False
 
 
-class MakeTwoPointCircularArc(
-    *ne.get_bases("MakeTwoPointCircularArc", MakeCircularArc)
-):
+class MakeTwoPointCircularArc(*ne.get_bases("MakeTwoPointCircularArc", MakeCircularArc)):
     _maya_type = "makeTwoPointCircularArc"
     _abstract = False
 
@@ -2864,9 +2835,7 @@ class ResultCurveTimeToTime(*ne.get_bases("ResultCurveTimeToTime", ResultCurve))
     _abstract = False
 
 
-class ResultCurveTimeToUnitless(
-    *ne.get_bases("ResultCurveTimeToUnitless", ResultCurve)
-):
+class ResultCurveTimeToUnitless(*ne.get_bases("ResultCurveTimeToUnitless", ResultCurve)):
     _maya_type = "resultCurveTimeToUnitless"
     _abstract = False
 
@@ -3721,9 +3690,7 @@ class VertexBakeSet(*ne.get_bases("VertexBakeSet", BakeSet)):
     _abstract = False
 
 
-class TadskAssetInstanceNode_TlightShape(
-    *ne.get_bases("TadskAssetInstanceNode_TlightShape", Light)
-):
+class TadskAssetInstanceNode_TlightShape(*ne.get_bases("TadskAssetInstanceNode_TlightShape", Light)):
     _maya_type = "TadskAssetInstanceNode_TlightShape"
     _abstract = True
 
@@ -4118,9 +4085,7 @@ class Stroke(*ne.get_bases("Stroke", PfxGeometry)):
     _abstract = False
 
 
-class SubdivSurfaceVarGroup(
-    *ne.get_bases("SubdivSurfaceVarGroup", BaseGeometryVarGroup)
-):
+class SubdivSurfaceVarGroup(*ne.get_bases("SubdivSurfaceVarGroup", BaseGeometryVarGroup)):
     _maya_type = "subdivSurfaceVarGroup"
     _abstract = False
 
@@ -4530,9 +4495,7 @@ class NewtonManip(*ne.get_bases("NewtonManip", FieldManip)):
     _abstract = False
 
 
-class NonExtendedLightShapeNode(
-    *ne.get_bases("NonExtendedLightShapeNode", NonAmbientLightShapeNode)
-):
+class NonExtendedLightShapeNode(*ne.get_bases("NonExtendedLightShapeNode", NonAmbientLightShapeNode)):
     _maya_type = "nonExtendedLightShapeNode"
     _abstract = True
 
