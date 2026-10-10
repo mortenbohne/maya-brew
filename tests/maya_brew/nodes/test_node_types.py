@@ -1,15 +1,33 @@
 import logging
 
-import maya_brew.nodes.cast
+import maya_brew.nodes.casting
 import maya_brew.nodes.node_types
 import pytest
 from maya_brew.attributes.node_attribute import Attribute
 from maya_brew.exceptions import MayaBrewAttributeError
 
 
+@pytest.mark.parametrize("maya_type", ["node", "dagNode", "transform", "mesh", "joint"])
+def test_native_class_exports_are_resolved_by_name(maya_type):
+    from maya_brew.nodes._foundation.native_node_hierarchy import python_class_name
+    from maya_brew.nodes._foundation.node_registry import registry
+
+    wrapper = getattr(maya_brew.nodes.node_types, python_class_name(maya_type))
+    assert wrapper is registry.get_or_create_class(maya_type)
+    assert wrapper._maya_type == maya_type
+
+
+def test_node_export_is_native_not_generic_base():
+    from maya_brew.nodes._foundation.node_extensions import Node
+
+    wrapper = maya_brew.nodes.node_types.Node
+    assert wrapper is not Node
+    assert issubclass(wrapper, Node)
+
+
 def test_dag_node_string(test_cube, caplog):
     dag_node = maya_brew.nodes.node_types.DagNode(test_cube)
-    full_node_path = maya_brew.nodes.cast.get_long_name_from_maya_string(test_cube)
+    full_node_path = maya_brew.nodes.casting.get_long_name_from_maya_string(test_cube)
     assert str(dag_node) == full_node_path
     # rename to see warning display correct node path when deleted
     new_name = "new_name"
