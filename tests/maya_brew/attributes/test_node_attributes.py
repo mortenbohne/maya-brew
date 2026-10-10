@@ -13,7 +13,8 @@ from maya_brew.attributes.node_attribute import (
     StringAttribute,
 )
 from maya_brew.log import get_logger
-from maya_brew.nodes.node_types import DagNode, Node
+from maya_brew.nodes._foundation.node_extensions import Node
+from maya_brew.nodes.node_types import DagNode
 
 logger = get_logger(__name__)
 
