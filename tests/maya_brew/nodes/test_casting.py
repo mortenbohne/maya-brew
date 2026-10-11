@@ -1,6 +1,9 @@
 import maya_brew
 import maya_brew.nodes.casting
 import pytest
+from maya_brew.exceptions import NodeCastingException, NodeException
+from maya_brew.nodes.casting import cast
+from maya_brew.nodes.node_types import DagNode, Joint, Mesh, MultiplyDivide, Transform
 
 
 def test_string_to_dag_path(test_cube, test_namespace, test_cube_short_name):
@@ -48,3 +51,42 @@ def test_get_long_name_from_maya_string(
     assert test_namespace not in new_cube_full_path
     with pytest.raises(maya_brew.nodes.casting.NoMatchingNodes):
         maya_brew.nodes.casting.get_long_name_from_maya_string("invalid_name")
+
+
+@pytest.fixture
+def native_nodes():
+    transform, _ = maya_brew.cmds.polyCube(name="cast_cube")
+    shape = maya_brew.cmds.listRelatives(transform, shapes=True, fullPath=True)[0]
+    joint = maya_brew.cmds.createNode("joint", name="cast_joint")
+    utility = maya_brew.cmds.createNode("multiplyDivide", name="cast_utility")
+    return {
+        "transform": transform,
+        "mesh": shape,
+        "joint": joint,
+        "multiply_divide": utility,
+    }
+
+
+def test_cast_returns_exact_native_class(native_nodes):
+    assert type(cast(native_nodes["transform"])) is Transform
+    assert type(cast(native_nodes["mesh"])) is Mesh
+    assert type(cast(native_nodes["joint"])) is Joint
+    assert type(cast(native_nodes["multiply_divide"])) is MultiplyDivide
+
+
+def test_cast_expected_type_preserves_actual_subclass(native_nodes):
+    assert type(cast(native_nodes["joint"], Transform)) is Joint
+    assert type(cast(native_nodes["mesh"], DagNode)) is Mesh
+
+
+def test_cast_expected_type_mismatch_raises(native_nodes):
+    with pytest.raises(
+        NodeCastingException, match="Expected Transform.*MultiplyDivide"
+    ):
+        cast(native_nodes["multiply_divide"], Transform)
+
+
+@pytest.mark.parametrize("value", ["", "node.tx", "node.vtx[0]", None, 123])
+def test_cast_rejects_non_node_inputs(value):
+    with pytest.raises(NodeException):
+        cast(value)
