@@ -1,5 +1,4 @@
 import pytest
-
 from maya_brew import cmds
 from maya_brew.command_wrapper import createNode
 from maya_brew.exceptions import AbstractNodeCreationError
