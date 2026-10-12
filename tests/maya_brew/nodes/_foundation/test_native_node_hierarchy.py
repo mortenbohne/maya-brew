@@ -1,5 +1,4 @@
 import pytest
-
 from maya_brew import cmds
 from maya_brew.exceptions import NodeTypeInheritanceError
 from maya_brew.nodes import _generated
