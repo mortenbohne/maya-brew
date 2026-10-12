@@ -1,7 +1,6 @@
 # @not-generated
 
 import pytest
-
 from maya_brew.nodes._foundation.native_node_hierarchy import NodeType
 from tools.node_hierarchy import generate
 
