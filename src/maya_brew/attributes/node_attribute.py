@@ -3,7 +3,8 @@ from typing import Any, Optional
 
 from .. import OpenMaya2, cmds
 from ..exceptions import MayaBrewAttributeError
-from ..nodes.node_types import DagNode, Node
+from ..nodes._foundation.node_extensions import Node
+from ..nodes.casting import cast
 
 PlugInput = typing.Union[OpenMaya2.MPlug, str]
 A = typing.TypeVar("A", bound="Attribute")
@@ -197,12 +198,15 @@ class Attribute:
 
     @staticmethod
     def _get_node_from_plug(plug: OpenMaya2.MPlug) -> Node:
-        mobj = plug.node()
-        if mobj.hasFn(OpenMaya2.MFn.kDagNode):
-            return DagNode(OpenMaya2.MFnDagNode(mobj).fullPathName())
-        else:
-            name = OpenMaya2.MFnDependencyNode(mobj).name()
-            return Node(name)
+        try:
+            mobj = plug.node()
+            if mobj.hasFn(OpenMaya2.MFn.kDagNode):
+                name = OpenMaya2.MFnDagNode(mobj).fullPathName()
+            else:
+                name = OpenMaya2.MFnDependencyNode(mobj).name()
+        except RuntimeError as e:
+            raise MayaBrewAttributeError(f"Cannot resolve plug owner: {e}") from e
+        return cast(name)
 
     @classmethod
     def _get_plug_value(cls, plug: OpenMaya2.MPlug):
