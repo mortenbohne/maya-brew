@@ -1,35 +1,21 @@
-"""Generate native node classes for the running Maya version.
-
-Run from the repository root with the target release's mayapy:
-    mayapy -m tools.node_hierarchy.generate
-"""
+"""Build native node hierarchy source and typing stubs."""
 
 # @not-generated
 
-from pathlib import Path
-
-from maya_brew import cmds
-from maya_brew.log import get_logger
-from maya_brew.nodes import _generated
 from maya_brew.nodes._foundation import node_extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import (
     NodeType,
-    discover_node_types,
     python_class_name,
 )
 from maya_brew.nodes._foundation.node_registry import (
     SNAPSHOT_MODULE,
-    snapshot_package_name,
 )
-
-logger = get_logger(__name__)
-logger.setLevel("INFO")
 
 CLASSES_MODULE = "classes"
 HEADER = "# AUTO-GENERATED; DO NOT EDIT.\n# @generated\n"
 
 
-def generate_artifacts(hierarchy: dict[str, NodeType]) -> dict[str, str]:
+def generate_node_files(hierarchy: dict[str, NodeType]) -> dict[str, str]:
     ordered = sorted(
         hierarchy.values(), key=lambda node: (len(node.inheritance), node.name)
     )
@@ -37,9 +23,27 @@ def generate_artifacts(hierarchy: dict[str, NodeType]) -> dict[str, str]:
     get_bases = node_extensions.get_bases.__name__
     root = f"ne.{node_extensions.Node.__name__}"
     lines = [HEADER, f"from {package} import {module} as ne\n"]
+    stub_lines = [
+        HEADER,
+        "from typing import ClassVar\n\n",
+        f"from {package} import {module} as ne\n",
+    ]
+    wrappers: dict[str, type[node_extensions.Node]] = {}
     for node in ordered:
         class_name = python_class_name(node.name)
         parent = python_class_name(node.parent) if node.parent else root
+        parent_class = wrappers[node.parent] if node.parent else node_extensions.Node
+        bases = node_extensions.get_bases(class_name, parent_class)
+        wrappers[node.name] = type(class_name, bases, {})
+        stub_bases = ", ".join(
+            parent if base is parent_class else f"ne.{base.__name__}"
+            for base in bases
+        )
+        stub_lines.append(
+            f"\n\nclass {class_name}({stub_bases}):\n"
+            "    _maya_type: ClassVar[str]\n"
+            "    _abstract: ClassVar[bool]\n"
+        )
         lines.extend(
             [
                 "\n\n",
@@ -54,21 +58,7 @@ def generate_artifacts(hierarchy: dict[str, NodeType]) -> dict[str, str]:
     constants.append("}\n")
     return {
         f"{CLASSES_MODULE}.py": "".join(lines),
+        f"{CLASSES_MODULE}.pyi": "".join(stub_lines),
         f"{SNAPSHOT_MODULE}.py": "".join(constants),
         "__init__.py": HEADER,
     }
-
-
-def main() -> None:
-    nodes = discover_node_types()
-    version = cmds.about(majorVersion=True)
-    package_name = snapshot_package_name(version)
-    destination = Path(_generated.__file__).parent / package_name.rpartition(".")[2]
-    destination.mkdir(exist_ok=True)
-    for filename, content in generate_artifacts(nodes).items():
-        (destination / filename).write_text(content, encoding="utf-8", newline="\n")
-    logger.info(f"Generated {len(nodes)} types for Maya {version} in {destination}")
-
-
-if __name__ == "__main__":
-    main()
