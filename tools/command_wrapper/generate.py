@@ -3,16 +3,15 @@
 # @not-generated
 
 import inspect
+import re
 from collections.abc import Callable
 from pathlib import Path
-import re
 from typing import Any
 
 from maya_brew import cmds
-from maya_brew.exceptions import MayaBrewException
-from maya_brew.command_wrapper import extensions
-from maya_brew.command_wrapper import _generated, _snapshot
+from maya_brew.command_wrapper import _generated, _snapshot, extensions
 from maya_brew.command_wrapper.typing import NODE_RETURNS, NodeReturn
+from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import (
     NodeType,
