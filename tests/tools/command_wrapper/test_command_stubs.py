@@ -1,3 +1,4 @@
+import pytest
 from maya_brew.nodes._foundation.native_node_hierarchy import NodeType
 from tools.command_wrapper import generate
 
@@ -43,6 +44,3 @@ def test_flag_overrides_complete_help():
 def test_unsupported_help_type_requires_override():
     with pytest.raises(ValueError, match="flag_types"):
         generate.command_flags("example", "  -v -value Unsupported\n", {})
-
-
-import pytest
