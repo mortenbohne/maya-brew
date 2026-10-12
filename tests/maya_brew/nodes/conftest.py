@@ -1,5 +1,4 @@
 import pytest
-
 from maya_brew import cmds
 from tests.maya_brew.nodes.plugins import brew_registry_plugin
 
