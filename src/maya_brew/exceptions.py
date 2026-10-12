@@ -22,6 +22,10 @@ class NodeException(MayaBrewException):
     """Raised when a node operation fails."""
 
 
+class AbstractNodeCreationError(NodeException):
+    """Raised when attempting to create an abstract node class."""
+
+
 class NodeTypeInheritanceError(MayaBrewException):
     """Raised when Maya's node-type inheritance cannot be resolved."""
 

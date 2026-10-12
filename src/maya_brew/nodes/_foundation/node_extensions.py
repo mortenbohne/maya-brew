@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, Self, TypeVar, overload
 
 from ... import OpenMaya2, cmds
-from ...exceptions import NodeException
+from ...exceptions import AbstractNodeCreationError, NodeException
 from ...log import get_logger
 from .. import casting
 
@@ -41,7 +41,9 @@ class Node:
     @classmethod
     def create(cls, name: str, **kwargs: Any) -> Self:
         if cls._abstract or cls._maya_type is None:
-            raise NodeException(f"Cannot create abstract node class {cls.__name__}")
+            raise AbstractNodeCreationError(
+                f"Cannot create a node from abstract class {cls.__name__}"
+            )
         kwargs.update(cls._cmds_creator_args)
         kwargs["name"] = name
         try:
