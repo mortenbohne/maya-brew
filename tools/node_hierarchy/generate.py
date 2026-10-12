@@ -36,7 +36,8 @@ def generate_node_files(hierarchy: dict[str, NodeType]) -> dict[str, str]:
         bases = node_extensions.get_bases(class_name, parent_class)
         wrappers[node.name] = type(class_name, bases, {})
         stub_bases = ", ".join(
-            parent if base is parent_class else f"ne.{base.__name__}" for base in bases
+            parent if base is parent_class else f"ne.{base.__name__}"
+            for base in bases
         )
         stub_lines.append(
             f"\n\nclass {class_name}({stub_bases}):\n"
