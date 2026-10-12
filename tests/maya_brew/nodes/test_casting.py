@@ -3,7 +3,14 @@ import maya_brew.nodes.casting
 import pytest
 from maya_brew.exceptions import NodeCastingException, NodeException
 from maya_brew.nodes.casting import cast
-from maya_brew.nodes.node_types import DagNode, Joint, Mesh, MultiplyDivide, Transform
+from maya_brew.nodes.node_types import (
+    DagNode,
+    Joint,
+    Mesh,
+    MultiplyDivide,
+    Transform,
+    Unknown,
+)
 
 
 def test_string_to_dag_path(test_cube, test_namespace, test_cube_short_name):
@@ -72,6 +79,17 @@ def test_cast_returns_exact_native_class(native_nodes):
     assert type(cast(native_nodes["mesh"])) is Mesh
     assert type(cast(native_nodes["joint"])) is Joint
     assert type(cast(native_nodes["multiply_divide"])) is MultiplyDivide
+
+
+@pytest.fixture
+def unknown_node():
+    return maya_brew.cmds.createNode("unknown", name="cast_unknown")
+
+
+def test_cast_unknown_node(unknown_node):
+    wrapped = cast(unknown_node)
+    assert type(wrapped) is Unknown
+    assert str(wrapped) == unknown_node
 
 
 def test_cast_expected_type_preserves_actual_subclass(native_nodes):
