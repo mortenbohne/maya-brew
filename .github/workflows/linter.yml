@@ -63,6 +63,7 @@ jobs:
           APPLY_FIXES_EVENT: push
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
+          IGNORE_GENERATED_FILES: true
           LINTER_RULES_PATH: /
           PYTHON_PYLINT_CONFIG_FILE: ./pyproject.toml
           PYTHONPATH: "${{ github.workspace }}/.venv/lib/python3.11/site-packages:${{ github.workspace }}/src"
