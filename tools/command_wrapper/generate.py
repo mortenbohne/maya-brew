@@ -3,14 +3,12 @@
 # @not-generated
 
 import inspect
-import re
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from maya_brew import cmds
 from maya_brew.command_wrapper import _generated, _snapshot, extensions
-from maya_brew.command_wrapper.typing import NODE_RETURNS, NodeReturn
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import (
@@ -18,43 +16,13 @@ from maya_brew.nodes._foundation.native_node_hierarchy import (
     python_class_name,
 )
 from maya_brew.nodes._foundation.node_registry import snapshot_package_name
+from tools.command_wrapper.help import command_flags
+from tools.command_wrapper.metadata import COMMANDS, CommandMetadata
 from tools.node_hierarchy.generate import CLASSES_MODULE
 
 HEADER = "# AUTO-GENERATED; DO NOT EDIT.\n# @generated\n"
 CONCRETE_NODES_MODULE = "concrete_nodes"
 CONCRETE_NODE_ALIAS = "ConcreteNode"
-
-
-def command_flags(
-    command: str, help_text: str, overrides: dict[str, str]
-) -> dict[str, str]:
-    types = {
-        "": "bool",
-        "String": "str",
-        "Int": "int",
-        "Float": "float",
-        "Boolean": "bool",
-    }
-    flags: dict[str, str] = {}
-    for line in help_text.splitlines():
-        if not line.lstrip().startswith("-"):
-            continue
-        match = re.fullmatch(r"\s*-(\w+)\s+-(\w+)\s*(.*?)\s*", line)
-        if match is None:
-            raise ValueError(f"{command}: unsupported flag help line {line!r}")
-        alias, name, maya_type = match.groups()
-        annotation = overrides.get(name, overrides.get(alias, types.get(maya_type)))
-        if annotation is None:
-            raise ValueError(
-                f"{command}.{name}: unsupported help type {maya_type!r}; "
-                "supply a flag_types override"
-            )
-        flags[name] = annotation
-        flags[alias] = annotation
-    if not flags and not overrides:
-        raise ValueError(f"{command}: no flags found in Maya help; supply flag_types")
-    flags.update(overrides)
-    return flags
 
 
 def generate_concrete_node_stub(hierarchy: dict[str, NodeType], version: str) -> str:
@@ -83,9 +51,23 @@ def generate_concrete_node_stub(hierarchy: dict[str, NodeType], version: str) ->
 
 
 def generate_command_definition(
-    function_name: str, policy: NodeReturn, flags: dict[str, str], kwargs_name: str
+    function_name: str,
+    policy: CommandMetadata,
+    flags: dict[str, str],
+    kwargs_name: str,
+    args_name: str | None,
+    return_type: str,
 ) -> str:
     node_class = node_extensions.Node.__name__
+    if args_name is None:
+        signature_arguments = (
+            f"    {policy.type_argument}: str | type[{node_class}],\n    *,\n"
+        )
+        call_arguments = f"        {policy.type_argument},\n"
+    else:
+        target_type = f"str | {node_class}" if policy.node_targets else "str"
+        signature_arguments = f"    *{args_name}: {target_type},\n"
+        call_arguments = f"        *{args_name},\n"
     unset_class = extensions.Unset.__name__
     runtime_flags = ",\n".join(
         f"    {flag}: {annotation} | {unset_class} = UNSET"
@@ -94,12 +76,11 @@ def generate_command_definition(
     supplied_flags = ",\n".join(f'        "{flag}": {flag}' for flag in flags)
     return (
         f"\n\ndef {function_name}(\n"
-        f"    {policy.type_argument}: str | type[{node_class}],\n"
-        f"    *,\n{runtime_flags},\n"
-        f") -> {node_class} | None:\n"
+        f"{signature_arguments}{runtime_flags},\n"
+        f") -> {return_type}:\n"
         f"    {kwargs_name} = {{\n{supplied_flags},\n    }}\n"
         f"    return extensions.{function_name}(\n"
-        f"        {policy.type_argument},\n"
+        f"{call_arguments}"
         f"        **{{flag: value for flag, value in {kwargs_name}.items() "
         "if value is not UNSET},\n"
         "    )\n"
@@ -107,9 +88,24 @@ def generate_command_definition(
 
 
 def generate_command_overloads(
-    function_name: str, policy: NodeReturn, flags: dict[str, str]
+    function_name: str,
+    policy: CommandMetadata,
+    flags: dict[str, str],
+    return_type: str,
 ) -> str:
+    signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
+    if signature_path.is_file():
+        return "\n\n" + signature_path.read_text(encoding="utf-8")
     node_class = node_extensions.Node.__name__
+    if policy.type_argument is None:
+        stub_flags = ", ".join(
+            f"{flag}: {annotation} = ..." for flag, annotation in flags.items()
+        )
+        target_type = f"str | {node_class}" if policy.node_targets else "str"
+        return (
+            f"\n\ndef {function_name}(*args: {target_type}, {stub_flags}) "
+            f"-> {return_type}: ...\n"
+        )
     if policy.nullable_flags:
         cases = [
             ("type[T]", "Literal[False]", "T"),
@@ -136,8 +132,20 @@ def generate_command_overloads(
     return "".join(lines)
 
 
-def command_kwargs_name(function: Callable[..., Any], policy: NodeReturn) -> str:
+def command_parameter_names(
+    function: Callable[..., Any], policy: CommandMetadata
+) -> tuple[str | None, str]:
     parameters = list(inspect.signature(function).parameters.values())
+    if policy.type_argument is None:
+        if (
+            len(parameters) != 2
+            or parameters[0].kind != inspect.Parameter.VAR_POSITIONAL
+            or parameters[1].kind != inspect.Parameter.VAR_KEYWORD
+        ):
+            raise ValueError(
+                f"{function.__name__}: expected *args followed by **kwargs"
+            )
+        return parameters[0].name, parameters[1].name
     if (
         len(parameters) != 2
         or parameters[0].name != policy.type_argument
@@ -148,10 +156,12 @@ def command_kwargs_name(function: Callable[..., Any], policy: NodeReturn) -> str
         raise ValueError(
             f"{function.__name__}: expected a required type argument followed by **kwargs"
         )
-    return parameters[1].name
+    return None, parameters[1].name
 
 
-def resolve_command_flags(function_name: str, policy: NodeReturn) -> dict[str, str]:
+def resolve_command_flags(
+    function_name: str, policy: CommandMetadata
+) -> dict[str, str]:
     try:
         help_text = cmds.help(function_name)
     except RuntimeError as e:
@@ -173,6 +183,7 @@ def generate_command_files(
     node_class = node_extensions.Node.__name__
     runtime = [
         HEADER,
+        "from typing import Any\n",
         f"from {extensions.__name__} import UNSET, {extensions.Unset.__name__}\n",
         f"from {extensions.__package__} import "
         f"{extensions.__name__.rpartition('.')[2]} as extensions\n",
@@ -180,23 +191,31 @@ def generate_command_files(
     ]
     stub = [
         HEADER,
-        "from typing import Literal, TypeVar, overload\n\n",
+        "from typing import Any, Literal, TypeVar, overload\n\n",
         f"from {node_extensions.__name__} import {node_class}\n",
         f"from .{CONCRETE_NODES_MODULE} import {CONCRETE_NODE_ALIAS}\n",
         f'\nT = TypeVar("T", bound={CONCRETE_NODE_ALIAS})\n',
     ]
     command_names = []
-    for function_name, function in inspect.getmembers(extensions, inspect.isfunction):
-        policy = NODE_RETURNS.get(function)
-        if policy is None:
-            continue
+    for function, policy in sorted(COMMANDS.items(), key=lambda item: item[0].__name__):
+        function_name = function.__name__
         command_names.append(function_name)
-        kwargs_name = command_kwargs_name(function, policy)
+        args_name, kwargs_name = command_parameter_names(function, policy)
+        return_annotation = inspect.signature(function).return_annotation
+        if return_annotation is inspect.Signature.empty:
+            raise ValueError(f"{function_name}: missing return annotation")
+        return_type = inspect.formatannotation(return_annotation).replace(
+            f"{node_extensions.__name__}.", ""
+        )
         flags = resolve_command_flags(function_name, policy)
         runtime.append(
-            generate_command_definition(function_name, policy, flags, kwargs_name)
+            generate_command_definition(
+                function_name, policy, flags, kwargs_name, args_name, return_type
+            )
         )
-        stub.append(generate_command_overloads(function_name, policy, flags))
+        stub.append(
+            generate_command_overloads(function_name, policy, flags, return_type)
+        )
     exports = (
         "\n\n__all__ = [" + ", ".join(f'"{name}"' for name in command_names) + "]\n"
     )
