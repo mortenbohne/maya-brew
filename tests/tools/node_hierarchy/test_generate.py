@@ -18,13 +18,18 @@ def hierarchy():
 
 @pytest.fixture()
 def artifacts(hierarchy):
-    return generate.generate_artifacts(hierarchy)
+    return generate.generate_node_files(hierarchy)
 
 
 def test_generation_is_deterministic(hierarchy, artifacts):
     reversed_hierarchy = dict(reversed(list(hierarchy.items())))
-    assert artifacts == generate.generate_artifacts(reversed_hierarchy)
-    assert set(artifacts) == {"classes.py", "constants.py", "__init__.py"}
+    assert artifacts == generate.generate_node_files(reversed_hierarchy)
+    assert set(artifacts) == {
+        "classes.py",
+        "classes.pyi",
+        "constants.py",
+        "__init__.py",
+    }
     assert all(content.startswith(generate.HEADER) for content in artifacts.values())
     assert artifacts["__init__.py"] == generate.HEADER
 
