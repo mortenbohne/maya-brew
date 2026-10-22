@@ -1,6 +1,5 @@
 import maya.cmds as maya_cmds
 import pytest
-
 from maya_brew import cmds
 from maya_brew.exceptions import NodeException
 from maya_brew.nodes._foundation.node_extensions import Node

@@ -1,5 +1,5 @@
-import pytest
 import maya.cmds as cmds
+import pytest
 from tests.maya_brew.nodes.plugins import brew_registry_plugin
 
 

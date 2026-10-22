@@ -1,6 +1,5 @@
-import pytest
-
 import maya.cmds as cmds
+import pytest
 from maya_brew.command_wrapper import createNode, polyPlane
 from maya_brew.exceptions import AbstractNodeCreationError, NodeException
 from maya_brew.nodes.node_state import NodeState

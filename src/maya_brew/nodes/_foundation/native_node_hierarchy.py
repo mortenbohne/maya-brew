@@ -9,8 +9,9 @@ import keyword
 import re
 from dataclasses import dataclass
 
-from ... import _maya_cmds
 from maya_brew.exceptions import NodeTypeInheritanceError
+
+from ... import _maya_cmds
 
 
 @dataclass

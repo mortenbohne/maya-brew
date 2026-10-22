@@ -1,5 +1,5 @@
-import pytest
 import maya.cmds as cmds
+import pytest
 from maya_brew import OpenMaya2
 from maya_brew.attributes.node_attribute import (
     Attribute,

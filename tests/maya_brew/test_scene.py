@@ -1,6 +1,6 @@
+import maya.cmds as cmds
 import maya_brew
 import maya_brew.scene
-import maya.cmds as cmds
 import pytest
 
 

@@ -1,7 +1,7 @@
+import maya.cmds as cmds
 import maya_brew
 import maya_brew.nodes.node_types
 import maya_brew.scene
-import maya.cmds as cmds
 import pytest
 from maya_brew import OpenMaya2
 

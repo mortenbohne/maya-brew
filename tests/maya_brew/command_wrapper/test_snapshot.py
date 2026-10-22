@@ -1,5 +1,5 @@
-import pytest
 import maya.cmds as cmds
+import pytest
 from maya_brew.command_wrapper import _snapshot
 from maya_brew.command_wrapper._generated.maya_2027 import commands
 
