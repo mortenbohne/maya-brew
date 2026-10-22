@@ -4,6 +4,7 @@ from maya_brew import cmds
 from maya_brew.command_wrapper import (
     createNode,
     ls,
+    polyCone,
     polyCube,
     polyPlane,
     polyPyramid,
@@ -13,6 +14,7 @@ from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     Joint,
+    PolyCone,
     PolyCube,
     PolyPlane,
     PolyPyramid,
@@ -23,6 +25,32 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_cone_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCone()
+    assert_type(nodes, tuple[Transform, PolyCone])
+    assert_type(polyCone(ch=False), tuple[Transform])
+    assert_type(polyCone(constructionHistory=False), tuple[Transform])
+    assert_type(polyCone(object=False), tuple[PolyCone])
+    assert_type(polyCone(o=False, ch=False), tuple[PolyCone])
+    assert_type(
+        polyCone(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCone] | tuple[Transform] | tuple[PolyCone],
+    )
+    assert_type(polyCone(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCone(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCone(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCone(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyCone(nodes[1], edit=True, radius=2.0), Literal["Values edited."])
+    assert_type(
+        polyCone(nodes[0], e=True, rcp=True, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyCone(nodes[1], q=True, radius=True), Any)
+    assert_type(
+        polyCone(axis=(0.0, 1.0, 0.0), sx=10, sy=3, sz=2, roundCap=True),
+        tuple[Transform, PolyCone],
+    )
 
 
 def check_poly_pyramid_types(history: bool, create_object: bool) -> None:

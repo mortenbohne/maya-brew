@@ -74,6 +74,7 @@ Currently wrapped commands:
 
 - `createNode`
 - `ls`
+- `polyCone`
 - `polyCube`
 - `polyPlane`
 - `polyPyramid`

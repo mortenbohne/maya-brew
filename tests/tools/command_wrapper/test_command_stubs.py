@@ -67,6 +67,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
 @pytest.fixture(
     params=[
         extensions.polyCube,
+        extensions.polyCone,
         extensions.polyPlane,
         extensions.polyPyramid,
         extensions.polySphere,

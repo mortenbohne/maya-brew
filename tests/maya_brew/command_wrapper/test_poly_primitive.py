@@ -4,6 +4,7 @@ from maya_brew import cmds
 from maya_brew.exceptions import NodeException
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
+    PolyCone,
     PolyCube,
     PolyPlane,
     PolyPyramid,
@@ -15,6 +16,7 @@ from maya_brew.nodes.node_types import (
 @pytest.fixture(
     params=[
         pytest.param((cmds.polyPlane, PolyPlane, "width"), id="polyPlane"),
+        pytest.param((cmds.polyCone, PolyCone, "radius"), id="polyCone"),
         pytest.param((cmds.polySphere, PolySphere, "radius"), id="polySphere"),
         pytest.param((cmds.polyCube, PolyCube, "width"), id="polyCube"),
         pytest.param((cmds.polyPyramid, PolyPyramid, "sideLength"), id="polyPyramid"),
