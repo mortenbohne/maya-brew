@@ -5,6 +5,7 @@ from .poly_cube import polyCube as polyCube
 from .poly_cylinder import polyCylinder as polyCylinder
 from .poly_pipe import polyPipe as polyPipe
 from .poly_plane import polyPlane as polyPlane
+from .poly_prism import polyPrism as polyPrism
 from .poly_pyramid import polyPyramid as polyPyramid
 from .poly_sphere import polySphere as polySphere
 from .poly_torus import polyTorus as polyTorus
@@ -17,6 +18,7 @@ __all__ = [
     "polyCylinder",
     "polyPipe",
     "polyPlane",
+    "polyPrism",
     "polyPyramid",
     "polySphere",
     "polyTorus",

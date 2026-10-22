@@ -9,6 +9,7 @@ from maya_brew.command_wrapper import (
     polyCylinder,
     polyPipe,
     polyPlane,
+    polyPrism,
     polyPyramid,
     polySphere,
     polyTorus,
@@ -22,6 +23,7 @@ from maya_brew.nodes.node_types import (
     PolyCylinder,
     PolyPipe,
     PolyPlane,
+    PolyPrism,
     PolyPyramid,
     PolySphere,
     PolyTorus,
@@ -31,6 +33,32 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_prism_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPrism()
+    assert_type(nodes, tuple[Transform, PolyPrism])
+    assert_type(polyPrism(ch=False), tuple[Transform])
+    assert_type(polyPrism(constructionHistory=False), tuple[Transform])
+    assert_type(polyPrism(object=False), tuple[PolyPrism])
+    assert_type(polyPrism(o=False, ch=False), tuple[PolyPrism])
+    assert_type(
+        polyPrism(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPrism] | tuple[Transform] | tuple[PolyPrism],
+    )
+    assert_type(polyPrism(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPrism(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPrism(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPrism(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyPrism(nodes[1], edit=True, length=5.0), Literal["Values edited."])
+    assert_type(polyPrism(nodes[0], e=True, cuv=0, tx=0), Literal["Values edited."])
+    assert_type(polyPrism(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPrism(axis=(0.0, 1.0, 0.0), length=3.0, numberOfSides=5, createUVs=2),
+        tuple[Transform, PolyPrism],
+    )
+    assert_type(polyPrism(numderOfSides=6, l=4.0), tuple[Transform, PolyPrism])
+    assert_type(polyPrism(nsi=6, ns=6), tuple[Transform, PolyPrism])
 
 
 def check_poly_pipe_types(history: bool, create_object: bool) -> None:

@@ -77,7 +77,9 @@ Currently wrapped commands:
 - `polyCone`
 - `polyCube`
 - `polyCylinder`
+- `polyPipe`
 - `polyPlane`
+- `polyPrism`
 - `polyPyramid`
 - `polySphere`
 - `polyTorus`
