@@ -1,6 +1,7 @@
 import maya_brew
 import maya_brew.nodes.node_types
 import maya_brew.scene
+import maya.cmds as cmds
 import pytest
 from maya_brew import OpenMaya2
 
@@ -17,9 +18,7 @@ def test_cube_short_name():
 
 @pytest.fixture()
 def test_cube(test_namespace, test_cube_short_name):
-    cube, history = maya_brew.cmds.polyCube(
-        name=f"{test_namespace}:{test_cube_short_name}"
-    )
+    cube, history = cmds.polyCube(name=f"{test_namespace}:{test_cube_short_name}")
     yield cube
 
 
@@ -47,7 +46,7 @@ def translatex_plug(brew_transform):
 def non_dag_plug():
     """Provide the MPlug for a non-DAG dependency node (multiplyDivide.input1X)."""
     name = "test_multiplyDivide"
-    maya_brew.cmds.createNode("multiplyDivide", name=name)
+    cmds.createNode("multiplyDivide", name=name)
     sel = OpenMaya2.MSelectionList()
     sel.add(name)
     mobj = sel.getDependNode(0)

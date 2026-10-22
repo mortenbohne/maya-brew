@@ -69,7 +69,7 @@ transform = cast("my_transform", Transform)  # Typed and checked as Transform
 `maya_brew.command_wrapper` provides typed wrappers around selected `maya.cmds`
 commands, accepting brew objects and returning native node wrappers where appropriate.
 Return types may differ from Maya's conventions, including typed tuples instead of
-lists and enums instead of numeric values. `maya_brew.cmds` remains the raw Maya
+lists and enums instead of numeric values. `maya_brew.maya_cmds` remains the raw Maya
 command module.
 
 Currently wrapped commands:

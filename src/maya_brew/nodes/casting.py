@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, TypeVar, overload
 
-from .. import OpenMaya2, cmds
+from .. import OpenMaya2, _maya_cmds
 from ..exceptions import (
     InvalidDagPath,
     MultipleMatchingNodes,
@@ -39,7 +39,7 @@ def get_long_name_from_maya_string(name: str) -> str:
     """
     Convert a unique maya.cmds node string to a long name.
     """
-    matching_nodes = cmds.ls(name, long=True)
+    matching_nodes = _maya_cmds.ls(name, long=True)
     if not matching_nodes:
         raise NoMatchingNodes(f"No objects matching '{name}' in scene")
     num_nodes = len(matching_nodes)
@@ -66,7 +66,7 @@ def cast(node_path: str, expected_type: "type[T] | None" = None) -> "Node | T":
         raise NodeException("Expected a node name, not an attribute or component")
     try:
         long_name = get_long_name_from_maya_string(node_path)
-        maya_type = cmds.nodeType(long_name)
+        maya_type = _maya_cmds.nodeType(long_name)
     except RuntimeError as e:
         raise NodeException(f"Cannot resolve node {node_path!r}: {e}") from e
     node = registry.get_or_create_class(maya_type)(long_name)

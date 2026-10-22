@@ -1,5 +1,5 @@
 import pytest
-from maya_brew import cmds
+import maya.cmds as cmds
 from maya_brew.exceptions import AbstractNodeCreationError
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_types import DagNode, Joint, MultiplyDivide, Transform

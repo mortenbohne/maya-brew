@@ -1,4 +1,4 @@
-from maya_brew import cmds
+import maya.cmds as cmds
 from maya_brew.nodes._foundation import node_registry
 from maya_brew.nodes._foundation.node_registry import NodeRegistry
 

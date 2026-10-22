@@ -1,14 +1,19 @@
 import maya_brew
 import maya_brew.scene
+import maya.cmds as cmds
 import pytest
 
 
 def test_new_scene():
-    cube, history = maya_brew.cmds.polyCube()
+    cube, history = cmds.polyCube()
     with pytest.raises(maya_brew.scene.UnsavedChanges):
         maya_brew.scene.new_file(force=False)
     maya_brew.scene.new_file(force=True)
-    assert maya_brew.cmds.objExists(cube) is False
+    assert cmds.objExists(cube) is False
+
+
+def test_raw_maya_commands_are_not_exported_from_package():
+    assert not hasattr(maya_brew, "cmds")
 
 
 def test_UnsavedChanges_is_RuntimeError():

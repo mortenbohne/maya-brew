@@ -7,7 +7,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from maya_brew import cmds
+import maya.cmds as cmds
 from maya_brew.command_wrapper import _generated, _snapshot, extensions
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions

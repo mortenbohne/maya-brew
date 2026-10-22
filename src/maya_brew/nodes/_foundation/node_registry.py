@@ -1,6 +1,6 @@
 import importlib
 
-from ... import cmds
+from ... import _maya_cmds
 from ...exceptions import MayaBrewException, NodeTypeInheritanceError
 from ...log import get_logger
 from .. import _generated
@@ -34,7 +34,7 @@ class NodeRegistry:
             self._loaded = True
             return
         try:
-            major_version = cmds.about(majorVersion=True)
+            major_version = _maya_cmds.about(majorVersion=True)
         except RuntimeError as e:
             raise MayaBrewException(f"Cannot determine Maya version: {e}") from e
         package_name = snapshot_package_name(major_version)
@@ -62,7 +62,7 @@ class NodeRegistry:
     def _create_class(self, maya_type: str) -> type[Node]:
         chain = query_node_type(maya_type)
         try:
-            concrete = set(cmds.allNodeTypes() or [])
+            concrete = set(_maya_cmds.allNodeTypes() or [])
         except RuntimeError as e:
             raise NodeTypeInheritanceError(
                 f"Cannot query concrete node types: {e}"

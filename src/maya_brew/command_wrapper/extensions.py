@@ -1,6 +1,6 @@
 from typing import Any
 
-from .. import cmds
+from .. import _maya_cmds
 from ..exceptions import AbstractNodeCreationError, NodeException
 from ..nodes._foundation.node_extensions import Node
 from ..nodes._foundation.node_registry import registry
@@ -29,7 +29,7 @@ def createNode(node_type: str | type[Node], **kwargs: Any) -> Node | None:
         if isinstance(kwargs.get(flag), Node):
             kwargs[flag] = str(kwargs[flag])
     try:
-        name = cmds.createNode(node_type, **kwargs)
+        name = _maya_cmds.createNode(node_type, **kwargs)
     except RuntimeError as e:
         if registry.get_or_create_class(node_type)._abstract:
             raise AbstractNodeCreationError(
@@ -45,7 +45,7 @@ def createNode(node_type: str | type[Node], **kwargs: Any) -> Node | None:
 def polyPlane(*args: str | Node, **kwargs: Any) -> Any:
     """Return created nodes as a tuple and queried node states as NodeState."""
     try:
-        result = cmds.polyPlane(
+        result = _maya_cmds.polyPlane(
             *(str(target) if isinstance(target, Node) else target for target in args),
             **kwargs,
         )

@@ -5,7 +5,7 @@ from pathlib import Path
 from .log import get_logger
 
 logger = get_logger(__name__)
-logger.setLevel("DEBUG")
+# logger.setLevel("DEBUG")
 
 
 def reload_mb():

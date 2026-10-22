@@ -2,7 +2,7 @@ import logging
 import os
 
 import maya.api._OpenMaya_py2 as OpenMaya2  # noqa
-import maya.cmds as cmds  # noqa: F401
+import maya.cmds as _maya_cmds  # noqa: F401
 
 PACKAGE_NAME = "MAYA_BREW"
 

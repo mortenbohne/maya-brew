@@ -2,7 +2,7 @@ import importlib
 from pathlib import Path
 from types import ModuleType
 
-from .. import cmds
+from .. import _maya_cmds
 from ..exceptions import MayaBrewException
 from ..log import get_logger
 from . import _generated
@@ -17,7 +17,7 @@ def snapshot_package_name(version: str | int) -> str:
 
 def load_commands() -> ModuleType:
     try:
-        version = cmds.about(majorVersion=True)
+        version = _maya_cmds.about(majorVersion=True)
     except RuntimeError as e:
         raise MayaBrewException(f"Cannot determine Maya version: {e}") from e
     package = snapshot_package_name(version)
