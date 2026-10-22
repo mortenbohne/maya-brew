@@ -6,6 +6,7 @@ from maya_brew.command_wrapper import (
     ls,
     polyCone,
     polyCube,
+    polyCylinder,
     polyPlane,
     polyPyramid,
     polySphere,
@@ -16,6 +17,7 @@ from maya_brew.nodes.node_types import (
     Joint,
     PolyCone,
     PolyCube,
+    PolyCylinder,
     PolyPlane,
     PolyPyramid,
     PolySphere,
@@ -25,6 +27,34 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_cylinder_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCylinder()
+    assert_type(nodes, tuple[Transform, PolyCylinder])
+    assert_type(polyCylinder(ch=False), tuple[Transform])
+    assert_type(polyCylinder(constructionHistory=False), tuple[Transform])
+    assert_type(polyCylinder(object=False), tuple[PolyCylinder])
+    assert_type(polyCylinder(o=False, ch=False), tuple[PolyCylinder])
+    assert_type(
+        polyCylinder(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCylinder] | tuple[Transform] | tuple[PolyCylinder],
+    )
+    assert_type(polyCylinder(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCylinder(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCylinder(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCylinder(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyCylinder(nodes[1], edit=True, radius=2.0), Literal["Values edited."]
+    )
+    assert_type(
+        polyCylinder(nodes[0], e=True, rcp=True, tx=1), Literal["Values edited."]
+    )
+    assert_type(polyCylinder(nodes[1], q=True, radius=True), Any)
+    assert_type(
+        polyCylinder(axis=(0.0, 1.0, 0.0), subdivisionsCaps=2, texture=1, rch=False),
+        tuple[Transform, PolyCylinder],
+    )
 
 
 def check_poly_cone_types(history: bool, create_object: bool) -> None:

@@ -76,6 +76,7 @@ Currently wrapped commands:
 - `ls`
 - `polyCone`
 - `polyCube`
+- `polyCylinder`
 - `polyPlane`
 - `polyPyramid`
 - `polySphere`

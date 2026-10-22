@@ -6,6 +6,7 @@ from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     PolyCone,
     PolyCube,
+    PolyCylinder,
     PolyPlane,
     PolyPyramid,
     PolySphere,
@@ -17,6 +18,7 @@ from maya_brew.nodes.node_types import (
     params=[
         pytest.param((cmds.polyPlane, PolyPlane, "width"), id="polyPlane"),
         pytest.param((cmds.polyCone, PolyCone, "radius"), id="polyCone"),
+        pytest.param((cmds.polyCylinder, PolyCylinder, "radius"), id="polyCylinder"),
         pytest.param((cmds.polySphere, PolySphere, "radius"), id="polySphere"),
         pytest.param((cmds.polyCube, PolyCube, "width"), id="polyCube"),
         pytest.param((cmds.polyPyramid, PolyPyramid, "sideLength"), id="polyPyramid"),
