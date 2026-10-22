@@ -1,14 +1,39 @@
 from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
-from maya_brew.command_wrapper import createNode, ls, polyPlane, polySphere
+from maya_brew.command_wrapper import createNode, ls, polyCube, polyPlane, polySphere
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import Joint, PolyPlane, PolySphere, Transform
+from maya_brew.nodes.node_types import Joint, PolyCube, PolyPlane, PolySphere, Transform
 
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_cube_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCube()
+    assert_type(nodes, tuple[Transform, PolyCube])
+    assert_type(polyCube(ch=False), tuple[Transform])
+    assert_type(polyCube(constructionHistory=False), tuple[Transform])
+    assert_type(polyCube(object=False), tuple[PolyCube])
+    assert_type(polyCube(o=False, ch=False), tuple[PolyCube])
+    assert_type(
+        polyCube(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCube] | tuple[Transform] | tuple[PolyCube],
+    )
+    assert_type(polyCube(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCube(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCube(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCube(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyCube(nodes[1], edit=True, width=2.0), Literal["Values edited."])
+    assert_type(polyCube(nodes[0], e=True, d=3.0), Literal["Values edited."])
+    assert_type(polyCube(nodes[1], q=True, width=True), Any)
+    assert_type(polyCube(nodes[1], query=True, axis=True), Any)
+    assert_type(
+        polyCube(axis=(0.0, 1.0, 0.0), sx=10, sy=15, sz=5),
+        tuple[Transform, PolyCube],
+    )
 
 
 def check_poly_sphere_types(history: bool, create_object: bool) -> None:

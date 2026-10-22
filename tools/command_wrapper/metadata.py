@@ -25,6 +25,10 @@ COMMANDS: dict[Callable[..., Any], CommandMetadata] = {
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
     ),
+    extensions.polyCube: CommandMetadata(
+        flag_types={"axis": "tuple[float, float, float] | bool"},
+        node_targets=True,
+    ),
     extensions.polySphere: CommandMetadata(
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
