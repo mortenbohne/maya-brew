@@ -55,7 +55,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         assert inspect.getdoc(namespace[function.__name__]) == inspect.getdoc(function)
 
 
-@pytest.fixture(params=[extensions.polyPlane, extensions.ls])
+@pytest.fixture(params=[extensions.polyPlane, extensions.polySphere, extensions.ls])
 def handwritten_signature(request):
     function = request.param
     return (

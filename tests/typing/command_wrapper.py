@@ -1,14 +1,41 @@
 from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
-from maya_brew.command_wrapper import createNode, ls, polyPlane
+from maya_brew.command_wrapper import createNode, ls, polyPlane, polySphere
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
+from maya_brew.nodes.node_types import Joint, PolyPlane, PolySphere, Transform
 
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_sphere_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polySphere()
+    assert_type(nodes, tuple[Transform, PolySphere])
+    assert_type(polySphere(ch=False), tuple[Transform])
+    assert_type(polySphere(constructionHistory=False), tuple[Transform])
+    assert_type(polySphere(object=False), tuple[PolySphere])
+    assert_type(polySphere(o=False, ch=False), tuple[PolySphere])
+    assert_type(
+        polySphere(constructionHistory=history, object=create_object),
+        tuple[Transform, PolySphere] | tuple[Transform] | tuple[PolySphere],
+    )
+    assert_type(polySphere(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polySphere(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polySphere(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polySphere(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polySphere(nodes[1], edit=True, radius=2.0), Literal["Values edited."])
+    assert_type(
+        polySphere(nodes[0], e=True, nds=NodeState.BLOCKING),
+        Literal["Values edited."],
+    )
+    assert_type(polySphere(nodes[1], q=True, radius=True), Any)
+    assert_type(polySphere(nodes[1], query=True, axis=True), Any)
+    assert_type(
+        polySphere(axis=(0.0, 1.0, 0.0), sx=10, sy=15), tuple[Transform, PolySphere]
+    )
 
 
 def check_ls_types(node: Node, nodes: list[Transform], mode: bool) -> None:

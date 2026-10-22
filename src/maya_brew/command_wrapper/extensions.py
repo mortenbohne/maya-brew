@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any
 
 from .. import _maya_cmds
@@ -118,26 +118,43 @@ def polyPlane(*args: str | Node, **kwargs: Any) -> Any:
     other queries and edits retain Maya's return values.
     Maya runtime errors are raised as NodeException.
     """
+    return _poly_primitive("polyPlane", _maya_cmds.polyPlane, args, kwargs)
+
+
+def polySphere(*args: str | Node, **kwargs: Any) -> Any:
+    """Return created nodes as a tuple of wrappers instead of a list of names.
+
+    Accept wrapped nodes as targets. nodeState queries return NodeState;
+    other queries and edits retain Maya's return values.
+    Maya runtime errors are raised as NodeException.
+    """
+    return _poly_primitive("polySphere", _maya_cmds.polySphere, args, kwargs)
+
+
+def _poly_primitive(
+    name: str,
+    command: Callable[..., Any],
+    args: Sequence[str | Node],
+    kwargs: dict[str, Any],
+) -> Any:
     try:
-        result = _maya_cmds.polyPlane(
+        result = command(
             *(str(target) if isinstance(target, Node) else target for target in args),
             **kwargs,
         )
     except RuntimeError as e:
-        raise NodeException(f"polyPlane failed: {e}") from e
+        raise NodeException(f"{name} failed: {e}") from e
     if (kwargs.get("query") or kwargs.get("q")) and (
         kwargs.get("nodeState") or kwargs.get("nds")
     ):
         try:
             return NodeState(result)
         except (ValueError, TypeError) as e:
-            raise NodeException(
-                f"Unexpected node state from polyPlane: {result!r}"
-            ) from e
+            raise NodeException(f"Unexpected node state from {name}: {result!r}") from e
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")):
         return result
     if not isinstance(result, list) or not all(
         isinstance(name, str) for name in result
     ):
-        raise NodeException(f"Unexpected result from polyPlane: {result!r}")
+        raise NodeException(f"Unexpected result from {name}: {result!r}")
     return tuple(cast(name) for name in result)
