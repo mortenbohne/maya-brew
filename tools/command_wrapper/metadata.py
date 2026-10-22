@@ -12,6 +12,7 @@ class CommandMetadata:
     node_arguments: tuple[str, ...] = ()
     flag_types: dict[str, str] = field(default_factory=dict)
     node_targets: bool = False
+    target_type: str | None = None
 
 
 COMMANDS: dict[Callable[..., Any], CommandMetadata] = {
@@ -23,5 +24,15 @@ COMMANDS: dict[Callable[..., Any], CommandMetadata] = {
     extensions.polyPlane: CommandMetadata(
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
+    ),
+    extensions.ls: CommandMetadata(
+        flag_types={
+            "containerType": "str | list[str] | tuple[str, ...]",
+            **{
+                flag: "str | type[Node] | Sequence[str | type[Node]]"
+                for flag in ("exactType", "excludeType", "type")
+            },
+        },
+        target_type="str | Node | Sequence[str | Node]",
     ),
 }

@@ -2,12 +2,14 @@
 
 # @not-generated
 
+import ast
 import inspect
+import keyword
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from maya_brew import cmds
+import maya.cmds as cmds
 from maya_brew.command_wrapper import _generated, _snapshot, extensions
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
@@ -57,6 +59,7 @@ def generate_command_definition(
     kwargs_name: str,
     args_name: str | None,
     return_type: str,
+    docstring: str | None = None,
 ) -> str:
     node_class = node_extensions.Node.__name__
     if args_name is None:
@@ -65,7 +68,9 @@ def generate_command_definition(
         )
         call_arguments = f"        {policy.type_argument},\n"
     else:
-        target_type = f"str | {node_class}" if policy.node_targets else "str"
+        target_type = policy.target_type or (
+            f"str | {node_class}" if policy.node_targets else "str"
+        )
         signature_arguments = f"    *{args_name}: {target_type},\n"
         call_arguments = f"        *{args_name},\n"
     unset_class = extensions.Unset.__name__
@@ -78,7 +83,8 @@ def generate_command_definition(
         f"\n\ndef {function_name}(\n"
         f"{signature_arguments}{runtime_flags},\n"
         f") -> {return_type}:\n"
-        f"    {kwargs_name} = {{\n{supplied_flags},\n    }}\n"
+        + (f"    {docstring!r}\n" if docstring else "")
+        + f"    {kwargs_name} = {{\n{supplied_flags},\n    }}\n"
         f"    return extensions.{function_name}(\n"
         f"{call_arguments}"
         f"        **{{flag: value for flag, value in {kwargs_name}.items() "
@@ -101,7 +107,9 @@ def generate_command_overloads(
         stub_flags = ", ".join(
             f"{flag}: {annotation} = ..." for flag, annotation in flags.items()
         )
-        target_type = f"str | {node_class}" if policy.node_targets else "str"
+        target_type = policy.target_type or (
+            f"str | {node_class}" if policy.node_targets else "str"
+        )
         return (
             f"\n\ndef {function_name}(*args: {target_type}, {stub_flags}) "
             f"-> {return_type}: ...\n"
@@ -174,7 +182,35 @@ def resolve_command_flags(
         raise ValueError(f"{function_name}: unknown policy flags {unknown_flags}")
     for flag in policy.node_arguments:
         flags[flag] = f"str | {node_extensions.Node.__name__}"
-    return flags
+    return {
+        flag: annotation
+        for flag, annotation in flags.items()
+        if not keyword.iskeyword(flag)
+    }
+
+
+def consolidate_stub_imports(source: str) -> str:
+    imports: dict[str, set[str]] = {}
+    lines = source.splitlines(keepends=True)
+    for statement in ast.parse(source).body:
+        if isinstance(statement, ast.ImportFrom):
+            prefix = f"from {'.' * statement.level}{statement.module or ''} import "
+        elif isinstance(statement, ast.Import):
+            prefix = "import "
+        else:
+            continue
+        names = imports.setdefault(prefix, set())
+        for alias in statement.names:
+            names.add(ast.unparse(alias))
+        assert statement.end_lineno is not None
+        for index in range(statement.lineno - 1, statement.end_lineno):
+            lines[index] = ""
+    body = "".join(lines).removeprefix(HEADER).lstrip("\n")
+    import_lines = [
+        prefix + ", ".join(sorted(names)) + "\n"
+        for prefix, names in sorted(imports.items())
+    ]
+    return HEADER + "".join(import_lines) + "\n" + body
 
 
 def generate_command_files(
@@ -183,6 +219,7 @@ def generate_command_files(
     node_class = node_extensions.Node.__name__
     runtime = [
         HEADER,
+        "from collections.abc import Sequence\n",
         "from typing import Any\n",
         f"from {extensions.__name__} import UNSET, {extensions.Unset.__name__}\n",
         f"from {extensions.__package__} import "
@@ -191,6 +228,7 @@ def generate_command_files(
     ]
     stub = [
         HEADER,
+        "from collections.abc import Sequence\n",
         "from typing import Any, Literal, TypeVar, overload\n\n",
         f"from {node_extensions.__name__} import {node_class}\n",
         f"from .{CONCRETE_NODES_MODULE} import {CONCRETE_NODE_ALIAS}\n",
@@ -210,7 +248,13 @@ def generate_command_files(
         flags = resolve_command_flags(function_name, policy)
         runtime.append(
             generate_command_definition(
-                function_name, policy, flags, kwargs_name, args_name, return_type
+                function_name,
+                policy,
+                flags,
+                kwargs_name,
+                args_name,
+                return_type,
+                inspect.getdoc(function),
             )
         )
         stub.append(
@@ -223,7 +267,7 @@ def generate_command_files(
     stub.append(exports)
     return {
         f"{_snapshot.COMMANDS_MODULE}.py": "".join(runtime),
-        f"{_snapshot.COMMANDS_MODULE}.pyi": "".join(stub),
+        f"{_snapshot.COMMANDS_MODULE}.pyi": consolidate_stub_imports("".join(stub)),
         f"{CONCRETE_NODES_MODULE}.pyi": generate_concrete_node_stub(hierarchy, version),
         "__init__.py": HEADER,
     }

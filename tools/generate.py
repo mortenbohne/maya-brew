@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from maya_brew import cmds
+import maya.cmds as cmds
 from maya_brew.log import get_logger
 from maya_brew.nodes import _generated
 from maya_brew.nodes._foundation.native_node_hierarchy import discover_node_types

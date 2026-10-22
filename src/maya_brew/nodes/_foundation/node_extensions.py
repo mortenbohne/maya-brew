@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, Self, TypeVar, overload
 
-from ... import OpenMaya2, cmds
+from ... import OpenMaya2, _maya_cmds
 from ...exceptions import AbstractNodeCreationError, NodeException
 from ...log import get_logger
 from .. import casting
@@ -29,14 +29,14 @@ class Node:
 
     def rename(self, new_name: str, *args: Any, **kwargs: Any) -> str:
         try:
-            actual_new_name = cmds.rename(str(self), new_name, *args, **kwargs)
+            actual_new_name = _maya_cmds.rename(str(self), new_name, *args, **kwargs)
         except RuntimeError as e:
             raise NodeException(f"Cannot rename '{self}': {e}") from e
         self.node_path = actual_new_name
         return actual_new_name
 
     def _cmd_caller(self, func_name: str, *args: Any, **kwargs: Any) -> Any:
-        return cmds.attr(func_name, self.node_path, *args, **kwargs)
+        return _maya_cmds.attr(func_name, self.node_path, *args, **kwargs)
 
     @classmethod
     def create(cls, name: str, **kwargs: Any) -> Self:
@@ -61,7 +61,7 @@ class Node:
     def _create_native(cls, **kwargs: Any) -> str:
         if cls._maya_type is None:
             raise NodeException("Generic Node has no native Maya type")
-        return cmds.createNode(cls._maya_type, **kwargs)
+        return _maya_cmds.createNode(cls._maya_type, **kwargs)
 
     @overload
     def list_attributes(self, attr_type: type[A], **kwargs: Any) -> list[A]: ...
@@ -77,7 +77,7 @@ class Node:
         from ...attributes.node_attribute import Attribute
 
         try:
-            names = cmds.listAttr(str(self), **kwargs)
+            names = _maya_cmds.listAttr(str(self), **kwargs)
         except RuntimeError as e:
             raise NodeException(f"Cannot list attributes on '{self}': {e}") from e
         attrs = [Attribute(f"{self}.{name}") for name in names or []]
@@ -135,7 +135,7 @@ class Transform(Node):
     def _create_native(cls, **kwargs: Any) -> str:
         if cls._maya_type == "transform":
             kwargs["empty"] = True
-            return cmds.group(**kwargs)
+            return _maya_cmds.group(**kwargs)
         return super()._create_native(**kwargs)
 
 

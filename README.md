@@ -66,15 +66,14 @@ transform = cast("my_transform", Transform)  # Typed and checked as Transform
 
 ### Command wrappers
 
-`maya_brew.command_wrapper` provides typed wrappers around selected `maya.cmds`
-commands, accepting brew objects and returning native node wrappers where appropriate.
-Return types may differ from Maya's conventions, including typed tuples instead of
-lists and enums instead of numeric values. `maya_brew.cmds` remains the raw Maya
-command module.
+`maya_brew.cmds` provides typed wrappers around selected `maya.cmds` commands.
+Wrapper docstrings describe differences from Maya's behavior. Use `maya.cmds`
+directly for commands that are not yet wrapped.
 
 Currently wrapped commands:
 
 - `createNode`
+- `ls`
 - `polyPlane`
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help

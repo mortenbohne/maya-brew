@@ -9,8 +9,9 @@ import keyword
 import re
 from dataclasses import dataclass
 
-import maya.cmds as cmds
 from maya_brew.exceptions import NodeTypeInheritanceError
+
+from ... import _maya_cmds
 
 
 @dataclass
@@ -43,7 +44,9 @@ def query_node_type(name: str) -> tuple[str, ...]:
     if name == "node":
         return (name,)
     try:
-        inheritance = tuple(cmds.nodeType(name, inherited=True, isTypeName=True) or ())
+        inheritance = tuple(
+            _maya_cmds.nodeType(name, inherited=True, isTypeName=True) or ()
+        )
     except RuntimeError as e:
         raise NodeTypeInheritanceError(f"Cannot query node type {name!r}: {e}") from e
     return inheritance
@@ -52,16 +55,16 @@ def query_node_type(name: str) -> tuple[str, ...]:
 def discover_node_types(include_plugins: bool = False) -> dict[str, NodeType]:
     """Preserve Maya's exact chains, including unlisted internal ancestors."""
     try:
-        concrete_types = set(cmds.allNodeTypes() or ())
+        concrete_types = set(_maya_cmds.allNodeTypes() or ())
         all_types = {
             name.removesuffix(" (abstract)")
-            for name in (cmds.allNodeTypes(includeAbstract=True) or ())
+            for name in (_maya_cmds.allNodeTypes(includeAbstract=True) or ())
         }
         plugin_types: set[str] = set()
         if not include_plugins:
-            for plugin in cmds.pluginInfo(query=True, listPlugins=True) or ():
+            for plugin in _maya_cmds.pluginInfo(query=True, listPlugins=True) or ():
                 plugin_types.update(
-                    cmds.pluginInfo(plugin, query=True, dependNode=True) or ()
+                    _maya_cmds.pluginInfo(plugin, query=True, dependNode=True) or ()
                 )
     except RuntimeError as e:
         raise NodeTypeInheritanceError(f"Cannot enumerate node types: {e}") from e

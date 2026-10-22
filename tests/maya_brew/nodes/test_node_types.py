@@ -1,5 +1,6 @@
 import logging
 
+import maya.cmds as cmds
 import maya_brew.nodes.casting
 import maya_brew.nodes.node_types
 import pytest
@@ -32,7 +33,7 @@ def test_dag_node_string(test_cube, caplog):
     # rename to see warning display correct node path when deleted
     new_name = "new_name"
     dag_node.rename(new_name)
-    maya_brew.cmds.delete(str(dag_node))
+    cmds.delete(str(dag_node))
     with caplog.at_level(logging.WARNING):
         str(dag_node)
         node_path = dag_node.node_path
@@ -44,7 +45,7 @@ def test_dag_node_rename(test_cube, caplog):
     new_name = "new_name"
     new_resolved_name = dag_node.rename(new_name)
     assert new_resolved_name == new_name
-    another_cube = maya_brew.cmds.polyCube(name="another_cube")[0]
+    another_cube = cmds.polyCube(name="another_cube")[0]
     another_dag_node = maya_brew.nodes.node_types.DagNode(another_cube)
     another_cube_new_name = another_dag_node.rename(new_name)
     assert another_cube_new_name != new_name

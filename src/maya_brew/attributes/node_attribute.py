@@ -1,7 +1,7 @@
 import typing
 from typing import Any, Optional
 
-from .. import OpenMaya2, cmds
+from .. import OpenMaya2, _maya_cmds
 from ..exceptions import MayaBrewAttributeError
 from ..nodes._foundation.node_extensions import Node
 from ..nodes.casting import cast
@@ -117,11 +117,11 @@ class Attribute:
         attr_name = self.plug.name()
         if self._setter_type_needed:
             if self._setter_unpack:
-                cmds.setAttr(attr_name, *value, type=self._creator_type)
+                _maya_cmds.setAttr(attr_name, *value, type=self._creator_type)
             else:
-                cmds.setAttr(attr_name, value, type=self._creator_type)
+                _maya_cmds.setAttr(attr_name, value, type=self._creator_type)
         else:
-            cmds.setAttr(attr_name, value)
+            _maya_cmds.setAttr(attr_name, value)
 
     def node(self):
         return self._get_node_from_plug(self.plug)
@@ -158,7 +158,7 @@ class Attribute:
         :param force: Whether to force the connection if the destination is already connected.
         :param next_available: Whether to connect to the next available index if the destination is an array attribute.
         """
-        cmds.connectAttr(
+        _maya_cmds.connectAttr(
             self.plug.name(),
             dest.plug.name(),
             force=force,
@@ -172,7 +172,7 @@ class Attribute:
         :param next_available: Whether to disconnect from the next available index if the destination is an
         array attribute.
         """
-        cmds.disconnectAttr(
+        _maya_cmds.disconnectAttr(
             self.plug.name(), dest.plug.name(), nextAvailable=next_available
         )
 
@@ -218,7 +218,7 @@ class Attribute:
         """
         name = self.plug.name()
         try:
-            cmds.deleteAttr(name)
+            _maya_cmds.deleteAttr(name)
         except Exception as e:
             raise MayaBrewAttributeError(f"Failed to delete attribute '{name}': {e}")
 
@@ -309,10 +309,10 @@ class Attribute:
         if writeable is not None:
             kwargs["writeable"] = writeable
         full_attr = f"{node_name}.{attr_name}"
-        if cmds.objExists(full_attr):
+        if _maya_cmds.objExists(full_attr):
             raise MayaBrewAttributeError(f"Attribute '{full_attr}' already exists.")
         try:
-            cmds.addAttr(node_name, longName=attr_name, **kwargs)
+            _maya_cmds.addAttr(node_name, longName=attr_name, **kwargs)
         except Exception as e:
             raise MayaBrewAttributeError(
                 f"Failed to create attribute '{full_attr}': {e}"
