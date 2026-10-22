@@ -48,3 +48,5 @@ def init():
 
 if MAYA_BREW_AUTOINIT:
     init()
+
+from . import command_wrapper as cmds  # noqa: E402, F401
