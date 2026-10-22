@@ -10,6 +10,15 @@ from tools.command_wrapper import generate
 from tools.command_wrapper.metadata import COMMANDS
 
 
+def test_extensions_star_import_exports_only_commands():
+    namespace = {}
+    exec("from maya_brew.command_wrapper.extensions import *", namespace)
+    exports = {
+        name: value for name, value in namespace.items() if name != "__builtins__"
+    }
+    assert exports == {function.__name__: function for function in COMMANDS}
+
+
 @pytest.fixture
 def hierarchy():
     return {

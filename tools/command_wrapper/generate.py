@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import maya.cmds as cmds
-from maya_brew.command_wrapper import _generated, _snapshot, extensions
+from maya_brew.command_wrapper import _generated, _snapshot, extension_utils, extensions
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import (
@@ -73,7 +73,7 @@ def generate_command_definition(
         )
         signature_arguments = f"    *{args_name}: {target_type},\n"
         call_arguments = f"        *{args_name},\n"
-    unset_class = extensions.Unset.__name__
+    unset_class = extension_utils.Unset.__name__
     runtime_flags = ",\n".join(
         f"    {flag}: {annotation} | {unset_class} = UNSET"
         for flag, annotation in flags.items()
@@ -221,8 +221,8 @@ def generate_command_files(
         HEADER,
         "from collections.abc import Sequence\n",
         "from typing import Any\n",
-        f"from {extensions.__name__} import UNSET, {extensions.Unset.__name__}\n",
-        f"from {extensions.__package__} import "
+        f"from {extension_utils.__name__} import UNSET, {extension_utils.Unset.__name__}\n",
+        f"from {extensions.__name__.rpartition('.')[0]} import "
         f"{extensions.__name__.rpartition('.')[2]} as extensions\n",
         f"from {node_extensions.__name__} import {node_class}\n",
     ]

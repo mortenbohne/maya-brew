@@ -2,7 +2,7 @@
 # @generated
 from collections.abc import Sequence
 from typing import Any
-from maya_brew.command_wrapper.extensions import UNSET, Unset
+from maya_brew.command_wrapper.extension_utils import UNSET, Unset
 from maya_brew.command_wrapper import extensions as extensions
 from maya_brew.nodes._foundation.node_extensions import Node
 
