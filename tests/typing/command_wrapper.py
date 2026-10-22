@@ -2,8 +2,8 @@ from typing import Any, Literal, assert_type
 
 from maya_brew.command_wrapper import createNode, polyPlane
 from maya_brew.nodes._foundation.node_extensions import Node
-from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
 from maya_brew.nodes.node_state import NodeState
+from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
 
 
 class CustomJoint(Joint):

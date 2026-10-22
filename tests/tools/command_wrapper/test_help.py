@@ -1,5 +1,4 @@
 import pytest
-
 from tools.command_wrapper.help import command_flags
 
 

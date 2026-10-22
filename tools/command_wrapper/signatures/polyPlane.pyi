@@ -1,7 +1,7 @@
 from typing import Any, Literal, TypedDict, Unpack, overload
 
-from maya_brew.nodes.node_types import PolyPlane, Transform
 from maya_brew.nodes.node_state import NodeState
+from maya_brew.nodes.node_types import PolyPlane, Transform
 
 class _PolyPlaneModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
