@@ -73,6 +73,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         extensions.polyPyramid,
         extensions.polySphere,
         extensions.polyTorus,
+        extensions.polyPipe,
         extensions.ls,
     ]
 )

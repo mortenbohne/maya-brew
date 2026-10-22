@@ -7,6 +7,7 @@ from maya_brew.command_wrapper import (
     polyCone,
     polyCube,
     polyCylinder,
+    polyPipe,
     polyPlane,
     polyPyramid,
     polySphere,
@@ -19,6 +20,7 @@ from maya_brew.nodes.node_types import (
     PolyCone,
     PolyCube,
     PolyCylinder,
+    PolyPipe,
     PolyPlane,
     PolyPyramid,
     PolySphere,
@@ -29,6 +31,34 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_pipe_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPipe()
+    assert_type(nodes, tuple[Transform, PolyPipe])
+    assert_type(polyPipe(ch=False), tuple[Transform])
+    assert_type(polyPipe(constructionHistory=False), tuple[Transform])
+    assert_type(polyPipe(object=False), tuple[PolyPipe])
+    assert_type(polyPipe(o=False, ch=False), tuple[PolyPipe])
+    assert_type(
+        polyPipe(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPipe] | tuple[Transform] | tuple[PolyPipe],
+    )
+    assert_type(polyPipe(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPipe(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPipe(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPipe(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPipe(nodes[1], edit=True, thickness=0.75), Literal["Values edited."]
+    )
+    assert_type(
+        polyPipe(nodes[0], e=True, cuv=False, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyPipe(nodes[1], q=True, thickness=True), Any)
+    assert_type(
+        polyPipe(axis=(0.0, 1.0, 0.0), thickness=0.5, h=3.0, createUVs=False),
+        tuple[Transform, PolyPipe],
+    )
 
 
 def check_poly_torus_types(history: bool, create_object: bool) -> None:
