@@ -11,6 +11,7 @@ from maya_brew.command_wrapper import (
     polyPipe,
     polyPlane,
     polyPlatonicSolid,
+    polyPrimitive,
     polyPrism,
     polyPyramid,
     polySphere,
@@ -27,6 +28,7 @@ from maya_brew.nodes.node_types import (
     PolyPipe,
     PolyPlane,
     PolyPlatonicSolid,
+    PolyPrimitiveMisc,
     PolyPrism,
     PolyPyramid,
     PolySphere,
@@ -37,6 +39,45 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_primitive_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPrimitive()
+    assert_type(nodes, tuple[Transform, PolyPrimitiveMisc])
+    assert_type(polyPrimitive(ch=False), tuple[Transform])
+    assert_type(polyPrimitive(constructionHistory=False), tuple[Transform])
+    assert_type(polyPrimitive(object=False), tuple[PolyPrimitiveMisc])
+    assert_type(polyPrimitive(o=False, ch=False), tuple[PolyPrimitiveMisc])
+    assert_type(
+        polyPrimitive(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPrimitiveMisc]
+        | tuple[Transform]
+        | tuple[PolyPrimitiveMisc],
+    )
+    assert_type(polyPrimitive(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPrimitive(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPrimitive(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPrimitive(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPrimitive(nodes[1], edit=True, radius=3.0), Literal["Values edited."]
+    )
+    assert_type(polyPrimitive(nodes[0], e=True, l=2.0), Literal["Values edited."])
+    assert_type(polyPrimitive(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPrimitive(
+            axis=(0.0, 1.0, 0.0),
+            radius=2.0,
+            sideLength=0.8,
+            polyType=0,
+            createUVs=4,
+            texture=0,
+        ),
+        tuple[Transform, PolyPrimitiveMisc],
+    )
+    assert_type(
+        polyPrimitive(pt=0, r=2.0, l=0.8, cuv=4, tx=0),
+        tuple[Transform, PolyPrimitiveMisc],
+    )
 
 
 def check_poly_platonic_solid_types(history: bool, create_object: bool) -> None:

@@ -946,6 +946,82 @@ def polyPlatonicSolid(
     )
 
 
+def polyPrimitive(
+    *args: str | Node,
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    axis: tuple[float, float, float] | bool | Unset = UNSET,
+    ax: tuple[float, float, float] | bool | Unset = UNSET,
+    caching: bool | Unset = UNSET,
+    cch: bool | Unset = UNSET,
+    constructionHistory: bool | Unset = UNSET,
+    ch: bool | Unset = UNSET,
+    componentTagCreate: bool | Unset = UNSET,
+    ctc: bool | Unset = UNSET,
+    createUVs: int | Unset = UNSET,
+    cuv: int | Unset = UNSET,
+    frozen: bool | Unset = UNSET,
+    fzn: bool | Unset = UNSET,
+    heightBaseline: float | Unset = UNSET,
+    hbl: float | Unset = UNSET,
+    sideLength: float | Unset = UNSET,
+    l: float | Unset = UNSET,
+    name: str | Unset = UNSET,
+    n: str | Unset = UNSET,
+    nodeState: int | Unset = UNSET,
+    nds: int | Unset = UNSET,
+    object: bool | Unset = UNSET,
+    o: bool | Unset = UNSET,
+    polyType: int | Unset = UNSET,
+    pt: int | Unset = UNSET,
+    radius: float | Unset = UNSET,
+    r: float | Unset = UNSET,
+    texture: int | Unset = UNSET,
+    tx: int | Unset = UNSET,
+) -> Any:
+    "Return created nodes as a tuple of wrappers instead of a list of names.\n\nThe history node is PolyPrimitiveMisc. Accept wrapped nodes as targets.\nnodeState queries return NodeState; other queries and edits retain Maya's\nreturn values. Maya runtime errors are raised as NodeException."
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "axis": axis,
+        "ax": ax,
+        "caching": caching,
+        "cch": cch,
+        "constructionHistory": constructionHistory,
+        "ch": ch,
+        "componentTagCreate": componentTagCreate,
+        "ctc": ctc,
+        "createUVs": createUVs,
+        "cuv": cuv,
+        "frozen": frozen,
+        "fzn": fzn,
+        "heightBaseline": heightBaseline,
+        "hbl": hbl,
+        "sideLength": sideLength,
+        "l": l,
+        "name": name,
+        "n": n,
+        "nodeState": nodeState,
+        "nds": nds,
+        "object": object,
+        "o": o,
+        "polyType": polyType,
+        "pt": pt,
+        "radius": radius,
+        "r": r,
+        "texture": texture,
+        "tx": tx,
+    }
+    return extensions.polyPrimitive(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
 def polyPrism(
     *args: str | Node,
     edit: bool | Unset = UNSET,
@@ -1294,4 +1370,4 @@ def polyTorus(
     )
 
 
-__all__ = ["createNode", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+__all__ = ["createNode", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]

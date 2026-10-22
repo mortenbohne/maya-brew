@@ -65,6 +65,10 @@ COMMANDS: dict[Callable[..., Any], CommandMetadata] = {
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
     ),
+    extensions.polyPrimitive: CommandMetadata(
+        flag_types={"axis": "tuple[float, float, float] | bool"},
+        node_targets=True,
+    ),
     extensions.ls: CommandMetadata(
         flag_types={
             "containerType": "str | list[str] | tuple[str, ...]",
