@@ -12,8 +12,10 @@ def test_new_scene():
     assert cmds.objExists(cube) is False
 
 
-def test_raw_maya_commands_are_not_exported_from_package():
-    assert not hasattr(maya_brew, "cmds")
+def test_command_wrapper_is_exported_from_package():
+    from maya_brew import command_wrapper
+
+    assert maya_brew.cmds is command_wrapper
 
 
 def test_UnsavedChanges_is_RuntimeError():

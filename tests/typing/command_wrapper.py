@@ -1,6 +1,7 @@
 from typing import Any, Literal, assert_type
 
-from maya_brew.command_wrapper import createNode, polyPlane
+from maya_brew import cmds
+from maya_brew.command_wrapper import createNode, ls, polyPlane
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
@@ -8,6 +9,32 @@ from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
 
 class CustomJoint(Joint):
     pass
+
+
+def check_ls_types(node: Node, nodes: list[Transform], mode: bool) -> None:
+    assert_type(ls(), list[Node | str])
+    assert_type(cmds.ls(node), list[Node | str])
+    assert_type(ls([node, "pPlane*"]), list[Node | str])
+    assert_type(ls(nodes), list[Node | str])
+    assert_type(ls((node, "pPlane*"), type=["mesh", "transform"]), list[Node | str])
+    assert_type(ls(typ=("mesh", "transform"), assemblies=True), list[Node | str])
+    assert_type(ls(uuid=True), list[str])
+    assert_type(ls(uid=True), list[str])
+    assert_type(ls(nodeTypes=True), list[str])
+    assert_type(ls(nt=True), list[str])
+    assert_type(ls(objectsOnly=True), list[Node])
+    assert_type(ls(o=True, selection=True), list[Node])
+    assert_type(ls(o=True, uid=True), list[str])
+    assert_type(ls(o=True, showType=True), list[Node | str])
+    assert_type(ls(o=True, ufeObjects=True), list[Node | str])
+    assert_type(ls(showNamespace=True), list[Node | str])
+    assert_type(ls(uuid=mode), list[Node | str])
+    assert_type(cmds.ls(type=Transform), list[Node | str])
+    assert_type(ls(typ=[Transform, "joint"]), list[Node | str])
+    assert_type(ls(exactType=Joint), list[Node | str])
+    assert_type(ls(et=(Joint, Transform)), list[Node | str])
+    assert_type(ls(excludeType=Transform), list[Node | str])
+    assert_type(ls(ext=[Joint], objectsOnly=True), list[Node])
 
 
 def check_create_node_types(node_type: str, shared: bool) -> None:
