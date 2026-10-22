@@ -10,6 +10,7 @@ from maya_brew.command_wrapper import (
     polyHelix,
     polyPipe,
     polyPlane,
+    polyPlatonicSolid,
     polyPrism,
     polyPyramid,
     polySphere,
@@ -25,6 +26,7 @@ from maya_brew.nodes.node_types import (
     PolyHelix,
     PolyPipe,
     PolyPlane,
+    PolyPlatonicSolid,
     PolyPrism,
     PolyPyramid,
     PolySphere,
@@ -35,6 +37,45 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_platonic_solid_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPlatonicSolid()
+    assert_type(nodes, tuple[Transform, PolyPlatonicSolid])
+    assert_type(polyPlatonicSolid(ch=False), tuple[Transform])
+    assert_type(polyPlatonicSolid(constructionHistory=False), tuple[Transform])
+    assert_type(polyPlatonicSolid(object=False), tuple[PolyPlatonicSolid])
+    assert_type(polyPlatonicSolid(o=False, ch=False), tuple[PolyPlatonicSolid])
+    assert_type(
+        polyPlatonicSolid(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPlatonicSolid]
+        | tuple[Transform]
+        | tuple[PolyPlatonicSolid],
+    )
+    assert_type(polyPlatonicSolid(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPlatonicSolid(nodes[1], edit=True, radius=3.0), Literal["Values edited."]
+    )
+    assert_type(polyPlatonicSolid(nodes[0], e=True, l=2.0), Literal["Values edited."])
+    assert_type(polyPlatonicSolid(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPlatonicSolid(
+            axis=(0.0, 1.0, 0.0),
+            radius=2.0,
+            sideLength=2.0,
+            solidType=1,
+            createUVs=4,
+            texture=0,
+        ),
+        tuple[Transform, PolyPlatonicSolid],
+    )
+    assert_type(
+        polyPlatonicSolid(st=2, r=2.0, l=2.0, cuv=4, tx=0),
+        tuple[Transform, PolyPlatonicSolid],
+    )
 
 
 def check_poly_helix_types(history: bool, create_object: bool) -> None:

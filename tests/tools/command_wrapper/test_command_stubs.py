@@ -71,6 +71,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         extensions.polyCylinder,
         extensions.polyHelix,
         extensions.polyPlane,
+        extensions.polyPlatonicSolid,
         extensions.polyPrism,
         extensions.polyPyramid,
         extensions.polySphere,

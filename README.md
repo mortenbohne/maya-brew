@@ -80,6 +80,7 @@ Currently wrapped commands:
 - `polyHelix`
 - `polyPipe`
 - `polyPlane`
+- `polyPlatonicSolid`
 - `polyPrism`
 - `polyPyramid`
 - `polySphere`

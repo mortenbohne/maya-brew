@@ -10,6 +10,7 @@ from maya_brew.nodes.node_types import (
     PolyHelix,
     PolyPipe,
     PolyPlane,
+    PolyPlatonicSolid,
     PolyPrism,
     PolyPyramid,
     PolySphere,
@@ -21,6 +22,10 @@ from maya_brew.nodes.node_types import (
 @pytest.fixture(
     params=[
         pytest.param((cmds.polyPlane, PolyPlane, "width"), id="polyPlane"),
+        pytest.param(
+            (cmds.polyPlatonicSolid, PolyPlatonicSolid, "radius"),
+            id="polyPlatonicSolid",
+        ),
         pytest.param((cmds.polyPrism, PolyPrism, "sideLength"), id="polyPrism"),
         pytest.param((cmds.polyCone, PolyCone, "radius"), id="polyCone"),
         pytest.param((cmds.polyCylinder, PolyCylinder, "radius"), id="polyCylinder"),
