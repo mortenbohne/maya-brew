@@ -10,6 +10,7 @@ from maya_brew.nodes.node_types import (
     PolyPlane,
     PolyPyramid,
     PolySphere,
+    PolyTorus,
     Transform,
 )
 
@@ -20,6 +21,7 @@ from maya_brew.nodes.node_types import (
         pytest.param((cmds.polyCone, PolyCone, "radius"), id="polyCone"),
         pytest.param((cmds.polyCylinder, PolyCylinder, "radius"), id="polyCylinder"),
         pytest.param((cmds.polySphere, PolySphere, "radius"), id="polySphere"),
+        pytest.param((cmds.polyTorus, PolyTorus, "radius"), id="polyTorus"),
         pytest.param((cmds.polyCube, PolyCube, "width"), id="polyCube"),
         pytest.param((cmds.polyPyramid, PolyPyramid, "sideLength"), id="polyPyramid"),
     ]

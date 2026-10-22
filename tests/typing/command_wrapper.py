@@ -10,6 +10,7 @@ from maya_brew.command_wrapper import (
     polyPlane,
     polyPyramid,
     polySphere,
+    polyTorus,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
@@ -21,12 +22,39 @@ from maya_brew.nodes.node_types import (
     PolyPlane,
     PolyPyramid,
     PolySphere,
+    PolyTorus,
     Transform,
 )
 
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_torus_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyTorus()
+    assert_type(nodes, tuple[Transform, PolyTorus])
+    assert_type(polyTorus(ch=False), tuple[Transform])
+    assert_type(polyTorus(constructionHistory=False), tuple[Transform])
+    assert_type(polyTorus(object=False), tuple[PolyTorus])
+    assert_type(polyTorus(o=False, ch=False), tuple[PolyTorus])
+    assert_type(
+        polyTorus(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyTorus] | tuple[Transform] | tuple[PolyTorus],
+    )
+    assert_type(polyTorus(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyTorus(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyTorus(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyTorus(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyTorus(nodes[1], edit=True, twist=45.0), Literal["Values edited."])
+    assert_type(
+        polyTorus(nodes[0], e=True, cuv=False, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyTorus(nodes[1], q=True, sectionRadius=True), Any)
+    assert_type(
+        polyTorus(axis=(0.0, 1.0, 0.0), sectionRadius=0.5, tw=30.0, createUVs=False),
+        tuple[Transform, PolyTorus],
+    )
 
 
 def check_poly_cylinder_types(history: bool, create_object: bool) -> None:

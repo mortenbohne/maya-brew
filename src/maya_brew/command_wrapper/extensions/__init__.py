@@ -6,6 +6,7 @@ from .poly_cylinder import polyCylinder as polyCylinder
 from .poly_plane import polyPlane as polyPlane
 from .poly_pyramid import polyPyramid as polyPyramid
 from .poly_sphere import polySphere as polySphere
+from .poly_torus import polyTorus as polyTorus
 
 __all__ = [
     "createNode",
@@ -16,4 +17,5 @@ __all__ = [
     "polyPlane",
     "polyPyramid",
     "polySphere",
+    "polyTorus",
 ]

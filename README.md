@@ -80,6 +80,7 @@ Currently wrapped commands:
 - `polyPlane`
 - `polyPyramid`
 - `polySphere`
+- `polyTorus`
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
 and tool-side metadata. Handwritten stubs supply command-specific typing where needed.

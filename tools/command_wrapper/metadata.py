@@ -41,6 +41,10 @@ COMMANDS: dict[Callable[..., Any], CommandMetadata] = {
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
     ),
+    extensions.polyTorus: CommandMetadata(
+        flag_types={"axis": "tuple[float, float, float] | bool", "twist": "float"},
+        node_targets=True,
+    ),
     extensions.polyPyramid: CommandMetadata(
         flag_types={"axis": "tuple[float, float, float] | bool"},
         node_targets=True,
