@@ -1,1 +1,2 @@
 src/maya_brew/nodes/_generated/** linguist-generated=true eol=lf
+src/maya_brew/command_wrapper/_generated/** linguist-generated=true eol=lf
