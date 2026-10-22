@@ -3,6 +3,7 @@ from .ls import ls as ls
 from .poly_cone import polyCone as polyCone
 from .poly_cube import polyCube as polyCube
 from .poly_cylinder import polyCylinder as polyCylinder
+from .poly_helix import polyHelix as polyHelix
 from .poly_pipe import polyPipe as polyPipe
 from .poly_plane import polyPlane as polyPlane
 from .poly_prism import polyPrism as polyPrism
@@ -16,6 +17,7 @@ __all__ = [
     "polyCone",
     "polyCube",
     "polyCylinder",
+    "polyHelix",
     "polyPipe",
     "polyPlane",
     "polyPrism",

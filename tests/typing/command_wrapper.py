@@ -7,6 +7,7 @@ from maya_brew.command_wrapper import (
     polyCone,
     polyCube,
     polyCylinder,
+    polyHelix,
     polyPipe,
     polyPlane,
     polyPrism,
@@ -21,6 +22,7 @@ from maya_brew.nodes.node_types import (
     PolyCone,
     PolyCube,
     PolyCylinder,
+    PolyHelix,
     PolyPipe,
     PolyPlane,
     PolyPrism,
@@ -33,6 +35,50 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_helix_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyHelix()
+    assert_type(nodes, tuple[Transform, PolyHelix])
+    assert_type(polyHelix(ch=False), tuple[Transform])
+    assert_type(polyHelix(constructionHistory=False), tuple[Transform])
+    assert_type(polyHelix(object=False), tuple[PolyHelix])
+    assert_type(polyHelix(o=False, ch=False), tuple[PolyHelix])
+    assert_type(
+        polyHelix(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyHelix] | tuple[Transform] | tuple[PolyHelix],
+    )
+    assert_type(polyHelix(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyHelix(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyHelix(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyHelix(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyHelix(nodes[1], edit=True, coils=4.5), Literal["Values edited."])
+    assert_type(polyHelix(nodes[0], e=True, cuv=0, tx=0), Literal["Values edited."])
+    assert_type(polyHelix(nodes[1], q=True, width=True), Any)
+    assert_type(
+        polyHelix(
+            axis=(0.0, 1.0, 0.0),
+            coils=3.5,
+            direction=1,
+            height=4.0,
+            width=2.0,
+            radius=0.25,
+            roundCap=True,
+            subdivisionsAxis=8,
+            subdivisionsCaps=2,
+            subdivisionsCoil=12,
+            createUVs=2,
+            texture=2,
+            useOldInitBehaviour=False,
+        ),
+        tuple[Transform, PolyHelix],
+    )
+    assert_type(
+        polyHelix(
+            c=3.5, d=0, h=4.0, w=2.0, r=0.25, rcp=True, sa=8, sc=2, sco=12, oib=True
+        ),
+        tuple[Transform, PolyHelix],
+    )
 
 
 def check_poly_prism_types(history: bool, create_object: bool) -> None:
