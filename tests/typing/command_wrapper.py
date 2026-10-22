@@ -1,14 +1,54 @@
 from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
-from maya_brew.command_wrapper import createNode, ls, polyCube, polyPlane, polySphere
+from maya_brew.command_wrapper import (
+    createNode,
+    ls,
+    polyCube,
+    polyPlane,
+    polyPyramid,
+    polySphere,
+)
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import Joint, PolyCube, PolyPlane, PolySphere, Transform
+from maya_brew.nodes.node_types import (
+    Joint,
+    PolyCube,
+    PolyPlane,
+    PolyPyramid,
+    PolySphere,
+    Transform,
+)
 
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_pyramid_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPyramid()
+    assert_type(nodes, tuple[Transform, PolyPyramid])
+    assert_type(polyPyramid(ch=False), tuple[Transform])
+    assert_type(polyPyramid(constructionHistory=False), tuple[Transform])
+    assert_type(polyPyramid(object=False), tuple[PolyPyramid])
+    assert_type(polyPyramid(o=False, ch=False), tuple[PolyPyramid])
+    assert_type(
+        polyPyramid(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPyramid] | tuple[Transform] | tuple[PolyPyramid],
+    )
+    assert_type(polyPyramid(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPyramid(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPyramid(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPyramid(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPyramid(nodes[1], edit=True, sideLength=2.0), Literal["Values edited."]
+    )
+    assert_type(polyPyramid(nodes[0], e=True, texture=False), Literal["Values edited."])
+    assert_type(polyPyramid(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPyramid(axis=(0.0, 1.0, 0.0), ns=5, nsi=5, sc=2, sh=3, tx=False),
+        tuple[Transform, PolyPyramid],
+    )
 
 
 def check_poly_cube_types(history: bool, create_object: bool) -> None:

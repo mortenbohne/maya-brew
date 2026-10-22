@@ -68,6 +68,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
     params=[
         extensions.polyCube,
         extensions.polyPlane,
+        extensions.polyPyramid,
         extensions.polySphere,
         extensions.ls,
     ]

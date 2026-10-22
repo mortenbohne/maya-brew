@@ -76,6 +76,7 @@ Currently wrapped commands:
 - `ls`
 - `polyCube`
 - `polyPlane`
+- `polyPyramid`
 - `polySphere`
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
