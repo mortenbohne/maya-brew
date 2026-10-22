@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import PolyPlane, Transform
-from typing import Any, Literal, TypeVar, TypedDict, Unpack, overload
+from typing import Any, Literal, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
 
@@ -23,6 +23,8 @@ def createNode(node_type: str, *, name: str = ..., n: str = ..., parent: str | N
 
 
 
+
+_LsTypeFilter: TypeAlias = str | type[Node] | Sequence[str | type[Node]]
 
 class _LsFilterFlags(TypedDict, total=False):
     absoluteName: bool
@@ -42,10 +44,10 @@ class _LsFilterFlags(TypedDict, total=False):
     dep: bool
     defaultNodes: bool
     dn: bool
-    exactType: str | type[Node] | Sequence[str | type[Node]]
-    et: str | type[Node] | Sequence[str | type[Node]]
-    excludeType: str | type[Node] | Sequence[str | type[Node]]
-    ext: str | type[Node] | Sequence[str | type[Node]]
+    exactType: _LsTypeFilter
+    et: _LsTypeFilter
+    excludeType: _LsTypeFilter
+    ext: _LsTypeFilter
     flatten: bool
     fl: bool
     geometry: bool
@@ -120,8 +122,8 @@ class _LsFilterFlags(TypedDict, total=False):
     tm: bool
     transforms: bool
     tr: bool
-    type: str | type[Node] | Sequence[str | type[Node]]
-    typ: str | type[Node] | Sequence[str | type[Node]]
+    type: _LsTypeFilter
+    typ: _LsTypeFilter
     undeletable: bool
     ud: bool
     untemplated: bool
