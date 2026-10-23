@@ -20,6 +20,7 @@ from maya_brew.nodes._foundation.native_node_hierarchy import (
 from maya_brew.nodes._foundation.node_registry import snapshot_package_name
 from tools.command_wrapper.help import command_flags
 from tools.command_wrapper.metadata import COMMANDS, CommandMetadata
+from tools.command_wrapper.primitive import generate_primitive_overloads
 from tools.node_hierarchy.generate import CLASSES_MODULE
 
 HEADER = "# AUTO-GENERATED; DO NOT EDIT.\n# @generated\n"
@@ -99,6 +100,10 @@ def generate_command_overloads(
     flags: dict[str, str],
     return_type: str,
 ) -> str:
+    if policy.primitive_history_type is not None:
+        return generate_primitive_overloads(
+            function_name, policy.primitive_history_type, flags
+        )
     signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
     if signature_path.is_file():
         return "\n\n" + signature_path.read_text(encoding="utf-8")

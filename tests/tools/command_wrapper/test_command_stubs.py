@@ -64,23 +64,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         assert inspect.getdoc(namespace[function.__name__]) == inspect.getdoc(function)
 
 
-@pytest.fixture(
-    params=[
-        extensions.polyCube,
-        extensions.polyCone,
-        extensions.polyCylinder,
-        extensions.polyHelix,
-        extensions.polyPlane,
-        extensions.polyPlatonicSolid,
-        extensions.polyPrimitive,
-        extensions.polyPrism,
-        extensions.polyPyramid,
-        extensions.polySphere,
-        extensions.polyTorus,
-        extensions.polyPipe,
-        extensions.ls,
-    ]
-)
+@pytest.fixture(params=[extensions.ls])
 def handwritten_signature(request):
     function = request.param
     return (
@@ -172,6 +156,53 @@ def test_handwritten_signature_matches_help_flags(handwritten_signature):
     for name, declared_flags in signatures:
         assert name == function.__name__
         assert declared_flags == flags.keys()
+
+
+@pytest.fixture(
+    params=[
+        function
+        for function, policy in COMMANDS.items()
+        if policy.primitive_history_type is not None
+    ],
+    ids=lambda function: function.__name__,
+)
+def primitive_signature(request):
+    function = request.param
+    policy = COMMANDS[function]
+    flags = generate.resolve_command_flags(function.__name__, policy)
+    return (
+        generate.generate_command_overloads(function.__name__, policy, flags, "Any"),
+        function,
+        flags,
+    )
+
+
+def test_primitive_signatures_match_help_flags(primitive_signature):
+    signature, function, flags = primitive_signature
+    signatures = list(signature_flag_names(signature))
+    assert len(signatures) == 13
+    for name, declared_flags in signatures:
+        assert name == function.__name__
+        assert declared_flags == flags.keys()
+
+
+def test_primitive_creation_axis_requires_vector(primitive_signature):
+    signature, _, _ = primitive_signature
+    definitions = {
+        statement.name: statement
+        for statement in ast.parse(signature).body
+        if isinstance(statement, ast.ClassDef)
+    }
+    for name, definition in definitions.items():
+        fields = {
+            field.target.id: ast.unparse(field.annotation)
+            for field in definition.body
+            if isinstance(field, ast.AnnAssign)
+        }
+        expected = "tuple[float, float, float]"
+        if name.endswith("ModeFlags"):
+            expected += " | bool"
+        assert fields["axis"] == fields["ax"] == expected
 
 
 def test_python_keyword_flag_aliases_are_omitted():

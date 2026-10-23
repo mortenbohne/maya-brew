@@ -217,7 +217,6 @@ def ls(
 
 
 
-
 class _PolyConeModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
     ax: tuple[float, float, float] | bool
@@ -309,6 +308,7 @@ def polyCone(
     ch: bool = ...,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[PolyCone]: ...
+
 @overload
 def polyCone(
     *args: str,
@@ -318,6 +318,7 @@ def polyCone(
     ch: bool = ...,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[PolyCone]: ...
+
 @overload
 def polyCone(
     *args: str,
@@ -327,6 +328,7 @@ def polyCone(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCone(
     *args: str,
@@ -336,6 +338,7 @@ def polyCone(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCone(
     *args: str,
@@ -345,6 +348,7 @@ def polyCone(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[Transform, PolyCone]: ...
+
 @overload
 def polyCone(
     *args: str,
@@ -354,6 +358,7 @@ def polyCone(
     o: bool = ...,
     **kwargs: Unpack[_PolyConeCreateFlags],
 ) -> tuple[Transform, PolyCone] | tuple[Transform] | tuple[PolyCone]: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -365,6 +370,7 @@ def polyCone(
     nds: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -376,6 +382,7 @@ def polyCone(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -387,6 +394,7 @@ def polyCone(
     nds: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -398,6 +406,7 @@ def polyCone(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -409,6 +418,7 @@ def polyCone(
     nds: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -420,6 +430,7 @@ def polyCone(
     nds: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCone(
     *args: str | PolyCone | Transform,
@@ -431,7 +442,6 @@ def polyCone(
     nds: int = ...,
     **kwargs: Unpack[_PolyConeModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -446,20 +456,18 @@ class _PolyCubeModeFlags(TypedDict, total=False):
     ctc: bool
     createUVs: int
     cuv: int
+    depth: float
+    d: float
     frozen: bool
     fzn: bool
+    height: float
+    h: float
     heightBaseline: float
     hbl: float
     name: str
     n: str
     object: bool
     o: bool
-    depth: float
-    d: float
-    height: float
-    h: float
-    width: float
-    w: float
     subdivisionsDepth: int
     sd: int
     subdivisionsHeight: int
@@ -474,6 +482,8 @@ class _PolyCubeModeFlags(TypedDict, total=False):
     sz: int
     texture: int
     tx: int
+    width: float
+    w: float
 
 class _PolyCubeCreateFlags(TypedDict, total=False):
     edit: Literal[False]
@@ -488,20 +498,18 @@ class _PolyCubeCreateFlags(TypedDict, total=False):
     ctc: bool
     createUVs: int
     cuv: int
+    depth: float
+    d: float
     frozen: bool
     fzn: bool
+    height: float
+    h: float
     heightBaseline: float
     hbl: float
     name: str
     n: str
     nodeState: int
     nds: int
-    depth: float
-    d: float
-    height: float
-    h: float
-    width: float
-    w: float
     subdivisionsDepth: int
     sd: int
     subdivisionsHeight: int
@@ -516,6 +524,8 @@ class _PolyCubeCreateFlags(TypedDict, total=False):
     sz: int
     texture: int
     tx: int
+    width: float
+    w: float
 
 @overload
 def polyCube(
@@ -526,6 +536,7 @@ def polyCube(
     ch: bool = ...,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[PolyCube]: ...
+
 @overload
 def polyCube(
     *args: str,
@@ -535,6 +546,7 @@ def polyCube(
     ch: bool = ...,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[PolyCube]: ...
+
 @overload
 def polyCube(
     *args: str,
@@ -544,6 +556,7 @@ def polyCube(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCube(
     *args: str,
@@ -553,6 +566,7 @@ def polyCube(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCube(
     *args: str,
@@ -562,6 +576,7 @@ def polyCube(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[Transform, PolyCube]: ...
+
 @overload
 def polyCube(
     *args: str,
@@ -571,6 +586,7 @@ def polyCube(
     o: bool = ...,
     **kwargs: Unpack[_PolyCubeCreateFlags],
 ) -> tuple[Transform, PolyCube] | tuple[Transform] | tuple[PolyCube]: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -582,6 +598,7 @@ def polyCube(
     nds: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -593,6 +610,7 @@ def polyCube(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -604,6 +622,7 @@ def polyCube(
     nds: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -615,6 +634,7 @@ def polyCube(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -626,6 +646,7 @@ def polyCube(
     nds: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -637,6 +658,7 @@ def polyCube(
     nds: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCube(
     *args: str | PolyCube | Transform,
@@ -648,7 +670,6 @@ def polyCube(
     nds: int = ...,
     **kwargs: Unpack[_PolyCubeModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -747,6 +768,7 @@ def polyCylinder(
     ch: bool = ...,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[PolyCylinder]: ...
+
 @overload
 def polyCylinder(
     *args: str,
@@ -756,6 +778,7 @@ def polyCylinder(
     ch: bool = ...,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[PolyCylinder]: ...
+
 @overload
 def polyCylinder(
     *args: str,
@@ -765,6 +788,7 @@ def polyCylinder(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCylinder(
     *args: str,
@@ -774,6 +798,7 @@ def polyCylinder(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyCylinder(
     *args: str,
@@ -783,6 +808,7 @@ def polyCylinder(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[Transform, PolyCylinder]: ...
+
 @overload
 def polyCylinder(
     *args: str,
@@ -792,6 +818,7 @@ def polyCylinder(
     o: bool = ...,
     **kwargs: Unpack[_PolyCylinderCreateFlags],
 ) -> tuple[Transform, PolyCylinder] | tuple[Transform] | tuple[PolyCylinder]: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -803,6 +830,7 @@ def polyCylinder(
     nds: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -814,6 +842,7 @@ def polyCylinder(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -825,6 +854,7 @@ def polyCylinder(
     nds: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -836,6 +866,7 @@ def polyCylinder(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -847,6 +878,7 @@ def polyCylinder(
     nds: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -858,6 +890,7 @@ def polyCylinder(
     nds: int = ...,
     **kwargs: Unpack[_PolyCylinderModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyCylinder(
     *args: str | PolyCylinder | Transform,
@@ -872,14 +905,13 @@ def polyCylinder(
 
 
 
-
 class _PolyHelixModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
     ax: tuple[float, float, float] | bool
-    caching: bool
-    cch: bool
     coils: float
     c: float
+    caching: bool
+    cch: bool
     constructionHistory: bool
     ch: bool
     componentTagCreate: bool
@@ -898,6 +930,8 @@ class _PolyHelixModeFlags(TypedDict, total=False):
     n: str
     object: bool
     o: bool
+    useOldInitBehaviour: bool
+    oib: bool
     radius: float
     r: float
     roundCap: bool
@@ -910,8 +944,6 @@ class _PolyHelixModeFlags(TypedDict, total=False):
     sco: int
     texture: int
     tx: int
-    useOldInitBehaviour: bool
-    oib: bool
     width: float
     w: float
 
@@ -922,10 +954,10 @@ class _PolyHelixCreateFlags(TypedDict, total=False):
     q: Literal[False]
     axis: tuple[float, float, float]
     ax: tuple[float, float, float]
-    caching: bool
-    cch: bool
     coils: float
     c: float
+    caching: bool
+    cch: bool
     componentTagCreate: bool
     ctc: bool
     createUVs: int
@@ -942,6 +974,8 @@ class _PolyHelixCreateFlags(TypedDict, total=False):
     n: str
     nodeState: int
     nds: int
+    useOldInitBehaviour: bool
+    oib: bool
     radius: float
     r: float
     roundCap: bool
@@ -954,8 +988,6 @@ class _PolyHelixCreateFlags(TypedDict, total=False):
     sco: int
     texture: int
     tx: int
-    useOldInitBehaviour: bool
-    oib: bool
     width: float
     w: float
 
@@ -968,6 +1000,7 @@ def polyHelix(
     ch: bool = ...,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[PolyHelix]: ...
+
 @overload
 def polyHelix(
     *args: str,
@@ -977,6 +1010,7 @@ def polyHelix(
     ch: bool = ...,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[PolyHelix]: ...
+
 @overload
 def polyHelix(
     *args: str,
@@ -986,6 +1020,7 @@ def polyHelix(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyHelix(
     *args: str,
@@ -995,6 +1030,7 @@ def polyHelix(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyHelix(
     *args: str,
@@ -1004,6 +1040,7 @@ def polyHelix(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[Transform, PolyHelix]: ...
+
 @overload
 def polyHelix(
     *args: str,
@@ -1013,6 +1050,7 @@ def polyHelix(
     o: bool = ...,
     **kwargs: Unpack[_PolyHelixCreateFlags],
 ) -> tuple[Transform, PolyHelix] | tuple[Transform] | tuple[PolyHelix]: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1024,6 +1062,7 @@ def polyHelix(
     nds: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1035,6 +1074,7 @@ def polyHelix(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1046,6 +1086,7 @@ def polyHelix(
     nds: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1057,6 +1098,7 @@ def polyHelix(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1068,6 +1110,7 @@ def polyHelix(
     nds: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1079,6 +1122,7 @@ def polyHelix(
     nds: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyHelix(
     *args: str | PolyHelix | Transform,
@@ -1090,7 +1134,6 @@ def polyHelix(
     nds: int = ...,
     **kwargs: Unpack[_PolyHelixModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -1127,10 +1170,10 @@ class _PolyPipeModeFlags(TypedDict, total=False):
     sc: int
     subdivisionsHeight: int
     sh: int
-    texture: bool
-    tx: bool
     thickness: float
     t: float
+    texture: bool
+    tx: bool
 
 class _PolyPipeCreateFlags(TypedDict, total=False):
     edit: Literal[False]
@@ -1167,10 +1210,10 @@ class _PolyPipeCreateFlags(TypedDict, total=False):
     sc: int
     subdivisionsHeight: int
     sh: int
-    texture: bool
-    tx: bool
     thickness: float
     t: float
+    texture: bool
+    tx: bool
 
 @overload
 def polyPipe(
@@ -1181,6 +1224,7 @@ def polyPipe(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[PolyPipe]: ...
+
 @overload
 def polyPipe(
     *args: str,
@@ -1190,6 +1234,7 @@ def polyPipe(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[PolyPipe]: ...
+
 @overload
 def polyPipe(
     *args: str,
@@ -1199,6 +1244,7 @@ def polyPipe(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPipe(
     *args: str,
@@ -1208,6 +1254,7 @@ def polyPipe(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPipe(
     *args: str,
@@ -1217,6 +1264,7 @@ def polyPipe(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[Transform, PolyPipe]: ...
+
 @overload
 def polyPipe(
     *args: str,
@@ -1226,6 +1274,7 @@ def polyPipe(
     o: bool = ...,
     **kwargs: Unpack[_PolyPipeCreateFlags],
 ) -> tuple[Transform, PolyPipe] | tuple[Transform] | tuple[PolyPipe]: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1237,6 +1286,7 @@ def polyPipe(
     nds: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1248,6 +1298,7 @@ def polyPipe(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1259,6 +1310,7 @@ def polyPipe(
     nds: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1270,6 +1322,7 @@ def polyPipe(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1281,6 +1334,7 @@ def polyPipe(
     nds: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1292,6 +1346,7 @@ def polyPipe(
     nds: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPipe(
     *args: str | PolyPipe | Transform,
@@ -1303,7 +1358,6 @@ def polyPipe(
     nds: int = ...,
     **kwargs: Unpack[_PolyPipeModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -1386,6 +1440,7 @@ def polyPlane(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -1395,6 +1450,7 @@ def polyPlane(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -1404,6 +1460,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -1413,6 +1470,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -1422,6 +1480,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform, PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -1431,6 +1490,7 @@ def polyPlane(
     o: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform, PolyPlane] | tuple[Transform] | tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1442,6 +1502,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1453,6 +1514,7 @@ def polyPlane(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1464,6 +1526,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1475,6 +1538,7 @@ def polyPlane(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1486,6 +1550,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1497,6 +1562,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -1508,7 +1574,6 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -1527,14 +1592,14 @@ class _PolyPlatonicSolidModeFlags(TypedDict, total=False):
     fzn: bool
     heightBaseline: float
     hbl: float
+    sideLength: float
+    l: float
     name: str
     n: str
     object: bool
     o: bool
     radius: float
     r: float
-    sideLength: float
-    l: float
     solidType: int
     st: int
     texture: int
@@ -1557,14 +1622,14 @@ class _PolyPlatonicSolidCreateFlags(TypedDict, total=False):
     fzn: bool
     heightBaseline: float
     hbl: float
+    sideLength: float
+    l: float
     name: str
     n: str
     nodeState: int
     nds: int
     radius: float
     r: float
-    sideLength: float
-    l: float
     solidType: int
     st: int
     texture: int
@@ -1579,6 +1644,7 @@ def polyPlatonicSolid(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
 ) -> tuple[PolyPlatonicSolid]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str,
@@ -1588,6 +1654,7 @@ def polyPlatonicSolid(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
 ) -> tuple[PolyPlatonicSolid]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str,
@@ -1597,6 +1664,7 @@ def polyPlatonicSolid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str,
@@ -1606,6 +1674,7 @@ def polyPlatonicSolid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str,
@@ -1615,6 +1684,7 @@ def polyPlatonicSolid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
 ) -> tuple[Transform, PolyPlatonicSolid]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str,
@@ -1623,9 +1693,8 @@ def polyPlatonicSolid(
     object: bool = ...,
     o: bool = ...,
     **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
-) -> (
-    tuple[Transform, PolyPlatonicSolid] | tuple[Transform] | tuple[PolyPlatonicSolid]
-): ...
+) -> tuple[Transform, PolyPlatonicSolid] | tuple[Transform] | tuple[PolyPlatonicSolid]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1637,6 +1706,7 @@ def polyPlatonicSolid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1648,6 +1718,7 @@ def polyPlatonicSolid(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1659,6 +1730,7 @@ def polyPlatonicSolid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1670,6 +1742,7 @@ def polyPlatonicSolid(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1681,6 +1754,7 @@ def polyPlatonicSolid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1692,6 +1766,7 @@ def polyPlatonicSolid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlatonicSolid(
     *args: str | PolyPlatonicSolid | Transform,
@@ -1703,7 +1778,6 @@ def polyPlatonicSolid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -1722,6 +1796,8 @@ class _PolyPrimitiveModeFlags(TypedDict, total=False):
     fzn: bool
     heightBaseline: float
     hbl: float
+    sideLength: float
+    l: float
     name: str
     n: str
     object: bool
@@ -1730,8 +1806,6 @@ class _PolyPrimitiveModeFlags(TypedDict, total=False):
     pt: int
     radius: float
     r: float
-    sideLength: float
-    l: float
     texture: int
     tx: int
 
@@ -1752,6 +1826,8 @@ class _PolyPrimitiveCreateFlags(TypedDict, total=False):
     fzn: bool
     heightBaseline: float
     hbl: float
+    sideLength: float
+    l: float
     name: str
     n: str
     nodeState: int
@@ -1760,8 +1836,6 @@ class _PolyPrimitiveCreateFlags(TypedDict, total=False):
     pt: int
     radius: float
     r: float
-    sideLength: float
-    l: float
     texture: int
     tx: int
 
@@ -1774,6 +1848,7 @@ def polyPrimitive(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
 ) -> tuple[PolyPrimitiveMisc]: ...
+
 @overload
 def polyPrimitive(
     *args: str,
@@ -1783,6 +1858,7 @@ def polyPrimitive(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
 ) -> tuple[PolyPrimitiveMisc]: ...
+
 @overload
 def polyPrimitive(
     *args: str,
@@ -1792,6 +1868,7 @@ def polyPrimitive(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPrimitive(
     *args: str,
@@ -1801,6 +1878,7 @@ def polyPrimitive(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPrimitive(
     *args: str,
@@ -1810,6 +1888,7 @@ def polyPrimitive(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
 ) -> tuple[Transform, PolyPrimitiveMisc]: ...
+
 @overload
 def polyPrimitive(
     *args: str,
@@ -1818,9 +1897,8 @@ def polyPrimitive(
     object: bool = ...,
     o: bool = ...,
     **kwargs: Unpack[_PolyPrimitiveCreateFlags],
-) -> (
-    tuple[Transform, PolyPrimitiveMisc] | tuple[Transform] | tuple[PolyPrimitiveMisc]
-): ...
+) -> tuple[Transform, PolyPrimitiveMisc] | tuple[Transform] | tuple[PolyPrimitiveMisc]: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1832,6 +1910,7 @@ def polyPrimitive(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1843,6 +1922,7 @@ def polyPrimitive(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1854,6 +1934,7 @@ def polyPrimitive(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1865,6 +1946,7 @@ def polyPrimitive(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1876,6 +1958,7 @@ def polyPrimitive(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1887,6 +1970,7 @@ def polyPrimitive(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPrimitive(
     *args: str | PolyPrimitiveMisc | Transform,
@@ -1898,7 +1982,6 @@ def polyPrimitive(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrimitiveModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -1921,20 +2004,20 @@ class _PolyPrismModeFlags(TypedDict, total=False):
     l: float
     name: str
     n: str
-    object: bool
-    o: bool
     numberOfSides: int
     ns: int
     numderOfSides: int
     nsi: int
-    sideLength: float
-    w: float
+    object: bool
+    o: bool
     subdivisionsCaps: int
     sc: int
     subdivisionsHeight: int
     sh: int
     texture: int
     tx: int
+    sideLength: float
+    w: float
 
 class _PolyPrismCreateFlags(TypedDict, total=False):
     edit: Literal[False]
@@ -1963,14 +2046,14 @@ class _PolyPrismCreateFlags(TypedDict, total=False):
     ns: int
     numderOfSides: int
     nsi: int
-    sideLength: float
-    w: float
     subdivisionsCaps: int
     sc: int
     subdivisionsHeight: int
     sh: int
     texture: int
     tx: int
+    sideLength: float
+    w: float
 
 @overload
 def polyPrism(
@@ -1981,6 +2064,7 @@ def polyPrism(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[PolyPrism]: ...
+
 @overload
 def polyPrism(
     *args: str,
@@ -1990,6 +2074,7 @@ def polyPrism(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[PolyPrism]: ...
+
 @overload
 def polyPrism(
     *args: str,
@@ -1999,6 +2084,7 @@ def polyPrism(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPrism(
     *args: str,
@@ -2008,6 +2094,7 @@ def polyPrism(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPrism(
     *args: str,
@@ -2017,6 +2104,7 @@ def polyPrism(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[Transform, PolyPrism]: ...
+
 @overload
 def polyPrism(
     *args: str,
@@ -2026,6 +2114,7 @@ def polyPrism(
     o: bool = ...,
     **kwargs: Unpack[_PolyPrismCreateFlags],
 ) -> tuple[Transform, PolyPrism] | tuple[Transform] | tuple[PolyPrism]: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2037,6 +2126,7 @@ def polyPrism(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2048,6 +2138,7 @@ def polyPrism(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2059,6 +2150,7 @@ def polyPrism(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2070,6 +2162,7 @@ def polyPrism(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2081,6 +2174,7 @@ def polyPrism(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2092,6 +2186,7 @@ def polyPrism(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPrism(
     *args: str | PolyPrism | Transform,
@@ -2103,7 +2198,6 @@ def polyPrism(
     nds: int = ...,
     **kwargs: Unpack[_PolyPrismModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -2124,20 +2218,20 @@ class _PolyPyramidModeFlags(TypedDict, total=False):
     hbl: float
     name: str
     n: str
-    object: bool
-    o: bool
     numberOfSides: int
     ns: int
     numderOfSides: int
     nsi: int
-    sideLength: float
-    w: float
+    object: bool
+    o: bool
     subdivisionsCaps: int
     sc: int
     subdivisionsHeight: int
     sh: int
     texture: bool
     tx: bool
+    sideLength: float
+    w: float
 
 class _PolyPyramidCreateFlags(TypedDict, total=False):
     edit: Literal[False]
@@ -2164,14 +2258,14 @@ class _PolyPyramidCreateFlags(TypedDict, total=False):
     ns: int
     numderOfSides: int
     nsi: int
-    sideLength: float
-    w: float
     subdivisionsCaps: int
     sc: int
     subdivisionsHeight: int
     sh: int
     texture: bool
     tx: bool
+    sideLength: float
+    w: float
 
 @overload
 def polyPyramid(
@@ -2182,6 +2276,7 @@ def polyPyramid(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[PolyPyramid]: ...
+
 @overload
 def polyPyramid(
     *args: str,
@@ -2191,6 +2286,7 @@ def polyPyramid(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[PolyPyramid]: ...
+
 @overload
 def polyPyramid(
     *args: str,
@@ -2200,6 +2296,7 @@ def polyPyramid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPyramid(
     *args: str,
@@ -2209,6 +2306,7 @@ def polyPyramid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPyramid(
     *args: str,
@@ -2218,6 +2316,7 @@ def polyPyramid(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[Transform, PolyPyramid]: ...
+
 @overload
 def polyPyramid(
     *args: str,
@@ -2227,6 +2326,7 @@ def polyPyramid(
     o: bool = ...,
     **kwargs: Unpack[_PolyPyramidCreateFlags],
 ) -> tuple[Transform, PolyPyramid] | tuple[Transform] | tuple[PolyPyramid]: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2238,6 +2338,7 @@ def polyPyramid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2249,6 +2350,7 @@ def polyPyramid(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2260,6 +2362,7 @@ def polyPyramid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2271,6 +2374,7 @@ def polyPyramid(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2282,6 +2386,7 @@ def polyPyramid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2293,6 +2398,7 @@ def polyPyramid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPyramid(
     *args: str | PolyPyramid | Transform,
@@ -2304,7 +2410,6 @@ def polyPyramid(
     nds: int = ...,
     **kwargs: Unpack[_PolyPyramidModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -2383,6 +2488,7 @@ def polySphere(
     ch: bool = ...,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[PolySphere]: ...
+
 @overload
 def polySphere(
     *args: str,
@@ -2392,6 +2498,7 @@ def polySphere(
     ch: bool = ...,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[PolySphere]: ...
+
 @overload
 def polySphere(
     *args: str,
@@ -2401,6 +2508,7 @@ def polySphere(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polySphere(
     *args: str,
@@ -2410,6 +2518,7 @@ def polySphere(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polySphere(
     *args: str,
@@ -2419,6 +2528,7 @@ def polySphere(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[Transform, PolySphere]: ...
+
 @overload
 def polySphere(
     *args: str,
@@ -2428,6 +2538,7 @@ def polySphere(
     o: bool = ...,
     **kwargs: Unpack[_PolySphereCreateFlags],
 ) -> tuple[Transform, PolySphere] | tuple[Transform] | tuple[PolySphere]: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2439,6 +2550,7 @@ def polySphere(
     nds: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2450,6 +2562,7 @@ def polySphere(
     nodeState: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2461,6 +2574,7 @@ def polySphere(
     nds: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2472,6 +2586,7 @@ def polySphere(
     nodeState: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2483,6 +2598,7 @@ def polySphere(
     nds: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2494,6 +2610,7 @@ def polySphere(
     nds: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polySphere(
     *args: str | PolySphere | Transform,
@@ -2505,7 +2622,6 @@ def polySphere(
     nds: int = ...,
     **kwargs: Unpack[_PolySphereModeFlags],
 ) -> Any: ...
-
 
 
 
@@ -2530,20 +2646,20 @@ class _PolyTorusModeFlags(TypedDict, total=False):
     o: bool
     radius: float
     r: float
-    sectionRadius: float
-    sr: float
     subdivisionsAxis: int
     sa: int
     subdivisionsHeight: int
     sh: int
+    sectionRadius: float
+    sr: float
     subdivisionsX: int
     sx: int
     subdivisionsY: int
     sy: int
-    texture: bool
-    tx: bool
     twist: float
     tw: float
+    texture: bool
+    tx: bool
 
 class _PolyTorusCreateFlags(TypedDict, total=False):
     edit: Literal[False]
@@ -2568,20 +2684,20 @@ class _PolyTorusCreateFlags(TypedDict, total=False):
     nds: int
     radius: float
     r: float
-    sectionRadius: float
-    sr: float
     subdivisionsAxis: int
     sa: int
     subdivisionsHeight: int
     sh: int
+    sectionRadius: float
+    sr: float
     subdivisionsX: int
     sx: int
     subdivisionsY: int
     sy: int
-    texture: bool
-    tx: bool
     twist: float
     tw: float
+    texture: bool
+    tx: bool
 
 @overload
 def polyTorus(
@@ -2592,6 +2708,7 @@ def polyTorus(
     ch: bool = ...,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[PolyTorus]: ...
+
 @overload
 def polyTorus(
     *args: str,
@@ -2601,6 +2718,7 @@ def polyTorus(
     ch: bool = ...,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[PolyTorus]: ...
+
 @overload
 def polyTorus(
     *args: str,
@@ -2610,6 +2728,7 @@ def polyTorus(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyTorus(
     *args: str,
@@ -2619,6 +2738,7 @@ def polyTorus(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyTorus(
     *args: str,
@@ -2628,6 +2748,7 @@ def polyTorus(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[Transform, PolyTorus]: ...
+
 @overload
 def polyTorus(
     *args: str,
@@ -2637,6 +2758,7 @@ def polyTorus(
     o: bool = ...,
     **kwargs: Unpack[_PolyTorusCreateFlags],
 ) -> tuple[Transform, PolyTorus] | tuple[Transform] | tuple[PolyTorus]: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2648,6 +2770,7 @@ def polyTorus(
     nds: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2659,6 +2782,7 @@ def polyTorus(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2670,6 +2794,7 @@ def polyTorus(
     nds: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2681,6 +2806,7 @@ def polyTorus(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2692,6 +2818,7 @@ def polyTorus(
     nds: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
@@ -2703,6 +2830,7 @@ def polyTorus(
     nds: int = ...,
     **kwargs: Unpack[_PolyTorusModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyTorus(
     *args: str | PolyTorus | Transform,
