@@ -4,7 +4,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import PolyPlane, Transform
+from maya_brew.nodes.node_types import PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
 from typing import Any, Literal, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -217,6 +217,1149 @@ def ls(
 
 
 
+class _PolyConeModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCap: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: bool
+    tx: bool
+
+class _PolyConeCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCap: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: bool
+    tx: bool
+
+@overload
+def polyCone(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[PolyCone]: ...
+
+@overload
+def polyCone(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[PolyCone]: ...
+
+@overload
+def polyCone(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCone(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCone(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[Transform, PolyCone]: ...
+
+@overload
+def polyCone(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyConeCreateFlags],
+) -> tuple[Transform, PolyCone] | tuple[Transform] | tuple[PolyCone]: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCone(
+    *args: str | PolyCone | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyConeModeFlags],
+) -> Any: ...
+
+
+
+class _PolyCubeModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    depth: float
+    d: float
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    subdivisionsDepth: int
+    sd: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsWidth: int
+    sw: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: int
+    tx: int
+    width: float
+    w: float
+
+class _PolyCubeCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    depth: float
+    d: float
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    subdivisionsDepth: int
+    sd: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsWidth: int
+    sw: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: int
+    tx: int
+    width: float
+    w: float
+
+@overload
+def polyCube(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[PolyCube]: ...
+
+@overload
+def polyCube(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[PolyCube]: ...
+
+@overload
+def polyCube(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCube(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCube(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[Transform, PolyCube]: ...
+
+@overload
+def polyCube(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyCubeCreateFlags],
+) -> tuple[Transform, PolyCube] | tuple[Transform] | tuple[PolyCube]: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCube(
+    *args: str | PolyCube | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCubeModeFlags],
+) -> Any: ...
+
+
+
+class _PolyCylinderModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    roundCapHeightCompensation: bool
+    rch: bool
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: int
+    tx: int
+
+class _PolyCylinderCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    roundCapHeightCompensation: bool
+    rch: bool
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    subdivisionsZ: int
+    sz: int
+    texture: int
+    tx: int
+
+@overload
+def polyCylinder(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[PolyCylinder]: ...
+
+@overload
+def polyCylinder(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[PolyCylinder]: ...
+
+@overload
+def polyCylinder(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCylinder(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyCylinder(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[Transform, PolyCylinder]: ...
+
+@overload
+def polyCylinder(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyCylinderCreateFlags],
+) -> tuple[Transform, PolyCylinder] | tuple[Transform] | tuple[PolyCylinder]: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyCylinder(
+    *args: str | PolyCylinder | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyCylinderModeFlags],
+) -> Any: ...
+
+
+
+class _PolyHelixModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    coils: float
+    c: float
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    direction: int
+    d: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    useOldInitBehaviour: bool
+    oib: bool
+    radius: float
+    r: float
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsCoil: int
+    sco: int
+    texture: int
+    tx: int
+    width: float
+    w: float
+
+class _PolyHelixCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    coils: float
+    c: float
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    direction: int
+    d: int
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    useOldInitBehaviour: bool
+    oib: bool
+    radius: float
+    r: float
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsCoil: int
+    sco: int
+    texture: int
+    tx: int
+    width: float
+    w: float
+
+@overload
+def polyHelix(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[PolyHelix]: ...
+
+@overload
+def polyHelix(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[PolyHelix]: ...
+
+@overload
+def polyHelix(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyHelix(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyHelix(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[Transform, PolyHelix]: ...
+
+@overload
+def polyHelix(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyHelixCreateFlags],
+) -> tuple[Transform, PolyHelix] | tuple[Transform] | tuple[PolyHelix]: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyHelix(
+    *args: str | PolyHelix | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyHelixModeFlags],
+) -> Any: ...
+
+
+
+class _PolyPipeModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: bool
+    cuv: bool
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    roundCapHeightCompensation: bool
+    rch: bool
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    thickness: float
+    t: float
+    texture: bool
+    tx: bool
+
+class _PolyPipeCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: bool
+    cuv: bool
+    frozen: bool
+    fzn: bool
+    height: float
+    h: float
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    roundCapHeightCompensation: bool
+    rch: bool
+    roundCap: bool
+    rcp: bool
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    thickness: float
+    t: float
+    texture: bool
+    tx: bool
+
+@overload
+def polyPipe(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[PolyPipe]: ...
+
+@overload
+def polyPipe(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[PolyPipe]: ...
+
+@overload
+def polyPipe(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPipe(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPipe(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[Transform, PolyPipe]: ...
+
+@overload
+def polyPipe(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyPipeCreateFlags],
+) -> tuple[Transform, PolyPipe] | tuple[Transform] | tuple[PolyPipe]: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPipe(
+    *args: str | PolyPipe | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPipeModeFlags],
+) -> Any: ...
+
+
 
 class _PolyPlaneModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
@@ -297,6 +1440,7 @@ def polyPlane(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -306,6 +1450,7 @@ def polyPlane(
     ch: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -315,6 +1460,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -324,6 +1470,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -333,6 +1480,7 @@ def polyPlane(
     o: Literal[True] = True,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform, PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str,
@@ -342,6 +1490,7 @@ def polyPlane(
     o: bool = ...,
     **kwargs: Unpack[_PolyPlaneCreateFlags],
 ) -> tuple[Transform, PolyPlane] | tuple[Transform] | tuple[PolyPlane]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -353,6 +1502,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -364,6 +1514,7 @@ def polyPlane(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -375,6 +1526,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -386,6 +1538,7 @@ def polyPlane(
     nodeState: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> NodeState: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -397,6 +1550,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -408,6 +1562,7 @@ def polyPlane(
     nds: int = ...,
     **kwargs: Unpack[_PolyPlaneModeFlags],
 ) -> Literal["Values edited."]: ...
+
 @overload
 def polyPlane(
     *args: str | PolyPlane | Transform,
@@ -421,4 +1576,1272 @@ def polyPlane(
 ) -> Any: ...
 
 
-__all__ = ["createNode", "ls", "polyPlane"]
+
+class _PolyPlatonicSolidModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    sideLength: float
+    l: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    solidType: int
+    st: int
+    texture: int
+    tx: int
+
+class _PolyPlatonicSolidCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    sideLength: float
+    l: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    solidType: int
+    st: int
+    texture: int
+    tx: int
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[PolyPlatonicSolid]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[PolyPlatonicSolid]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[Transform, PolyPlatonicSolid]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidCreateFlags],
+) -> tuple[Transform, PolyPlatonicSolid] | tuple[Transform] | tuple[PolyPlatonicSolid]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPlatonicSolid(
+    *args: str | PolyPlatonicSolid | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPlatonicSolidModeFlags],
+) -> Any: ...
+
+
+
+class _PolyPrimitiveModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    sideLength: float
+    l: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    polyType: int
+    pt: int
+    radius: float
+    r: float
+    texture: int
+    tx: int
+
+class _PolyPrimitiveCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    sideLength: float
+    l: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    polyType: int
+    pt: int
+    radius: float
+    r: float
+    texture: int
+    tx: int
+
+@overload
+def polyPrimitive(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[PolyPrimitiveMisc]: ...
+
+@overload
+def polyPrimitive(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[PolyPrimitiveMisc]: ...
+
+@overload
+def polyPrimitive(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPrimitive(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPrimitive(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[Transform, PolyPrimitiveMisc]: ...
+
+@overload
+def polyPrimitive(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyPrimitiveCreateFlags],
+) -> tuple[Transform, PolyPrimitiveMisc] | tuple[Transform] | tuple[PolyPrimitiveMisc]: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPrimitive(
+    *args: str | PolyPrimitiveMisc | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrimitiveModeFlags],
+) -> Any: ...
+
+
+
+class _PolyPrismModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    length: float
+    l: float
+    name: str
+    n: str
+    numberOfSides: int
+    ns: int
+    numderOfSides: int
+    nsi: int
+    object: bool
+    o: bool
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    texture: int
+    tx: int
+    sideLength: float
+    w: float
+
+class _PolyPrismCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    length: float
+    l: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    numberOfSides: int
+    ns: int
+    numderOfSides: int
+    nsi: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    texture: int
+    tx: int
+    sideLength: float
+    w: float
+
+@overload
+def polyPrism(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[PolyPrism]: ...
+
+@overload
+def polyPrism(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[PolyPrism]: ...
+
+@overload
+def polyPrism(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPrism(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPrism(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[Transform, PolyPrism]: ...
+
+@overload
+def polyPrism(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyPrismCreateFlags],
+) -> tuple[Transform, PolyPrism] | tuple[Transform] | tuple[PolyPrism]: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPrism(
+    *args: str | PolyPrism | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPrismModeFlags],
+) -> Any: ...
+
+
+
+class _PolyPyramidModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    numberOfSides: int
+    ns: int
+    numderOfSides: int
+    nsi: int
+    object: bool
+    o: bool
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    texture: bool
+    tx: bool
+    sideLength: float
+    w: float
+
+class _PolyPyramidCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    numberOfSides: int
+    ns: int
+    numderOfSides: int
+    nsi: int
+    subdivisionsCaps: int
+    sc: int
+    subdivisionsHeight: int
+    sh: int
+    texture: bool
+    tx: bool
+    sideLength: float
+    w: float
+
+@overload
+def polyPyramid(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[PolyPyramid]: ...
+
+@overload
+def polyPyramid(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[PolyPyramid]: ...
+
+@overload
+def polyPyramid(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPyramid(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyPyramid(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[Transform, PolyPyramid]: ...
+
+@overload
+def polyPyramid(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyPyramidCreateFlags],
+) -> tuple[Transform, PolyPyramid] | tuple[Transform] | tuple[PolyPyramid]: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyPyramid(
+    *args: str | PolyPyramid | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyPyramidModeFlags],
+) -> Any: ...
+
+
+
+class _PolySphereModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    texture: int
+    tx: int
+
+class _PolySphereCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: int
+    cuv: int
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsHeight: int
+    sh: int
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    texture: int
+    tx: int
+
+@overload
+def polySphere(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[PolySphere]: ...
+
+@overload
+def polySphere(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[PolySphere]: ...
+
+@overload
+def polySphere(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polySphere(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polySphere(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[Transform, PolySphere]: ...
+
+@overload
+def polySphere(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolySphereCreateFlags],
+) -> tuple[Transform, PolySphere] | tuple[Transform] | tuple[PolySphere]: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polySphere(
+    *args: str | PolySphere | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolySphereModeFlags],
+) -> Any: ...
+
+
+
+class _PolyTorusModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: bool
+    cuv: bool
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsHeight: int
+    sh: int
+    sectionRadius: float
+    sr: float
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    twist: float
+    tw: float
+    texture: bool
+    tx: bool
+
+class _PolyTorusCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    componentTagCreate: bool
+    ctc: bool
+    createUVs: bool
+    cuv: bool
+    frozen: bool
+    fzn: bool
+    heightBaseline: float
+    hbl: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    radius: float
+    r: float
+    subdivisionsAxis: int
+    sa: int
+    subdivisionsHeight: int
+    sh: int
+    sectionRadius: float
+    sr: float
+    subdivisionsX: int
+    sx: int
+    subdivisionsY: int
+    sy: int
+    twist: float
+    tw: float
+    texture: bool
+    tx: bool
+
+@overload
+def polyTorus(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[PolyTorus]: ...
+
+@overload
+def polyTorus(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[PolyTorus]: ...
+
+@overload
+def polyTorus(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyTorus(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def polyTorus(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[Transform, PolyTorus]: ...
+
+@overload
+def polyTorus(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_PolyTorusCreateFlags],
+) -> tuple[Transform, PolyTorus] | tuple[Transform] | tuple[PolyTorus]: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def polyTorus(
+    *args: str | PolyTorus | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_PolyTorusModeFlags],
+) -> Any: ...
+
+
+__all__ = ["createNode", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]

@@ -1,14 +1,378 @@
 from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
-from maya_brew.command_wrapper import createNode, ls, polyPlane
+from maya_brew.command_wrapper import (
+    createNode,
+    ls,
+    polyCone,
+    polyCube,
+    polyCylinder,
+    polyHelix,
+    polyPipe,
+    polyPlane,
+    polyPlatonicSolid,
+    polyPrimitive,
+    polyPrism,
+    polyPyramid,
+    polySphere,
+    polyTorus,
+)
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import Joint, PolyPlane, Transform
+from maya_brew.nodes.node_types import (
+    Joint,
+    PolyCone,
+    PolyCube,
+    PolyCylinder,
+    PolyHelix,
+    PolyPipe,
+    PolyPlane,
+    PolyPlatonicSolid,
+    PolyPrimitiveMisc,
+    PolyPrism,
+    PolyPyramid,
+    PolySphere,
+    PolyTorus,
+    Transform,
+)
 
 
 class CustomJoint(Joint):
     pass
+
+
+def check_poly_primitive_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPrimitive()
+    assert_type(nodes, tuple[Transform, PolyPrimitiveMisc])
+    assert_type(polyPrimitive(ch=False), tuple[Transform])
+    assert_type(polyPrimitive(constructionHistory=False), tuple[Transform])
+    assert_type(polyPrimitive(object=False), tuple[PolyPrimitiveMisc])
+    assert_type(polyPrimitive(o=False, ch=False), tuple[PolyPrimitiveMisc])
+    assert_type(
+        polyPrimitive(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPrimitiveMisc]
+        | tuple[Transform]
+        | tuple[PolyPrimitiveMisc],
+    )
+    assert_type(polyPrimitive(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPrimitive(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPrimitive(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPrimitive(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPrimitive(nodes[1], edit=True, radius=3.0), Literal["Values edited."]
+    )
+    assert_type(polyPrimitive(nodes[0], e=True, l=2.0), Literal["Values edited."])
+    assert_type(polyPrimitive(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPrimitive(
+            axis=(0.0, 1.0, 0.0),
+            radius=2.0,
+            sideLength=0.8,
+            polyType=0,
+            createUVs=4,
+            texture=0,
+        ),
+        tuple[Transform, PolyPrimitiveMisc],
+    )
+    assert_type(
+        polyPrimitive(pt=0, r=2.0, l=0.8, cuv=4, tx=0),
+        tuple[Transform, PolyPrimitiveMisc],
+    )
+
+
+def check_poly_platonic_solid_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPlatonicSolid()
+    assert_type(nodes, tuple[Transform, PolyPlatonicSolid])
+    assert_type(polyPlatonicSolid(ch=False), tuple[Transform])
+    assert_type(polyPlatonicSolid(constructionHistory=False), tuple[Transform])
+    assert_type(polyPlatonicSolid(object=False), tuple[PolyPlatonicSolid])
+    assert_type(polyPlatonicSolid(o=False, ch=False), tuple[PolyPlatonicSolid])
+    assert_type(
+        polyPlatonicSolid(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPlatonicSolid]
+        | tuple[Transform]
+        | tuple[PolyPlatonicSolid],
+    )
+    assert_type(polyPlatonicSolid(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPlatonicSolid(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPlatonicSolid(nodes[1], edit=True, radius=3.0), Literal["Values edited."]
+    )
+    assert_type(polyPlatonicSolid(nodes[0], e=True, l=2.0), Literal["Values edited."])
+    assert_type(polyPlatonicSolid(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPlatonicSolid(
+            axis=(0.0, 1.0, 0.0),
+            radius=2.0,
+            sideLength=2.0,
+            solidType=1,
+            createUVs=4,
+            texture=0,
+        ),
+        tuple[Transform, PolyPlatonicSolid],
+    )
+    assert_type(
+        polyPlatonicSolid(st=2, r=2.0, l=2.0, cuv=4, tx=0),
+        tuple[Transform, PolyPlatonicSolid],
+    )
+
+
+def check_poly_helix_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyHelix()
+    assert_type(nodes, tuple[Transform, PolyHelix])
+    assert_type(polyHelix(ch=False), tuple[Transform])
+    assert_type(polyHelix(constructionHistory=False), tuple[Transform])
+    assert_type(polyHelix(object=False), tuple[PolyHelix])
+    assert_type(polyHelix(o=False, ch=False), tuple[PolyHelix])
+    assert_type(
+        polyHelix(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyHelix] | tuple[Transform] | tuple[PolyHelix],
+    )
+    assert_type(polyHelix(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyHelix(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyHelix(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyHelix(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyHelix(nodes[1], edit=True, coils=4.5), Literal["Values edited."])
+    assert_type(polyHelix(nodes[0], e=True, cuv=0, tx=0), Literal["Values edited."])
+    assert_type(polyHelix(nodes[1], q=True, width=True), Any)
+    assert_type(
+        polyHelix(
+            axis=(0.0, 1.0, 0.0),
+            coils=3.5,
+            direction=1,
+            height=4.0,
+            width=2.0,
+            radius=0.25,
+            roundCap=True,
+            subdivisionsAxis=8,
+            subdivisionsCaps=2,
+            subdivisionsCoil=12,
+            createUVs=2,
+            texture=2,
+            useOldInitBehaviour=False,
+        ),
+        tuple[Transform, PolyHelix],
+    )
+    assert_type(
+        polyHelix(
+            c=3.5, d=0, h=4.0, w=2.0, r=0.25, rcp=True, sa=8, sc=2, sco=12, oib=True
+        ),
+        tuple[Transform, PolyHelix],
+    )
+
+
+def check_poly_prism_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPrism()
+    assert_type(nodes, tuple[Transform, PolyPrism])
+    assert_type(polyPrism(ch=False), tuple[Transform])
+    assert_type(polyPrism(constructionHistory=False), tuple[Transform])
+    assert_type(polyPrism(object=False), tuple[PolyPrism])
+    assert_type(polyPrism(o=False, ch=False), tuple[PolyPrism])
+    assert_type(
+        polyPrism(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPrism] | tuple[Transform] | tuple[PolyPrism],
+    )
+    assert_type(polyPrism(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPrism(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPrism(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPrism(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyPrism(nodes[1], edit=True, length=5.0), Literal["Values edited."])
+    assert_type(polyPrism(nodes[0], e=True, cuv=0, tx=0), Literal["Values edited."])
+    assert_type(polyPrism(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPrism(axis=(0.0, 1.0, 0.0), length=3.0, numberOfSides=5, createUVs=2),
+        tuple[Transform, PolyPrism],
+    )
+    assert_type(polyPrism(numderOfSides=6, l=4.0), tuple[Transform, PolyPrism])
+    assert_type(polyPrism(nsi=6, ns=6), tuple[Transform, PolyPrism])
+
+
+def check_poly_pipe_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPipe()
+    assert_type(nodes, tuple[Transform, PolyPipe])
+    assert_type(polyPipe(ch=False), tuple[Transform])
+    assert_type(polyPipe(constructionHistory=False), tuple[Transform])
+    assert_type(polyPipe(object=False), tuple[PolyPipe])
+    assert_type(polyPipe(o=False, ch=False), tuple[PolyPipe])
+    assert_type(
+        polyPipe(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPipe] | tuple[Transform] | tuple[PolyPipe],
+    )
+    assert_type(polyPipe(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPipe(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPipe(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPipe(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPipe(nodes[1], edit=True, thickness=0.75), Literal["Values edited."]
+    )
+    assert_type(
+        polyPipe(nodes[0], e=True, cuv=False, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyPipe(nodes[1], q=True, thickness=True), Any)
+    assert_type(
+        polyPipe(axis=(0.0, 1.0, 0.0), thickness=0.5, h=3.0, createUVs=False),
+        tuple[Transform, PolyPipe],
+    )
+
+
+def check_poly_torus_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyTorus()
+    assert_type(nodes, tuple[Transform, PolyTorus])
+    assert_type(polyTorus(ch=False), tuple[Transform])
+    assert_type(polyTorus(constructionHistory=False), tuple[Transform])
+    assert_type(polyTorus(object=False), tuple[PolyTorus])
+    assert_type(polyTorus(o=False, ch=False), tuple[PolyTorus])
+    assert_type(
+        polyTorus(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyTorus] | tuple[Transform] | tuple[PolyTorus],
+    )
+    assert_type(polyTorus(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyTorus(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyTorus(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyTorus(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyTorus(nodes[1], edit=True, twist=45.0), Literal["Values edited."])
+    assert_type(
+        polyTorus(nodes[0], e=True, cuv=False, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyTorus(nodes[1], q=True, sectionRadius=True), Any)
+    assert_type(
+        polyTorus(axis=(0.0, 1.0, 0.0), sectionRadius=0.5, tw=30.0, createUVs=False),
+        tuple[Transform, PolyTorus],
+    )
+
+
+def check_poly_cylinder_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCylinder()
+    assert_type(nodes, tuple[Transform, PolyCylinder])
+    assert_type(polyCylinder(ch=False), tuple[Transform])
+    assert_type(polyCylinder(constructionHistory=False), tuple[Transform])
+    assert_type(polyCylinder(object=False), tuple[PolyCylinder])
+    assert_type(polyCylinder(o=False, ch=False), tuple[PolyCylinder])
+    assert_type(
+        polyCylinder(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCylinder] | tuple[Transform] | tuple[PolyCylinder],
+    )
+    assert_type(polyCylinder(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCylinder(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCylinder(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCylinder(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyCylinder(nodes[1], edit=True, radius=2.0), Literal["Values edited."]
+    )
+    assert_type(
+        polyCylinder(nodes[0], e=True, rcp=True, tx=1), Literal["Values edited."]
+    )
+    assert_type(polyCylinder(nodes[1], q=True, radius=True), Any)
+    assert_type(
+        polyCylinder(axis=(0.0, 1.0, 0.0), subdivisionsCaps=2, texture=1, rch=False),
+        tuple[Transform, PolyCylinder],
+    )
+
+
+def check_poly_cone_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCone()
+    assert_type(nodes, tuple[Transform, PolyCone])
+    assert_type(polyCone(ch=False), tuple[Transform])
+    assert_type(polyCone(constructionHistory=False), tuple[Transform])
+    assert_type(polyCone(object=False), tuple[PolyCone])
+    assert_type(polyCone(o=False, ch=False), tuple[PolyCone])
+    assert_type(
+        polyCone(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCone] | tuple[Transform] | tuple[PolyCone],
+    )
+    assert_type(polyCone(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCone(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCone(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCone(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyCone(nodes[1], edit=True, radius=2.0), Literal["Values edited."])
+    assert_type(
+        polyCone(nodes[0], e=True, rcp=True, tx=False), Literal["Values edited."]
+    )
+    assert_type(polyCone(nodes[1], q=True, radius=True), Any)
+    assert_type(
+        polyCone(axis=(0.0, 1.0, 0.0), sx=10, sy=3, sz=2, roundCap=True),
+        tuple[Transform, PolyCone],
+    )
+
+
+def check_poly_pyramid_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyPyramid()
+    assert_type(nodes, tuple[Transform, PolyPyramid])
+    assert_type(polyPyramid(ch=False), tuple[Transform])
+    assert_type(polyPyramid(constructionHistory=False), tuple[Transform])
+    assert_type(polyPyramid(object=False), tuple[PolyPyramid])
+    assert_type(polyPyramid(o=False, ch=False), tuple[PolyPyramid])
+    assert_type(
+        polyPyramid(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyPyramid] | tuple[Transform] | tuple[PolyPyramid],
+    )
+    assert_type(polyPyramid(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyPyramid(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyPyramid(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyPyramid(nodes[0], q=True, nds=True), NodeState)
+    assert_type(
+        polyPyramid(nodes[1], edit=True, sideLength=2.0), Literal["Values edited."]
+    )
+    assert_type(polyPyramid(nodes[0], e=True, texture=False), Literal["Values edited."])
+    assert_type(polyPyramid(nodes[1], q=True, sideLength=True), Any)
+    assert_type(
+        polyPyramid(axis=(0.0, 1.0, 0.0), ns=5, nsi=5, sc=2, sh=3, tx=False),
+        tuple[Transform, PolyPyramid],
+    )
+
+
+def check_poly_cube_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polyCube()
+    assert_type(nodes, tuple[Transform, PolyCube])
+    assert_type(polyCube(ch=False), tuple[Transform])
+    assert_type(polyCube(constructionHistory=False), tuple[Transform])
+    assert_type(polyCube(object=False), tuple[PolyCube])
+    assert_type(polyCube(o=False, ch=False), tuple[PolyCube])
+    assert_type(
+        polyCube(constructionHistory=history, object=create_object),
+        tuple[Transform, PolyCube] | tuple[Transform] | tuple[PolyCube],
+    )
+    assert_type(polyCube(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polyCube(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polyCube(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polyCube(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polyCube(nodes[1], edit=True, width=2.0), Literal["Values edited."])
+    assert_type(polyCube(nodes[0], e=True, d=3.0), Literal["Values edited."])
+    assert_type(polyCube(nodes[1], q=True, width=True), Any)
+    assert_type(polyCube(nodes[1], query=True, axis=True), Any)
+    assert_type(
+        polyCube(axis=(0.0, 1.0, 0.0), sx=10, sy=15, sz=5),
+        tuple[Transform, PolyCube],
+    )
+
+
+def check_poly_sphere_types(history: bool, create_object: bool) -> None:
+    nodes = cmds.polySphere()
+    assert_type(nodes, tuple[Transform, PolySphere])
+    assert_type(polySphere(ch=False), tuple[Transform])
+    assert_type(polySphere(constructionHistory=False), tuple[Transform])
+    assert_type(polySphere(object=False), tuple[PolySphere])
+    assert_type(polySphere(o=False, ch=False), tuple[PolySphere])
+    assert_type(
+        polySphere(constructionHistory=history, object=create_object),
+        tuple[Transform, PolySphere] | tuple[Transform] | tuple[PolySphere],
+    )
+    assert_type(polySphere(nodes[1], query=True, nodeState=True), NodeState)
+    assert_type(polySphere(nodes[0], query=True, nds=True), NodeState)
+    assert_type(polySphere(nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(polySphere(nodes[0], q=True, nds=True), NodeState)
+    assert_type(polySphere(nodes[1], edit=True, radius=2.0), Literal["Values edited."])
+    assert_type(
+        polySphere(nodes[0], e=True, nds=NodeState.BLOCKING),
+        Literal["Values edited."],
+    )
+    assert_type(polySphere(nodes[1], q=True, radius=True), Any)
+    assert_type(polySphere(nodes[1], query=True, axis=True), Any)
+    assert_type(
+        polySphere(axis=(0.0, 1.0, 0.0), sx=10, sy=15), tuple[Transform, PolySphere]
+    )
 
 
 def check_ls_types(node: Node, nodes: list[Transform], mode: bool) -> None:
