@@ -19,7 +19,13 @@ from maya_brew.nodes._foundation.native_node_hierarchy import (
 )
 from maya_brew.nodes._foundation.node_registry import snapshot_package_name
 from tools.command_wrapper.help import command_flags
-from tools.command_wrapper.metadata import COMMANDS, CommandMetadata
+from tools.command_wrapper.metadata import (
+    COMMANDS,
+    CommandSignature,
+    NodeCreationSignature,
+    PrimitiveSignature,
+    Signature,
+)
 from tools.command_wrapper.primitive import generate_primitive_overloads
 from tools.node_hierarchy.generate import CLASSES_MODULE
 
@@ -55,7 +61,7 @@ def generate_concrete_node_stub(hierarchy: dict[str, NodeType], version: str) ->
 
 def generate_command_definition(
     function_name: str,
-    policy: CommandMetadata,
+    policy: Signature,
     flags: dict[str, str],
     kwargs_name: str,
     args_name: str | None,
@@ -63,14 +69,16 @@ def generate_command_definition(
     docstring: str | None = None,
 ) -> str:
     node_class = node_extensions.Node.__name__
-    if args_name is None:
+    if isinstance(policy, NodeCreationSignature):
         signature_arguments = (
             f"    {policy.type_argument}: str | type[{node_class}],\n    *,\n"
         )
         call_arguments = f"        {policy.type_argument},\n"
     else:
-        target_type = policy.target_type or (
-            f"str | {node_class}" if policy.node_targets else "str"
+        target_type = (
+            policy.argument_type
+            if isinstance(policy, CommandSignature)
+            else f"str | {node_class}"
         )
         signature_arguments = f"    *{args_name}: {target_type},\n"
         call_arguments = f"        *{args_name},\n"
@@ -96,30 +104,26 @@ def generate_command_definition(
 
 def generate_command_overloads(
     function_name: str,
-    policy: CommandMetadata,
+    policy: Signature,
     flags: dict[str, str],
     return_type: str,
 ) -> str:
-    if policy.primitive_history_type is not None:
-        return generate_primitive_overloads(
-            function_name, policy.primitive_history_type, flags
-        )
+    if isinstance(policy, PrimitiveSignature):
+        return generate_primitive_overloads(function_name, policy.history_type, flags)
     signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
     if signature_path.is_file():
         return "\n\n" + signature_path.read_text(encoding="utf-8")
     node_class = node_extensions.Node.__name__
-    if policy.type_argument is None:
+    if isinstance(policy, CommandSignature):
         stub_flags = ", ".join(
             f"{flag}: {annotation} = ..." for flag, annotation in flags.items()
         )
-        target_type = policy.target_type or (
-            f"str | {node_class}" if policy.node_targets else "str"
-        )
         return (
-            f"\n\ndef {function_name}(*args: {target_type}, {stub_flags}) "
+            f"\n\ndef {function_name}(*args: {policy.argument_type}, {stub_flags}) "
             f"-> {return_type}: ...\n"
         )
-    if policy.nullable_flags:
+    cases: list[tuple[str, str | None, str]]
+    if policy.nullable_return_flags:
         cases = [
             ("type[T]", "Literal[False]", "T"),
             ("type[T]", "bool", "T | None"),
@@ -132,7 +136,7 @@ def generate_command_overloads(
         stub_flags = ", ".join(
             (
                 f"{flag}: {nullable_type} = False"
-                if flag in policy.nullable_flags
+                if flag in policy.nullable_return_flags
                 else f"{flag}: {annotation} = ..."
             )
             for flag, annotation in flags.items()
@@ -146,10 +150,10 @@ def generate_command_overloads(
 
 
 def command_parameter_names(
-    function: Callable[..., Any], policy: CommandMetadata
+    function: Callable[..., Any], policy: Signature
 ) -> tuple[str | None, str]:
     parameters = list(inspect.signature(function).parameters.values())
-    if policy.type_argument is None:
+    if not isinstance(policy, NodeCreationSignature):
         if (
             len(parameters) != 2
             or parameters[0].kind != inspect.Parameter.VAR_POSITIONAL
@@ -172,21 +176,29 @@ def command_parameter_names(
     return None, parameters[1].name
 
 
-def resolve_command_flags(
-    function_name: str, policy: CommandMetadata
-) -> dict[str, str]:
+def resolve_command_flags(function_name: str, policy: Signature) -> dict[str, str]:
     try:
         help_text = cmds.help(function_name)
     except RuntimeError as e:
         raise MayaBrewException(
             f"Cannot query command help for {function_name}: {e}"
         ) from e
-    flags = command_flags(function_name, help_text, policy.flag_types)
-    unknown_flags = set(policy.nullable_flags + policy.node_arguments) - flags.keys()
-    if unknown_flags:
-        raise ValueError(f"{function_name}: unknown policy flags {unknown_flags}")
-    for flag in policy.node_arguments:
-        flags[flag] = f"str | {node_extensions.Node.__name__}"
+    if not isinstance(help_text, str):
+        raise MayaBrewException(
+            f"Expected command help text for {function_name}, got {type(help_text).__name__}"
+        )
+    overrides = policy.flag_type_overrides
+    if isinstance(policy, PrimitiveSignature):
+        overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
+    flags = command_flags(function_name, help_text, overrides)
+    if isinstance(policy, NodeCreationSignature):
+        unknown_flags = (
+            set(policy.nullable_return_flags + policy.node_flags) - flags.keys()
+        )
+        if unknown_flags:
+            raise ValueError(f"{function_name}: unknown policy flags {unknown_flags}")
+        for flag in policy.node_flags:
+            flags[flag] = f"str | {node_extensions.Node.__name__}"
     return {
         flag: annotation
         for flag, annotation in flags.items()

@@ -7,7 +7,12 @@ import pytest
 from maya_brew.command_wrapper import extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import NodeType
 from tools.command_wrapper import generate
-from tools.command_wrapper.metadata import COMMANDS
+from tools.command_wrapper.metadata import (
+    COMMANDS,
+    CommandSignature,
+    NodeCreationSignature,
+    PrimitiveSignature,
+)
 
 
 def test_extensions_star_import_exports_only_commands():
@@ -162,7 +167,7 @@ def test_handwritten_signature_matches_help_flags(handwritten_signature):
     params=[
         function
         for function, policy in COMMANDS.items()
-        if policy.primitive_history_type is not None
+        if isinstance(policy, PrimitiveSignature)
     ],
     ids=lambda function: function.__name__,
 )
@@ -209,3 +214,42 @@ def test_python_keyword_flag_aliases_are_omitted():
     flags = generate.resolve_command_flags("ls", COMMANDS[extensions.ls])
     assert "assemblies" in flags
     assert "as" not in flags
+
+
+def test_regular_signature_uses_argument_type():
+    signature = generate.generate_command_overloads(
+        "example", CommandSignature(argument_type="str | Node"), {"name": "str"}, "Any"
+    )
+    assert "def example(*args: str | Node, name: str = ...) -> Any" in signature
+
+
+def test_primitive_defaults_preserve_custom_overrides():
+    flags = generate.resolve_command_flags(
+        "polyTorus",
+        PrimitiveSignature(
+            history_type="PolyTorus", flag_type_overrides={"twist": "float"}
+        ),
+    )
+    assert flags["axis"] == flags["ax"] == "tuple[float, float, float] | bool"
+    assert flags["twist"] == flags["tw"] == "float"
+
+
+def test_node_creation_flags_accept_nodes():
+    flags = generate.resolve_command_flags(
+        "createNode", COMMANDS[extensions.createNode]
+    )
+    assert flags["parent"] == flags["p"] == "str | Node"
+
+
+@pytest.mark.parametrize(
+    "signature",
+    [
+        NodeCreationSignature(type_argument="node_type", node_flags=("missing",)),
+        NodeCreationSignature(
+            type_argument="node_type", nullable_return_flags=("missing",)
+        ),
+    ],
+)
+def test_unknown_node_creation_flags_are_rejected(signature):
+    with pytest.raises(ValueError, match="unknown policy flags"):
+        generate.resolve_command_flags("createNode", signature)

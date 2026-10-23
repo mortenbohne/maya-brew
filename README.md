@@ -88,7 +88,14 @@ Currently wrapped commands:
 - `polyTorus`
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
-and tool-side metadata. Handwritten stubs supply command-specific typing where needed.
+and tool-side metadata. The command registry uses `CommandSignature` for regular
+commands, `NodeCreationSignature` for typed node creation, and `PrimitiveSignature`
+for shared polygon primitive overloads. Handwritten stubs supply command-specific
+typing where needed.
+
+Primitive signatures are composed from separate create, query, and edit generators.
+Mode selection and overload rendering are shared; flag availability and return
+types remain command-specific rather than inferred from Maya's short help output.
 
 ### Generated hierarchies
 

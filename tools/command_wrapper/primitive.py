@@ -1,5 +1,7 @@
 """Generate the shared typing contract for polygon primitive commands."""
 
+from tools.command_wrapper.modes import mode_selectors, render_overload
+
 
 def generate_primitive_overloads(
     command: str, history_type: str, flags: dict[str, str]
@@ -34,94 +36,127 @@ def generate_primitive_overloads(
             f"    {flag}: {annotation}\n" for flag, annotation in fields.items()
         )
 
-    def overload(parameters: list[str], result: str, *, creation: bool = False) -> None:
-        target = "str" if creation else f"str | {history_type} | Transform"
-        kwargs = create_flags if creation else mode_flags
-        lines.extend(
-            [
-                f"\n@overload\ndef {command}(\n",
-                f"    *args: {target},\n",
-                *(f"    {parameter},\n" for parameter in parameters),
-                f"    **kwargs: Unpack[{kwargs}],\n",
-                f") -> {result}: ...\n",
-            ]
-        )
+    lines.extend(
+        [
+            generate_creation_overloads(command, history_type, create_flags),
+            generate_query_overloads(command, history_type, mode_flags),
+            generate_edit_overloads(command, history_type, mode_flags),
+            render_overload(
+                command,
+                f"str | {history_type} | Transform",
+                mode_flags,
+                [
+                    "edit: bool = False",
+                    "e: bool = False",
+                    "query: bool = False",
+                    "q: bool = False",
+                    "nodeState: int = ...",
+                    "nds: int = ...",
+                ],
+                "Any",
+            ),
+        ]
+    )
+    return "".join(lines)
 
+
+def generate_creation_overloads(
+    command: str, history_type: str, flags_type: str
+) -> str:
+    lines = []
     for object_flag, alias in (("object", "o"), ("o", "object")):
-        overload(
-            [
-                f"{object_flag}: Literal[False]",
-                f"{alias}: bool = ...",
-                "constructionHistory: bool = ...",
-                "ch: bool = ...",
-            ],
-            f"tuple[{history_type}]",
-            creation=True,
+        lines.append(
+            render_overload(
+                command,
+                "str",
+                flags_type,
+                [
+                    f"{object_flag}: Literal[False]",
+                    f"{alias}: bool = ...",
+                    "constructionHistory: bool = ...",
+                    "ch: bool = ...",
+                ],
+                f"tuple[{history_type}]",
+            )
         )
     for history_flag, alias in (
         ("constructionHistory", "ch"),
         ("ch", "constructionHistory"),
     ):
-        overload(
-            [
-                f"{history_flag}: Literal[False]",
-                f"{alias}: bool = ...",
-                "object: Literal[True] = True",
-                "o: Literal[True] = True",
-            ],
-            "tuple[Transform]",
-            creation=True,
-        )
-    overload(
-        [
-            f"{flag}: Literal[True] = True"
-            for flag in ("constructionHistory", "ch", "object", "o")
-        ],
-        f"tuple[Transform, {history_type}]",
-        creation=True,
-    )
-    overload(
-        [
-            f"{flag}: bool = ..."
-            for flag in ("constructionHistory", "ch", "object", "o")
-        ],
-        f"tuple[Transform, {history_type}] | tuple[Transform] | tuple[{history_type}]",
-        creation=True,
-    )
-    for query, query_alias in (("query", "q"), ("q", "query")):
-        for state, state_alias in (("nodeState", "nds"), ("nds", "nodeState")):
-            overload(
+        lines.append(
+            render_overload(
+                command,
+                "str",
+                flags_type,
                 [
-                    f"{query}: Literal[True]",
-                    f"{state}: Literal[True]",
-                    "edit: bool = False",
-                    "e: bool = False",
-                    f"{query_alias}: bool = ...",
-                    f"{state_alias}: int = ...",
+                    f"{history_flag}: Literal[False]",
+                    f"{alias}: bool = ...",
+                    "object: Literal[True] = True",
+                    "o: Literal[True] = True",
                 ],
-                "NodeState",
+                "tuple[Transform]",
             )
-    for edit, alias in (("edit", "e"), ("e", "edit")):
-        overload(
+        )
+    lines.append(
+        render_overload(
+            command,
+            "str",
+            flags_type,
             [
-                f"{edit}: Literal[True]",
-                f"{alias}: bool = False",
-                "query: Literal[False] = False",
-                "q: Literal[False] = False",
+                f"{flag}: Literal[True] = True"
+                for flag in ("constructionHistory", "ch", "object", "o")
+            ],
+            f"tuple[Transform, {history_type}]",
+        )
+    )
+    lines.append(
+        render_overload(
+            command,
+            "str",
+            flags_type,
+            [
+                f"{flag}: bool = ..."
+                for flag in ("constructionHistory", "ch", "object", "o")
+            ],
+            f"tuple[Transform, {history_type}] | tuple[Transform] | tuple[{history_type}]",
+        )
+    )
+    return "".join(lines)
+
+
+def generate_query_overloads(command: str, history_type: str, flags_type: str) -> str:
+    lines = []
+    for selector in mode_selectors("query"):
+        for state, state_alias in (("nodeState", "nds"), ("nds", "nodeState")):
+            lines.append(
+                render_overload(
+                    command,
+                    f"str | {history_type} | Transform",
+                    flags_type,
+                    [
+                        selector[0],
+                        f"{state}: Literal[True]",
+                        *selector[1:],
+                        f"{state_alias}: int = ...",
+                    ],
+                    "NodeState",
+                )
+            )
+    return "".join(lines)
+
+
+def generate_edit_overloads(command: str, history_type: str, flags_type: str) -> str:
+    return "".join(
+        render_overload(
+            command,
+            f"str | {history_type} | Transform",
+            flags_type,
+            [
+                *selector,
                 "nodeState: int = ...",
                 "nds: int = ...",
             ],
             'Literal["Values edited."]',
         )
-    overload(
-        [
-            "edit: bool = False",
-            "e: bool = False",
-            "query: bool = False",
-            "q: bool = False",
-            "nodeState: int = ...",
-            "nds: int = ...",
-        ],
-        "Any",
+        for selector in mode_selectors("edit")
     )
-    return "".join(lines)

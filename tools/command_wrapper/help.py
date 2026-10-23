@@ -27,11 +27,13 @@ def command_flags(
         if annotation is None:
             raise ValueError(
                 f"{command}.{name}: unsupported help type {maya_type!r}; "
-                "supply a flag_types override"
+                "supply a flag_type_overrides entry"
             )
         flags[name] = annotation
         flags[alias] = annotation
     if not flags and not overrides:
-        raise ValueError(f"{command}: no flags found in Maya help; supply flag_types")
+        raise ValueError(
+            f"{command}: no flags found in Maya help; supply flag_type_overrides"
+        )
     flags.update(overrides)
     return flags
