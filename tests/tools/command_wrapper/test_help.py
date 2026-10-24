@@ -49,6 +49,12 @@ def test_multi_value_help_types_are_inferred(maya_type, annotation):
     }
 
 
+def test_help_flags_support_missing_long_name_column():
+    assert command_flags("example", "  -rgb - Float Float Float\n", {}) == {
+        "rgb": "tuple[float, float, float]"
+    }
+
+
 @pytest.mark.parametrize(
     "help_text, message",
     [

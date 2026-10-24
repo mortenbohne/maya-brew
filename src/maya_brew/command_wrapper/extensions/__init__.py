@@ -1,8 +1,10 @@
+from .ambient_light import ambientLight as ambientLight
 from .circle import circle as circle
 from .cone import cone as cone
 from .connect_joint import connectJoint as connectJoint
 from .create_node import createNode as createNode
 from .cylinder import cylinder as cylinder
+from .directional_light import directionalLight as directionalLight
 from .ik_handle import ikHandle as ikHandle
 from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
 from .ik_solver import ikSolver as ikSolver
@@ -15,6 +17,7 @@ from .mirror_joint import mirrorJoint as mirrorJoint
 from .nurbs_cube import nurbsCube as nurbsCube
 from .nurbs_plane import nurbsPlane as nurbsPlane
 from .nurbs_square import nurbsSquare as nurbsSquare
+from .point_light import pointLight as pointLight
 from .poly_cone import polyCone as polyCone
 from .poly_cube import polyCube as polyCube
 from .poly_cylinder import polyCylinder as polyCylinder
@@ -28,13 +31,17 @@ from .poly_pyramid import polyPyramid as polyPyramid
 from .poly_sphere import polySphere as polySphere
 from .poly_torus import polyTorus as polyTorus
 from .remove_joint import removeJoint as removeJoint
+from .space_locator import spaceLocator as spaceLocator
 from .sphere import sphere as sphere
+from .spot_light import spotLight as spotLight
 from .torus import torus as torus
 
 __all__ = [
+    "ambientLight",
     "circle",
     "cone",
     "cylinder",
+    "directionalLight",
     "connectJoint",
     "createNode",
     "ikHandle",
@@ -49,6 +56,7 @@ __all__ = [
     "nurbsCube",
     "nurbsPlane",
     "nurbsSquare",
+    "pointLight",
     "polyCone",
     "polyCube",
     "polyCylinder",
@@ -62,6 +70,8 @@ __all__ = [
     "polySphere",
     "polyTorus",
     "removeJoint",
+    "spaceLocator",
     "sphere",
+    "spotLight",
     "torus",
 ]

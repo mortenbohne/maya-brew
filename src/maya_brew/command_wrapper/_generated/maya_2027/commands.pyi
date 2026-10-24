@@ -4,10 +4,69 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
+from maya_brew.nodes.node_types import AmbientLight, DirectionalLight, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, SpotLight, Transform
 from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
+
+
+class _AmbientLightFlags(TypedDict, total=False):
+    ambientShade: float
+    discRadius: float
+    drs: float
+    exclusive: bool
+    exc: bool
+    rgb: tuple[float, float, float]
+    useRayTraceShadows: bool
+    rs: bool
+    shadowColor: tuple[float, float, float]
+    sc: tuple[float, float, float]
+    shadowDither: float
+    sd: float
+    shadowSamples: int
+    sh: int
+    softShadow: bool
+    ss: bool
+
+class _AmbientLightCreateFlags(_AmbientLightFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    intensity: float
+    i: float
+    name: str
+    n: str
+    position: tuple[float, float, float]
+    pos: tuple[float, float, float]
+    rotation: tuple[float, float, float]
+    rot: tuple[float, float, float]
+
+class _AmbientLightModeFlags(_AmbientLightFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    intensity: float | bool
+    i: float | bool
+    name: str | bool
+    n: str | bool
+    position: tuple[float, float, float] | bool
+    pos: tuple[float, float, float] | bool
+    rotation: tuple[float, float, float] | bool
+    rot: tuple[float, float, float] | bool
+
+@overload
+def ambientLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_AmbientLightCreateFlags],
+) -> AmbientLight: ...
+
+@overload
+def ambientLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_AmbientLightModeFlags],
+) -> Any: ...
 
 
 
@@ -714,6 +773,68 @@ def cylinder(
     nodeState: int = ...,
     nds: int = ...,
     **kwargs: Unpack[_CylinderModeFlags],
+) -> Any: ...
+
+
+class _DirectionalLightFlags(TypedDict, total=False):
+    discRadius: float
+    drs: float
+    exclusive: bool
+    exc: bool
+    rgb: tuple[float, float, float]
+    useRayTraceShadows: bool
+    rs: bool
+    shadowColor: tuple[float, float, float]
+    sc: tuple[float, float, float]
+    shadowDither: float
+    sd: float
+    shadowSamples: int
+    sh: int
+    softShadow: bool
+    ss: bool
+
+class _DirectionalLightCreateFlags(_DirectionalLightFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    decayRate: int
+    d: int
+    intensity: float
+    i: float
+    name: str
+    n: str
+    position: tuple[float, float, float]
+    pos: tuple[float, float, float]
+    rotation: tuple[float, float, float]
+    rot: tuple[float, float, float]
+
+class _DirectionalLightModeFlags(_DirectionalLightFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    decayRate: int | bool
+    d: int | bool
+    intensity: float | bool
+    i: float | bool
+    name: str | bool
+    n: str | bool
+    position: tuple[float, float, float] | bool
+    pos: tuple[float, float, float] | bool
+    rotation: tuple[float, float, float] | bool
+    rot: tuple[float, float, float] | bool
+
+@overload
+def directionalLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DirectionalLightCreateFlags],
+) -> DirectionalLight: ...
+
+@overload
+def directionalLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DirectionalLightModeFlags],
 ) -> Any: ...
 
 
@@ -1836,6 +1957,68 @@ def nurbsSquare(
     nodeState: int = ...,
     nds: int = ...,
     **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> Any: ...
+
+
+class _PointLightFlags(TypedDict, total=False):
+    discRadius: float
+    drs: float
+    exclusive: bool
+    exc: bool
+    rgb: tuple[float, float, float]
+    useRayTraceShadows: bool
+    rs: bool
+    shadowColor: tuple[float, float, float]
+    sc: tuple[float, float, float]
+    shadowDither: float
+    sd: float
+    shadowSamples: int
+    sh: int
+    softShadow: bool
+    ss: bool
+
+class _PointLightCreateFlags(_PointLightFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    decayRate: int
+    d: int
+    intensity: float
+    i: float
+    name: str
+    n: str
+    position: tuple[float, float, float]
+    pos: tuple[float, float, float]
+    rotation: tuple[float, float, float]
+    rot: tuple[float, float, float]
+
+class _PointLightModeFlags(_PointLightFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    decayRate: int | bool
+    d: int | bool
+    intensity: float | bool
+    i: float | bool
+    name: str | bool
+    n: str | bool
+    position: tuple[float, float, float] | bool
+    pos: tuple[float, float, float] | bool
+    rotation: tuple[float, float, float] | bool
+    rot: tuple[float, float, float] | bool
+
+@overload
+def pointLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_PointLightCreateFlags],
+) -> PointLight: ...
+
+@overload
+def pointLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_PointLightModeFlags],
 ) -> Any: ...
 
 
@@ -4470,6 +4653,45 @@ def polyTorus(
 def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
 
 
+class _SpaceLocatorFlags(TypedDict, total=False):
+    absolute: bool
+    a: bool
+    relative: bool
+    r: bool
+
+class _SpaceLocatorCreateFlags(_SpaceLocatorFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    name: str
+    n: str
+    position: tuple[float, float, float]
+    p: tuple[float, float, float]
+
+class _SpaceLocatorModeFlags(_SpaceLocatorFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    name: str | bool
+    n: str | bool
+    position: tuple[float, float, float] | bool
+    p: tuple[float, float, float] | bool
+
+@overload
+def spaceLocator(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SpaceLocatorCreateFlags],
+) -> Transform: ...
+
+@overload
+def spaceLocator(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SpaceLocatorModeFlags],
+) -> Any: ...
+
+
 
 class _SphereModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
@@ -4687,6 +4909,88 @@ def sphere(
     nodeState: int = ...,
     nds: int = ...,
     **kwargs: Unpack[_SphereModeFlags],
+) -> Any: ...
+
+
+class _SpotLightFlags(TypedDict, total=False):
+    bottomBarnDoorAngle: float
+    bbd: float
+    barnDoors: bool
+    bd: bool
+    dropOff: float
+    do: float
+    discRadius: float
+    drs: float
+    exclusive: bool
+    exc: bool
+    leftBarnDoorAngle: float
+    lbd: float
+    rightBarnDoorAngle: float
+    rbd: float
+    rgb: tuple[float, float, float]
+    useRayTraceShadows: bool
+    rs: bool
+    shadowColor: tuple[float, float, float]
+    sc: tuple[float, float, float]
+    shadowDither: float
+    sd: float
+    shadowSamples: int
+    sh: int
+    softShadow: bool
+    ss: bool
+    topBarnDoorAngle: float
+    tbd: float
+
+class _SpotLightCreateFlags(_SpotLightFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    coneAngle: float
+    ca: float
+    decayRate: int
+    d: int
+    intensity: float
+    i: float
+    name: str
+    n: str
+    penumbra: float
+    p: float
+    position: tuple[float, float, float]
+    pos: tuple[float, float, float]
+    rotation: tuple[float, float, float]
+    rot: tuple[float, float, float]
+
+class _SpotLightModeFlags(_SpotLightFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    coneAngle: float | bool
+    ca: float | bool
+    decayRate: int | bool
+    d: int | bool
+    intensity: float | bool
+    i: float | bool
+    name: str | bool
+    n: str | bool
+    penumbra: float | bool
+    p: float | bool
+    position: tuple[float, float, float] | bool
+    pos: tuple[float, float, float] | bool
+    rotation: tuple[float, float, float] | bool
+    rot: tuple[float, float, float] | bool
+
+@overload
+def spotLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SpotLightCreateFlags],
+) -> SpotLight: ...
+
+@overload
+def spotLight(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SpotLightModeFlags],
 ) -> Any: ...
 
 
@@ -4914,4 +5218,4 @@ def torus(
 ) -> Any: ...
 
 
-__all__ = ["circle", "cone", "connectJoint", "createNode", "cylinder", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint", "sphere", "torus"]
+__all__ = ["ambientLight", "circle", "cone", "connectJoint", "createNode", "cylinder", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint", "spaceLocator", "sphere", "spotLight", "torus"]
