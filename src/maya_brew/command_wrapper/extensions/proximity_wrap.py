@@ -2,7 +2,6 @@ from ... import _maya_cmds
 from ...nodes.node_types import ProximityWrap
 from ..extension_utils import _single_node_result, mode_node_command
 
-
 proximityWrap = mode_node_command(
     name="proximityWrap",
     command_getter=lambda: _maya_cmds.proximityWrap,

@@ -2,7 +2,6 @@ from ... import _maya_cmds
 from ...nodes.node_types import IkSolver
 from ..extension_utils import _node_result, mode_node_command
 
-
 ikSolver = mode_node_command(
     name="ikSolver",
     command_getter=lambda: _maya_cmds.ikSolver,

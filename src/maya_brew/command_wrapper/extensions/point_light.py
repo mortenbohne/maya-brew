@@ -2,7 +2,6 @@ from ... import _maya_cmds
 from ...nodes.node_types import PointLight
 from ..extension_utils import _node_result, mode_node_command
 
-
 pointLight = mode_node_command(
     name="pointLight",
     command_getter=lambda: _maya_cmds.pointLight,

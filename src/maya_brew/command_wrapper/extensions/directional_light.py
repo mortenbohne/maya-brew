@@ -2,7 +2,6 @@ from ... import _maya_cmds
 from ...nodes.node_types import DirectionalLight
 from ..extension_utils import _node_result, mode_node_command
 
-
 directionalLight = mode_node_command(
     name="directionalLight",
     command_getter=lambda: _maya_cmds.directionalLight,

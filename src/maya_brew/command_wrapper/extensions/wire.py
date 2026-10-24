@@ -2,7 +2,6 @@ from ... import _maya_cmds
 from ...nodes.node_types import Wire
 from ..extension_utils import _first_node_result, mode_node_command
 
-
 wire = mode_node_command(
     name="wire",
     command_getter=lambda: _maya_cmds.wire,
