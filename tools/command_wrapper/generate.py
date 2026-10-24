@@ -10,15 +10,15 @@ Generation uses Maya's `cmds.help()` output as the source of truth for flag
 availability and primitive command shape, then applies explicit metadata
 overrides where Maya help is ambiguous or underspecified.
 
+Command-specific generators live in `tools.command_wrapper.commands`.
+
 Policy-driven behavior:
 
 - `CommandSignature`: plain command overloads
 - `ModeSignature`: create/edit/query split with explicit presence-flag contracts
 - `NodeCreationSignature`: typed node factory overloads
 - `PrimitiveSignature`: shared history-primitive overload generation
-
-Some exceptional commands can still provide handwritten signature snippets via
-`tools/command_wrapper/signatures/*.pyi`.
+- `LsSignature`: class-filter-aware node listing overloads
 """
 
 # @not-generated
@@ -39,10 +39,12 @@ from maya_brew.nodes._foundation.native_node_hierarchy import (
     python_class_name,
 )
 from maya_brew.nodes._foundation.node_registry import snapshot_package_name
+from tools.command_wrapper.commands.ls import generate_ls_overloads
 from tools.command_wrapper.help import command_flags
 from tools.command_wrapper.metadata import (
     COMMANDS,
     CommandSignature,
+    LsSignature,
     ModeSignature,
     NodeCreationSignature,
     PrimitiveSignature,
@@ -139,9 +141,8 @@ def generate_command_overloads(
         if creation_flags is None:
             raise ValueError(f"{function_name}: creation flags are required")
         return generate_mode_overloads(function_name, policy, flags, creation_flags)
-    signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
-    if signature_path.is_file():
-        return "\n\n" + signature_path.read_text(encoding="utf-8")
+    if isinstance(policy, LsSignature):
+        return generate_ls_overloads(policy.argument_type, flags)
     node_class = node_extensions.Node.__name__
     if isinstance(policy, CommandSignature):
         stub_flags = ", ".join(

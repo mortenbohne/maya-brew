@@ -12,6 +12,11 @@ class CommandSignature:
 
 
 @dataclass(frozen=True)
+class LsSignature(CommandSignature):
+    pass
+
+
+@dataclass(frozen=True)
 class ModeSignature(CommandSignature):
     creation_return_type: str = "Node"
     node_imports: tuple[str, ...] = ()
@@ -254,7 +259,7 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.nurbsPlane: PrimitiveSignature(history_type="MakeNurbPlane"),
     extensions.nurbsCube: PrimitiveSignature(history_type="MakeNurbCube"),
     extensions.nurbsSquare: PrimitiveSignature(history_type="MakeNurbsSquare"),
-    extensions.ls: CommandSignature(
+    extensions.ls: LsSignature(
         flag_type_overrides={
             "containerType": "str | list[str] | tuple[str, ...]",
             **{

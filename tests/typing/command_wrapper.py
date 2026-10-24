@@ -57,6 +57,7 @@ from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     AmbientLight,
     BlendShape,
+    DagNode,
     DeltaMush,
     DirectionalLight,
     Ffd,
@@ -64,6 +65,7 @@ from maya_brew.nodes.node_types import (
     IkHandle,
     IkSolver,
     Joint,
+    Light,
     MakeNurbCircle,
     MakeNurbCone,
     MakeNurbCube,
@@ -87,6 +89,7 @@ from maya_brew.nodes.node_types import (
     PolyTorus,
     ProximityWrap,
     Sculpt,
+    Shape,
     SkinCluster,
     SoftMod,
     SpotLight,
@@ -650,12 +653,170 @@ def check_ls_types(node: Node, nodes: list[Transform], mode: bool) -> None:
     assert_type(ls(o=True, ufeObjects=True), list[Node | str])
     assert_type(ls(showNamespace=True), list[Node | str])
     assert_type(ls(uuid=mode), list[Node | str])
-    assert_type(cmds.ls(type=Transform), list[Node | str])
+    transforms = cmds.ls(type=Transform)
+    assert_type(transforms, list[Transform])
     assert_type(ls(typ=[Transform, "joint"]), list[Node | str])
-    assert_type(ls(exactType=Joint), list[Node | str])
-    assert_type(ls(et=(Joint, Transform)), list[Node | str])
+    assert_type(ls(exactType=Joint), list[Joint])
+    assert_type(ls(et=(Joint, Transform)), list[Joint | Transform])
     assert_type(ls(excludeType=Transform), list[Node | str])
     assert_type(ls(ext=[Joint], objectsOnly=True), list[Node])
+
+
+def check_ls_class_filter_types(mode: bool, node_type: type[Transform]) -> None:
+    assert_type(cmds.ls(type=Transform, long=True), list[Transform])
+    assert_type(ls(typ=Transform, selection=True), list[Transform])
+    assert_type(ls(exactType=Joint), list[Joint])
+    assert_type(ls(et=Joint), list[Joint])
+    assert_type(ls(type=DagNode), list[DagNode])
+    assert_type(ls(type=node_type), list[Transform])
+    assert_type(ls(type=CustomJoint), list[CustomJoint])
+    assert_type(ls(type=CustomJoint, o=True), list[CustomJoint])
+    assert_type(ls(type=Transform, objectsOnly=True), list[Transform])
+    assert_type(ls(typ=Transform, o=True), list[Transform])
+    assert_type(ls(exactType=Joint, objectsOnly=True), list[Joint])
+    assert_type(ls(et=Joint, o=True), list[Joint])
+    assert_type(ls(type=Transform, o=True, st=False, uid=False), list[Transform])
+    assert_type(ls(type=Transform, o=mode), list[Transform])
+    assert_type(ls(type=Transform, objectsOnly=False), list[Transform])
+    assert_type(ls("cube.translateX", type=Transform), list[Transform])
+    assert_type(ls(type=Transform, sl=mode, ocs=mode), list[Transform])
+    assert_type(ls(type=Transform, uuid=False, showType=False), list[Transform])
+    assert_type(ls(type=Transform, sns=False, ufe=False), list[Transform])
+    assert_type(ls(type=Transform, showType=True), list[Transform | str])
+    assert_type(ls(typ=Transform, st=mode, o=True), list[Transform | str])
+    assert_type(ls(type=Joint, showNamespace=True), list[Joint | str])
+    assert_type(ls(et=Joint, sns=mode, o=True), list[Joint | str])
+    assert_type(ls(type=Transform, ufeObjects=True), list[Transform | str])
+    assert_type(ls(type=Transform, ufe=mode, objectsOnly=True), list[Transform | str])
+    assert_type(ls(type=Transform, uuid=True), list[str])
+    assert_type(ls(typ=Transform, uid=True, o=True), list[str])
+    assert_type(ls(exactType=Joint, nodeTypes=True), list[str])
+    assert_type(ls(et=Joint, nt=True), list[str])
+    assert_type(ls(type=Transform, uuid=mode), list[Transform | str])
+    assert_type(ls(type=Transform, shapes=True), list[Node | str])
+    assert_type(ls(type=Transform, s=mode, o=True), list[Node])
+    assert_type(ls(type=Transform, shapes=False), list[Transform])
+    assert_type(ls(type=Transform, dag=True), list[Node | str])
+    assert_type(ls(type=Transform, dep=True, o=True), list[Node])
+    assert_type(ls(type=Transform, containerType="custom"), list[Node | str])
+    assert_type(ls(type="transform", o=True), list[Node])
+    assert_type(ls(type=[Transform]), list[Node | str])
+    assert_type(ls(type=[]), list[Node | str])
+    assert_type(ls(type=[], objectsOnly=True), list[Node])
+    ls(type=42)  # type: ignore[call-overload]
+    ls(type=Transform, missingFlag=True)  # type: ignore[call-overload]
+
+
+def check_ls_tuple_filter_types(
+    mode: bool,
+    node_types: tuple[type[Shape], type[Transform]],
+    nonempty: tuple[type[Transform], *tuple[type[Transform], ...]],
+    possibly_empty: tuple[type[Transform], ...],
+    node_list: list[type[Transform]],
+) -> None:
+    nodes = cmds.ls(type=(Shape, Transform))
+    assert_type(nodes, list[Shape | Transform])
+    assert_type(ls(typ=(Shape, Transform), long=True), list[Shape | Transform])
+    assert_type(ls(exactType=(Shape, Transform)), list[Shape | Transform])
+    assert_type(ls(et=(Shape, Transform)), list[Shape | Transform])
+    assert_type(ls(type=node_types), list[Shape | Transform])
+    assert_type(ls(type=(Transform,)), list[Transform])
+    assert_type(ls(typ=(CustomJoint,), o=True), list[CustomJoint])
+    assert_type(ls(type=(Shape, CustomJoint)), list[Shape | CustomJoint])
+    assert_type(
+        ls(type=(Shape, Transform, CustomJoint)), list[Shape | Transform | CustomJoint]
+    )
+    assert_type(ls(type=nonempty), list[Transform])
+    assert_type(ls(type=(Shape, Transform), objectsOnly=True), list[Shape | Transform])
+    assert_type(ls(type=(Shape, Transform), o=mode), list[Shape | Transform])
+    assert_type(ls(type=(Shape, Transform), shapes=False), list[Shape | Transform])
+    assert_type(ls(type=(Shape, Transform), uuid=True), list[str])
+    assert_type(ls(typ=(Shape, Transform), uid=True), list[str])
+    assert_type(ls(exactType=(Shape, Transform), nodeTypes=True), list[str])
+    assert_type(ls(et=(Shape, Transform), nt=True), list[str])
+    assert_type(
+        ls(type=(Shape, Transform), showType=True), list[Shape | Transform | str]
+    )
+    assert_type(ls(typ=(Shape, Transform), st=mode), list[Shape | Transform | str])
+    assert_type(ls(type=(Shape, Transform), sns=True), list[Shape | Transform | str])
+    assert_type(ls(et=(Shape, Transform), ufe=mode), list[Shape | Transform | str])
+    assert_type(ls(type=(Shape, Transform), uuid=mode), list[Shape | Transform | str])
+    assert_type(ls(type=(Shape, Transform), shapes=True), list[Node | str])
+    assert_type(ls(type=(Shape, Transform), s=mode, o=True), list[Node])
+    assert_type(ls(type=(Shape, Transform), containerType="custom"), list[Node | str])
+    assert_type(ls(type=(Transform, "mesh")), list[Node | str])
+    assert_type(ls(excludeType=(Shape, Transform)), list[Node | str])
+    assert_type(ls(type=[Shape, Transform]), list[Node | str])
+    assert_type(ls(type=node_list), list[Node | str])
+    assert_type(ls(type=possibly_empty), list[Node | str])
+    assert_type(ls(type=()), list[Node | str])
+    assert_type(ls(type=(), o=True), list[Node])
+
+
+def check_ls_multi_class_tuple_types(mode: bool) -> None:
+    nodes = cmds.ls(type=(Shape, Transform, Light))
+    assert_type(nodes, list[Shape | Transform | Light])
+    node_types = (Shape, Transform, BlendShape)
+    assert_type(ls(type=node_types), list[Shape | Transform | BlendShape])
+    assert_type(ls(typ=node_types), list[Shape | Transform | BlendShape])
+    assert_type(ls(exactType=node_types), list[Shape | Transform | BlendShape])
+    assert_type(ls(et=node_types), list[Shape | Transform | BlendShape])
+    assert_type(ls(type=node_types, o=True), list[Shape | Transform | BlendShape])
+    assert_type(
+        ls(type=node_types, showType=True), list[Shape | Transform | BlendShape | str]
+    )
+    assert_type(
+        ls(type=node_types, uuid=mode), list[Shape | Transform | BlendShape | str]
+    )
+    assert_type(ls(type=node_types, uuid=True), list[str])
+    assert_type(ls(type=node_types, shapes=True), list[Node | str])
+    assert_type(ls(type=node_types, shapes=True, o=True), list[Node])
+
+
+def check_ls_tuple_precision_boundary() -> None:
+    sixteen_types = (
+        BlendShape,
+        DeltaMush,
+        Ffd,
+        IkSolver,
+        MakeNurbCircle,
+        MakeNurbCone,
+        MakeNurbCube,
+        MakeNurbCylinder,
+        MakeNurbPlane,
+        MakeNurbSphere,
+        MakeNurbsSquare,
+        MakeNurbTorus,
+        PolyCube,
+        PolySphere,
+        Shape,
+        Transform,
+    )
+    assert_type(
+        ls(type=sixteen_types),
+        list[
+            BlendShape
+            | DeltaMush
+            | Ffd
+            | IkSolver
+            | MakeNurbCircle
+            | MakeNurbCone
+            | MakeNurbCube
+            | MakeNurbCylinder
+            | MakeNurbPlane
+            | MakeNurbSphere
+            | MakeNurbsSquare
+            | MakeNurbTorus
+            | PolyCube
+            | PolySphere
+            | Shape
+            | Transform
+        ],
+    )
+    seventeen_types = (*sixteen_types, CustomJoint)
+    assert_type(ls(type=seventeen_types), list[Node])
+    assert_type(ls(type=seventeen_types, showType=True), list[Node | str])
+    assert_type(ls(type=seventeen_types, uuid=True), list[str])
 
 
 def check_create_node_types(node_type: str, shared: bool) -> None:

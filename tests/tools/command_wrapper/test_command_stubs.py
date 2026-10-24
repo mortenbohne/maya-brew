@@ -1,12 +1,12 @@
 import ast
 import inspect
-from pathlib import Path
 from typing import get_type_hints
 
 import pytest
 from maya_brew.command_wrapper import extensions
 from maya_brew.nodes._foundation.native_node_hierarchy import NodeType
 from tools.command_wrapper import generate
+from tools.command_wrapper.commands.ls import MAX_PRECISE_TUPLE_TYPES
 from tools.command_wrapper.metadata import (
     COMMANDS,
     CommandSignature,
@@ -70,22 +70,20 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         assert inspect.getdoc(namespace[function.__name__]) == inspect.getdoc(function)
 
 
-@pytest.fixture(params=[extensions.ls])
-def handwritten_signature(request):
-    function = request.param
-    return (
-        Path(generate.__file__).with_name("signatures") / f"{function.__name__}.pyi"
-    ).read_text(encoding="utf-8"), function
+@pytest.fixture
+def ls_signature():
+    policy = COMMANDS[extensions.ls]
+    flags = generate.resolve_command_flags("ls", policy)
+    return generate.generate_command_overloads("ls", policy, flags, "list[Node | str]")
 
 
-def test_handwritten_signature_is_in_generated_stub(artifacts, handwritten_signature):
-    signature, _ = handwritten_signature
+def test_ls_signature_is_in_generated_stub(artifacts, ls_signature):
     generated_definitions = {
         ast.dump(statement)
         for statement in ast.parse(artifacts["commands.pyi"]).body
         if isinstance(statement, (ast.ClassDef, ast.FunctionDef))
     }
-    for statement in ast.parse(signature).body:
+    for statement in ast.parse(ls_signature).body:
         if isinstance(statement, (ast.ClassDef, ast.FunctionDef)):
             assert ast.dump(statement) in generated_definitions
 
@@ -154,13 +152,12 @@ def signature_flag_names(signature):
             yield definition.name, flags
 
 
-def test_handwritten_signature_matches_help_flags(handwritten_signature):
-    signature, function = handwritten_signature
-    flags = generate.resolve_command_flags(function.__name__, COMMANDS[function])
-    signatures = list(signature_flag_names(signature))
-    assert signatures
+def test_ls_signature_matches_help_flags(ls_signature):
+    flags = generate.resolve_command_flags("ls", COMMANDS[extensions.ls])
+    signatures = list(signature_flag_names(ls_signature))
+    assert len(signatures) == 8 * (MAX_PRECISE_TUPLE_TYPES + 1) + 7
     for name, declared_flags in signatures:
-        assert name == function.__name__
+        assert name == "ls"
         assert declared_flags == flags.keys()
 
 

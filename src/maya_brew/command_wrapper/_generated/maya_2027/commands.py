@@ -1541,7 +1541,7 @@ def ls(
     visible: bool | Unset = UNSET,
     v: bool | Unset = UNSET,
 ) -> list[Node | str]:
-    'Return wrapped nodes, leaving non-node results as strings.\n\nAccept wrapped nodes as targets, individually or in sequences. The type,\nexactType, excludeType flags and their aliases also accept wrapper classes\nor mixed sequences of classes and Maya type names.\n\nComponents, attributes, UFE paths, UUIDs, and node-type names remain strings.\nshowType and showNamespace retain Maya\'s flat, interleaved metadata layout.\nobjectsOnly gives node-only results without metadata or string-returning\nflags. Use assemblies instead of Maya\'s Python-keyword alias "as".\nMaya runtime errors are raised as NodeException.'
+    'Return wrapped nodes, leaving non-node results as strings.\n\nAccept wrapped nodes as targets, individually or in sequences. The type,\nexactType, excludeType flags and their aliases also accept wrapper classes\nor mixed sequences of classes and Maya type names.\nPositive class filters preserve the requested wrapper type, including custom\nsubclasses. Native subclasses are retained when they satisfy that type.\n\nComponents, attributes, UFE paths, UUIDs, and node-type names remain strings.\nshowType and showNamespace retain Maya\'s flat, interleaved metadata layout.\nobjectsOnly gives node-only results without metadata or string-returning\nflags. Use assemblies instead of Maya\'s Python-keyword alias "as".\nMaya runtime errors are raised as NodeException.'
     kwargs = {
         "absoluteName": absoluteName,
         "an": an,
