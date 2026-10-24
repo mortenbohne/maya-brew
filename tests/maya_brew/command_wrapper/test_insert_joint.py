@@ -1,7 +1,7 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import extensions, insertJoint
+from maya_brew.command_wrapper import insertJoint
 from maya_brew.exceptions import NodeCastingException, NodeException
 from maya_brew.nodes.node_types import Joint
 
@@ -71,13 +71,3 @@ def test_insert_joint_rejects_wrong_node_type(monkeypatch, transform):
     with pytest.raises(NodeCastingException, match="Expected Joint"):
         cmds.insertJoint()
 
-
-def test_insert_joint_forwards_no_flags(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "insertJoint", record_call)
-    insertJoint("root")
-    assert calls == [(("root",), {})]

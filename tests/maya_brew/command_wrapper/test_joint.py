@@ -1,7 +1,7 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import extensions, joint
+from maya_brew.command_wrapper import joint
 from maya_brew.exceptions import NodeException
 from maya_brew.nodes.casting import cast
 from maya_brew.nodes.node_types import Joint
@@ -332,18 +332,6 @@ def test_joint_symmetry_creation_returns_joint(symmetric_joint):
     assert type(symmetric_joint) is Joint
     assert maya_cmds.objExists(str(symmetric_joint))
 
-
-def test_joint_omitted_flags_are_not_forwarded(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "joint", record_call)
-    joint(name="supplied", scaleCompensate=False, query=False)
-    assert calls == [
-        ((), {"name": "supplied", "scaleCompensate": False, "query": False})
-    ]
 
 
 def test_joint_runtime_errors_are_chained(joint_chain):

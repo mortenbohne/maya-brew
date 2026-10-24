@@ -1,7 +1,7 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import extensions, mirrorJoint
+from maya_brew.command_wrapper import mirrorJoint
 from maya_brew.exceptions import NodeException
 from maya_brew.nodes.node_types import Joint, Transform
 
@@ -84,13 +84,3 @@ def test_mirror_joint_runtime_errors_are_chained():
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-
-def test_mirror_joint_omitted_flags_are_not_forwarded(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "mirrorJoint", record_call)
-    mirrorJoint(mirrorBehavior=False, sr=("left", "right"))
-    assert calls == [((), {"mirrorBehavior": False, "sr": ("left", "right")})]

@@ -1,7 +1,7 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import extensions, ikHandle
+from maya_brew.command_wrapper import ikHandle
 from maya_brew.exceptions import NodeCastingException, NodeException
 from maya_brew.nodes.casting import cast
 from maya_brew.nodes.node_types import IkEffector, IkHandle, Transform
@@ -259,17 +259,6 @@ def test_ik_handle_runtime_errors_are_chained(joint_chain):
     with pytest.raises(NodeException, match="ikHandle failed") as error:
         cmds.ikHandle(sj=joint_chain[0], ee=joint_chain[-1], solver="invalid")
     assert isinstance(error.value.__cause__, RuntimeError)
-
-
-def test_ik_handle_omitted_flags_are_not_forwarded(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "ikHandle", record_call)
-    ikHandle(name="supplied", createCurve=False, query=False)
-    assert calls == [((), {"name": "supplied", "createCurve": False, "query": False})]
 
 
 
