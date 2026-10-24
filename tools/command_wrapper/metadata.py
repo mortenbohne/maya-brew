@@ -126,6 +126,14 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.polyHelix: PrimitiveSignature(history_type="PolyHelix"),
     extensions.polyPlatonicSolid: PrimitiveSignature(history_type="PolyPlatonicSolid"),
     extensions.polyPrimitive: PrimitiveSignature(history_type="PolyPrimitiveMisc"),
+    extensions.circle: PrimitiveSignature(history_type="MakeNurbCircle"),
+    extensions.cone: PrimitiveSignature(history_type="MakeNurbCone"),
+    extensions.cylinder: PrimitiveSignature(history_type="MakeNurbCylinder"),
+    extensions.sphere: PrimitiveSignature(history_type="MakeNurbSphere"),
+    extensions.torus: PrimitiveSignature(history_type="MakeNurbTorus"),
+    extensions.nurbsPlane: PrimitiveSignature(history_type="MakeNurbPlane"),
+    extensions.nurbsCube: PrimitiveSignature(history_type="MakeNurbCube"),
+    extensions.nurbsSquare: PrimitiveSignature(history_type="MakeNurbsSquare"),
     extensions.ls: CommandSignature(
         flag_type_overrides={
             "containerType": "str | list[str] | tuple[str, ...]",

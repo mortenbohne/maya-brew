@@ -256,7 +256,8 @@ def test_primitive_creation_axis_requires_vector(primitive_signature):
         expected = "tuple[float, float, float]"
         if name.endswith("ModeFlags"):
             expected += " | bool"
-        assert fields["axis"] == fields["ax"] == expected
+        if {"axis", "ax"} <= fields.keys():
+            assert fields["axis"] == fields["ax"] == expected
 
 
 def test_python_keyword_flag_aliases_are_omitted():

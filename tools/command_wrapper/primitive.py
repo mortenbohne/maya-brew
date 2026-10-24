@@ -125,7 +125,11 @@ def generate_creation_overloads(
     return "".join(lines)
 
 
-def generate_query_overloads(command: str, history_type: str, flags_type: str) -> str:
+def generate_query_overloads(
+    command: str,
+    history_type: str,
+    flags_type: str,
+) -> str:
     lines = []
     for selector in mode_selectors("query"):
         for state, state_alias in (("nodeState", "nds"), ("nds", "nodeState")):
@@ -146,7 +150,11 @@ def generate_query_overloads(command: str, history_type: str, flags_type: str) -
     return "".join(lines)
 
 
-def generate_edit_overloads(command: str, history_type: str, flags_type: str) -> str:
+def generate_edit_overloads(
+    command: str,
+    history_type: str,
+    flags_type: str,
+) -> str:
     return "".join(
         render_overload(
             command,

@@ -209,7 +209,12 @@ def resolve_command_flags(
             **overrides,
         }
     if isinstance(policy, PrimitiveSignature):
-        overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
+        has_axis = any(
+            line.lstrip().startswith("-ax ") and " -axis " in line
+            for line in help_text.splitlines()
+        )
+        if has_axis:
+            overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
     flags = command_flags(function_name, help_text, overrides)
     if isinstance(policy, NodeCreationSignature):
         unknown_flags = (

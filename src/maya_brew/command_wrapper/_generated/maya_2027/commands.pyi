@@ -4,10 +4,482 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import IkEffector, IkHandle, IkSolver, Joint, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
+from maya_brew.nodes.node_types import IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
 from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
+
+
+
+class _CircleModeFlags(TypedDict, total=False):
+    center: tuple[float, float, float]
+    c: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    centerX: float
+    cx: float
+    centerY: float
+    cy: float
+    centerZ: float
+    cz: float
+    degree: int
+    d: int
+    fixCenter: bool
+    fc: bool
+    first: tuple[float, float, float]
+    fp: tuple[float, float, float]
+    firstPointX: float
+    fpx: float
+    firstPointY: float
+    fpy: float
+    firstPointZ: float
+    fpz: float
+    frozen: bool
+    fzn: bool
+    name: str
+    n: str
+    normal: tuple[float, float, float]
+    nr: tuple[float, float, float]
+    normalX: float
+    nrx: float
+    normalY: float
+    nry: float
+    normalZ: float
+    nrz: float
+    object: bool
+    o: bool
+    radius: float
+    r: float
+    sections: int
+    s: int
+    sweep: float
+    sw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+class _CircleCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    center: tuple[float, float, float]
+    c: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    centerX: float
+    cx: float
+    centerY: float
+    cy: float
+    centerZ: float
+    cz: float
+    degree: int
+    d: int
+    fixCenter: bool
+    fc: bool
+    first: tuple[float, float, float]
+    fp: tuple[float, float, float]
+    firstPointX: float
+    fpx: float
+    firstPointY: float
+    fpy: float
+    firstPointZ: float
+    fpz: float
+    frozen: bool
+    fzn: bool
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    normal: tuple[float, float, float]
+    nr: tuple[float, float, float]
+    normalX: float
+    nrx: float
+    normalY: float
+    nry: float
+    normalZ: float
+    nrz: float
+    radius: float
+    r: float
+    sections: int
+    s: int
+    sweep: float
+    sw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+@overload
+def circle(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[MakeNurbCircle]: ...
+
+@overload
+def circle(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[MakeNurbCircle]: ...
+
+@overload
+def circle(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def circle(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def circle(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[Transform, MakeNurbCircle]: ...
+
+@overload
+def circle(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_CircleCreateFlags],
+) -> tuple[Transform, MakeNurbCircle] | tuple[Transform] | tuple[MakeNurbCircle]: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> NodeState: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> NodeState: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> NodeState: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> NodeState: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def circle(
+    *args: str | MakeNurbCircle | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CircleModeFlags],
+) -> Any: ...
+
+
+
+class _ConeModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    spans: int
+    nsp: int
+    object: bool
+    o: bool
+    useOldInitBehaviour: bool
+    oib: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+class _ConeCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    spans: int
+    nsp: int
+    useOldInitBehaviour: bool
+    oib: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+@overload
+def cone(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[MakeNurbCone]: ...
+
+@overload
+def cone(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[MakeNurbCone]: ...
+
+@overload
+def cone(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def cone(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def cone(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[Transform, MakeNurbCone]: ...
+
+@overload
+def cone(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_ConeCreateFlags],
+) -> tuple[Transform, MakeNurbCone] | tuple[Transform] | tuple[MakeNurbCone]: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> NodeState: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def cone(
+    *args: str | MakeNurbCone | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_ConeModeFlags],
+) -> Any: ...
 
 
 def connectJoint(*args: str | Node | Sequence[str | Node], connectMode: bool = ..., cm: bool = ..., parentMode: bool = ..., pm: bool = ...) -> None: ...
@@ -23,6 +495,226 @@ def createNode(node_type: type[T], *, name: str = ..., n: str = ..., parent: str
 
 @overload
 def createNode(node_type: str, *, name: str = ..., n: str = ..., parent: str | Node = ..., p: str | Node = ..., shared: bool = False, s: bool = False, skipSelect: bool = ..., ss: bool = ...) -> Node | None: ...
+
+
+
+class _CylinderModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    spans: int
+    nsp: int
+    object: bool
+    o: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+class _CylinderCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    spans: int
+    nsp: int
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+@overload
+def cylinder(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[MakeNurbCylinder]: ...
+
+@overload
+def cylinder(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[MakeNurbCylinder]: ...
+
+@overload
+def cylinder(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def cylinder(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def cylinder(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[Transform, MakeNurbCylinder]: ...
+
+@overload
+def cylinder(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_CylinderCreateFlags],
+) -> tuple[Transform, MakeNurbCylinder] | tuple[Transform] | tuple[MakeNurbCylinder]: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> NodeState: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def cylinder(
+    *args: str | MakeNurbCylinder | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_CylinderModeFlags],
+) -> Any: ...
 
 
 class _IkHandleFlags(TypedDict, total=False):
@@ -513,6 +1205,638 @@ def ls(
 
 
 def mirrorJoint(*args: str | Node | Sequence[str | Node], mirrorBehavior: bool = ..., mb: bool = ..., mirrorXY: bool = ..., mxy: bool = ..., mirrorXZ: bool = ..., mxz: bool = ..., mirrorYZ: bool = ..., myz: bool = ..., searchReplace: tuple[str, str] = ..., sr: tuple[str, str] = ...) -> tuple[Node, ...]: ...
+
+
+
+class _NurbsCubeModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    lengthRatio: float
+    lr: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    patchesU: int
+    u: int
+    patchesV: int
+    v: int
+    width: float
+    w: float
+
+class _NurbsCubeCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    lengthRatio: float
+    lr: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    patchesU: int
+    u: int
+    patchesV: int
+    v: int
+    width: float
+    w: float
+
+@overload
+def nurbsCube(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[MakeNurbCube]: ...
+
+@overload
+def nurbsCube(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[MakeNurbCube]: ...
+
+@overload
+def nurbsCube(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsCube(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsCube(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[Transform, MakeNurbCube]: ...
+
+@overload
+def nurbsCube(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_NurbsCubeCreateFlags],
+) -> tuple[Transform, MakeNurbCube] | tuple[Transform] | tuple[MakeNurbCube]: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsCube(
+    *args: str | MakeNurbCube | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsCubeModeFlags],
+) -> Any: ...
+
+
+
+class _NurbsPlaneModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    lengthRatio: float
+    lr: float
+    name: str
+    n: str
+    object: bool
+    o: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    patchesU: int
+    u: int
+    patchesV: int
+    v: int
+    width: float
+    w: float
+
+class _NurbsPlaneCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    lengthRatio: float
+    lr: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    patchesU: int
+    u: int
+    patchesV: int
+    v: int
+    width: float
+    w: float
+
+@overload
+def nurbsPlane(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[MakeNurbPlane]: ...
+
+@overload
+def nurbsPlane(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[MakeNurbPlane]: ...
+
+@overload
+def nurbsPlane(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsPlane(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsPlane(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[Transform, MakeNurbPlane]: ...
+
+@overload
+def nurbsPlane(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_NurbsPlaneCreateFlags],
+) -> tuple[Transform, MakeNurbPlane] | tuple[Transform] | tuple[MakeNurbPlane]: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsPlane(
+    *args: str | MakeNurbPlane | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsPlaneModeFlags],
+) -> Any: ...
+
+
+
+class _NurbsSquareModeFlags(TypedDict, total=False):
+    center: tuple[float, float, float]
+    c: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    centerX: float
+    cx: float
+    centerY: float
+    cy: float
+    centerZ: float
+    cz: float
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    name: str
+    n: str
+    normal: tuple[float, float, float]
+    nr: tuple[float, float, float]
+    normalX: float
+    nrx: float
+    normalY: float
+    nry: float
+    normalZ: float
+    nrz: float
+    object: bool
+    o: bool
+    sideLength1: float
+    sl1: float
+    sideLength2: float
+    sl2: float
+    spansPerSide: int
+    sps: int
+
+class _NurbsSquareCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    center: tuple[float, float, float]
+    c: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    centerX: float
+    cx: float
+    centerY: float
+    cy: float
+    centerZ: float
+    cz: float
+    degree: int
+    d: int
+    frozen: bool
+    fzn: bool
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    normal: tuple[float, float, float]
+    nr: tuple[float, float, float]
+    normalX: float
+    nrx: float
+    normalY: float
+    nry: float
+    normalZ: float
+    nrz: float
+    sideLength1: float
+    sl1: float
+    sideLength2: float
+    sl2: float
+    spansPerSide: int
+    sps: int
+
+@overload
+def nurbsSquare(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[MakeNurbsSquare]: ...
+
+@overload
+def nurbsSquare(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[MakeNurbsSquare]: ...
+
+@overload
+def nurbsSquare(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsSquare(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def nurbsSquare(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[Transform, MakeNurbsSquare]: ...
+
+@overload
+def nurbsSquare(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_NurbsSquareCreateFlags],
+) -> tuple[Transform, MakeNurbsSquare] | tuple[Transform] | tuple[MakeNurbsSquare]: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> NodeState: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def nurbsSquare(
+    *args: str | MakeNurbsSquare | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_NurbsSquareModeFlags],
+) -> Any: ...
 
 
 
@@ -3146,4 +4470,448 @@ def polyTorus(
 def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
 
 
-__all__ = ["connectJoint", "createNode", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]
+
+class _SphereModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    spans: int
+    nsp: int
+    object: bool
+    o: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+class _SphereCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    spans: int
+    nsp: int
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+@overload
+def sphere(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[MakeNurbSphere]: ...
+
+@overload
+def sphere(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[MakeNurbSphere]: ...
+
+@overload
+def sphere(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def sphere(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def sphere(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[Transform, MakeNurbSphere]: ...
+
+@overload
+def sphere(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_SphereCreateFlags],
+) -> tuple[Transform, MakeNurbSphere] | tuple[Transform] | tuple[MakeNurbSphere]: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> NodeState: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def sphere(
+    *args: str | MakeNurbSphere | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_SphereModeFlags],
+) -> Any: ...
+
+
+
+class _TorusModeFlags(TypedDict, total=False):
+    axis: tuple[float, float, float] | bool
+    ax: tuple[float, float, float] | bool
+    caching: bool
+    cch: bool
+    constructionHistory: bool
+    ch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    minorSweep: float
+    msw: float
+    name: str
+    n: str
+    spans: int
+    nsp: int
+    object: bool
+    o: bool
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+class _TorusCreateFlags(TypedDict, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    axis: tuple[float, float, float]
+    ax: tuple[float, float, float]
+    caching: bool
+    cch: bool
+    degree: int
+    d: int
+    endSweep: float
+    esw: float
+    frozen: bool
+    fzn: bool
+    heightRatio: float
+    hr: float
+    minorSweep: float
+    msw: float
+    name: str
+    n: str
+    nodeState: int
+    nds: int
+    spans: int
+    nsp: int
+    pivot: tuple[float, float, float]
+    p: tuple[float, float, float]
+    polygon: int
+    po: int
+    radius: float
+    r: float
+    sections: int
+    s: int
+    startSweep: float
+    ssw: float
+    tolerance: float
+    tol: float
+    useTolerance: bool
+    ut: bool
+
+@overload
+def torus(
+    *args: str,
+    object: Literal[False],
+    o: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[MakeNurbTorus]: ...
+
+@overload
+def torus(
+    *args: str,
+    o: Literal[False],
+    object: bool = ...,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[MakeNurbTorus]: ...
+
+@overload
+def torus(
+    *args: str,
+    constructionHistory: Literal[False],
+    ch: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def torus(
+    *args: str,
+    ch: Literal[False],
+    constructionHistory: bool = ...,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[Transform]: ...
+
+@overload
+def torus(
+    *args: str,
+    constructionHistory: Literal[True] = True,
+    ch: Literal[True] = True,
+    object: Literal[True] = True,
+    o: Literal[True] = True,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[Transform, MakeNurbTorus]: ...
+
+@overload
+def torus(
+    *args: str,
+    constructionHistory: bool = ...,
+    ch: bool = ...,
+    object: bool = ...,
+    o: bool = ...,
+    **kwargs: Unpack[_TorusCreateFlags],
+) -> tuple[Transform, MakeNurbTorus] | tuple[Transform] | tuple[MakeNurbTorus]: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    query: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    query: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    q: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    q: Literal[True],
+    nodeState: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    q: Literal[True],
+    nds: Literal[True],
+    edit: bool = False,
+    e: bool = False,
+    query: bool = ...,
+    nodeState: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> NodeState: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    edit: Literal[True],
+    e: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    e: Literal[True],
+    edit: bool = False,
+    query: Literal[False] = False,
+    q: Literal[False] = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> Literal["Values edited."]: ...
+
+@overload
+def torus(
+    *args: str | MakeNurbTorus | Transform,
+    edit: bool = False,
+    e: bool = False,
+    query: bool = False,
+    q: bool = False,
+    nodeState: int = ...,
+    nds: int = ...,
+    **kwargs: Unpack[_TorusModeFlags],
+) -> Any: ...
+
+
+__all__ = ["circle", "cone", "connectJoint", "createNode", "cylinder", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint", "sphere", "torus"]
