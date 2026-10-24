@@ -122,6 +122,12 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("BlendShape",),
         queryable_flag_types={"envelope": "float"},
     ),
+    extensions.cluster: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Cluster",
+        node_imports=("Cluster",),
+        queryable_flag_types={"envelope": "float"},
+    ),
     extensions.deltaMush: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="DeltaMush",

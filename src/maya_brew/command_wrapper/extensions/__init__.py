@@ -1,5 +1,6 @@
 from .ambient_light import ambientLight as ambientLight
 from .blend_shape import blendShape as blendShape
+from .cluster import cluster as cluster
 from .circle import circle as circle
 from .cone import cone as cone
 from .connect_joint import connectJoint as connectJoint
@@ -49,6 +50,7 @@ from .wire import wire as wire
 __all__ = [
     "ambientLight",
     "blendShape",
+    "cluster",
     "circle",
     "cone",
     "connectJoint",

@@ -44,6 +44,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     CreateJiggleDeformer,
     CreateWrap,
     blendShape,
+    cluster,
     deltaMush,
     lattice,
     proximityWrap,
@@ -57,6 +58,7 @@ from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     AmbientLight,
     BlendShape,
+    Cluster,
     DagNode,
     DeltaMush,
     DirectionalLight,
@@ -152,6 +154,11 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(blendShape("blendShape1", q=True, envelope=True), Any)
     assert_type(blendShape("blendShape1", query=mode, en=True), Any)
     assert_type(blendShape("blendShape1", e=True, envelope=0.25), Any)
+
+    assert_type(cluster("target", envelope=0.6), Cluster)
+    assert_type(cluster("cluster1", q=True, envelope=True), Any)
+    assert_type(cluster("cluster1", query=mode, en=True), Any)
+    assert_type(cluster("cluster1", e=True, envelope=0.3), Any)
 
     assert_type(skinCluster("joint1", "target", skinMethod=0), SkinCluster)
     assert_type(skinCluster("skinCluster1", q=True, skinMethod=True), Any)

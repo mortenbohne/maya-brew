@@ -4,7 +4,10 @@ from typing import Any
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.exceptions import NodeCastingException
+from maya_brew.exceptions import (
+    NodeCastingException,
+    NodeException,
+)
 from maya_brew.nodes import node_types
 
 
@@ -19,6 +22,7 @@ class DeformerCase:
 
 CASES = (
     DeformerCase("blendShape", node_types.BlendShape, "envelope", "envelope", 0.75),
+    DeformerCase("cluster", node_types.Cluster, "envelope", "envelope", 0.5),
     DeformerCase("deltaMush", node_types.DeltaMush, "envelope", "envelope", 0.4),
     DeformerCase("lattice", node_types.Ffd, "divisions", "divisions", (2, 3, 4)),
     DeformerCase(
@@ -45,6 +49,8 @@ def created_node(case):
     mesh = cmds.polySphere()[0]
     if case.command == "blendShape":
         return cmds.blendShape(mesh, mesh), case.wrapper_type
+    if case.command == "cluster":
+        return cmds.cluster(mesh), case.wrapper_type
     if case.command == "deltaMush":
         return cmds.deltaMush(mesh), case.wrapper_type
     if case.command == "lattice":
@@ -70,6 +76,8 @@ def created_node(case):
 def creation_args(command: str) -> tuple[Any, ...]:
     if command == "blendShape":
         return ("source", "target")
+    if command == "cluster":
+        return ("target",)
     if command == "skinCluster":
         return ("joint1", "target")
     if command == "proximityWrap":
@@ -116,6 +124,7 @@ def test_edits_match_maya(case, created_node, mode):
     "command, expected",
     [
         ("blendShape", "Expected BlendShape"),
+        ("cluster", "Expected Cluster"),
         ("deltaMush", "Expected DeltaMush"),
         ("lattice", "Expected Ffd"),
         ("proximityWrap", "Expected ProximityWrap"),
@@ -130,3 +139,22 @@ def test_deformers_reject_wrong_node_types(monkeypatch, command, expected):
     monkeypatch.setattr(maya_cmds, command, lambda *args, **kwargs: [wrong_result])
     with pytest.raises(NodeCastingException, match=expected):
         getattr(cmds, command)(*creation_args(command))
+
+
+def test_cluster_weighted_node_requires_related_transforms() -> None:
+    mesh = cmds.polySphere()[0]
+    cluster_node = cmds.cluster(mesh)
+    first = cmds.createNode("transform", n="cluster_weighted_a")
+    second = cmds.createNode("transform", n="cluster_weighted_b")
+
+    with pytest.raises(
+        NodeException,
+        match="cluster weightedNode expects related parent/child transforms",
+    ) as error:
+        cmds.cluster(cluster_node, e=True, weightedNode=(first, second))
+
+    assert isinstance(error.value.__cause__, NodeException)
+    assert isinstance(error.value.__cause__.__cause__, RuntimeError)
+    assert "Transforms not related in hierarchy." in str(error.value.__cause__)
+
+

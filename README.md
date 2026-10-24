@@ -74,6 +74,7 @@ Currently wrapped commands:
 
 - `ambientLight`
 - `blendShape`
+- `cluster`
 - `circle`
 - `cone`
 - `connectJoint`
