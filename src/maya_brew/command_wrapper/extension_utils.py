@@ -14,6 +14,18 @@ class Unset:
 UNSET = Unset()
 
 
+def _node_target_names(
+    args: Sequence[str | Node | Sequence[str | Node]],
+) -> list[str]:
+    targets: list[str] = []
+    for argument in args:
+        if isinstance(argument, (str, Node)):
+            argument = [argument]
+        for target in argument:
+            targets.append(str(target) if isinstance(target, Node) else target)
+    return targets
+
+
 def _poly_primitive(
     name: str,
     command: Callable[..., Any],

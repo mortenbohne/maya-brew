@@ -3,6 +3,7 @@ from typing import Any, Literal, assert_type
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
     createNode,
+    joint,
     ls,
     polyCone,
     polyCube,
@@ -39,6 +40,23 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_joint_types(target: Joint, mode: bool) -> None:
+    assert_type(cmds.joint(), Joint)
+    assert_type(joint(name="root", position=(0, 1, 2)), Joint)
+    assert_type(joint(target, p=(1, 2, 3), r=True), Joint)
+    assert_type(joint(q=False, edit=False, ax="90deg"), Joint)
+    assert_type(joint(lz=("-90deg", "90deg"), lsz=False), Joint)
+    assert_type(joint(target, query=True, position=True), Any)
+    assert_type(joint(target, q=True, name=True), Any)
+    assert_type(joint([target], edit=True, radius=2), Any)
+    assert_type(joint((target, "other"), e=True, oj="xyz", sao="yup"), Any)
+    assert_type(joint(exists="root"), bool)
+    assert_type(joint(ex="root", e=True), bool)
+    assert_type(joint(exists=False), bool)
+    assert_type(joint(target, query=mode, position=True), Any)
+    assert_type(joint(target, e=mode, radius=2), Any)
 
 
 def check_poly_primitive_types(history: bool, create_object: bool) -> None:

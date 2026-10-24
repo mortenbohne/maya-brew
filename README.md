@@ -73,6 +73,7 @@ directly for commands that are not yet wrapped.
 Currently wrapped commands:
 
 - `createNode`
+- `joint`
 - `ls`
 - `polyCone`
 - `polyCube`

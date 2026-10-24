@@ -1,4 +1,5 @@
 from .create_node import createNode as createNode
+from .joint import joint as joint
 from .ls import ls as ls
 from .poly_cone import polyCone as polyCone
 from .poly_cube import polyCube as polyCube
@@ -15,6 +16,7 @@ from .poly_torus import polyTorus as polyTorus
 
 __all__ = [
     "createNode",
+    "joint",
     "ls",
     "polyCone",
     "polyCube",

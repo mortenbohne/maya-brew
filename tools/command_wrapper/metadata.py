@@ -34,6 +34,25 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         nullable_return_flags=("shared", "s"),
         node_flags=("parent", "p"),
     ),
+    extensions.joint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        flag_type_overrides={
+            **{flag: "float | str | bool" for flag in ("angleX", "angleY", "angleZ")},
+            **{
+                flag: "tuple[float | str, float | str] | bool"
+                for flag in ("limitX", "limitY", "limitZ")
+            },
+            **{
+                flag: "tuple[float | str, float | str, float | str] | bool"
+                for flag in ("orientation", "position", "scaleOrientation")
+            },
+            "scale": "tuple[float, float, float] | bool",
+            **{
+                flag: "str | bool"
+                for flag in ("degreeOfFreedom", "exists", "name", "rotationOrder")
+            },
+        },
+    ),
     extensions.polyPlane: PrimitiveSignature(history_type="PolyPlane"),
     extensions.polyCone: PrimitiveSignature(history_type="PolyCone"),
     extensions.polyCylinder: PrimitiveSignature(history_type="PolyCylinder"),
