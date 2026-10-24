@@ -99,7 +99,6 @@ def test_supplied_arguments_and_results_are_preserved(
     native.assert_called_once_with(*args, **flags)
 
 
-
 def test_missing_joint_scale_raises_node_exception():
     with pytest.raises(NodeException, match="jointDisplayScale failed") as caught:
         cmds.jointDisplayScale()

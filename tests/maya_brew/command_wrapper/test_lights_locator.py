@@ -80,7 +80,6 @@ def test_edits_match_maya(case, created_node, mode):
         assert queried == pytest.approx(case.edit_value)
 
 
-
 @pytest.mark.parametrize("result", [None, [], ["node1", "node2"], 1, False])
 def test_commands_reject_unexpected_creation_results(monkeypatch, result):
     for name in ("ambientLight", "directionalLight", "pointLight", "spotLight"):
