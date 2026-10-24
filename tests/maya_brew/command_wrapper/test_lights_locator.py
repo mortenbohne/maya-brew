@@ -4,7 +4,7 @@ from typing import Any
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.exceptions import NodeCastingException, NodeException
+from maya_brew.exceptions import NodeCastingException
 from maya_brew.nodes import node_types
 
 
