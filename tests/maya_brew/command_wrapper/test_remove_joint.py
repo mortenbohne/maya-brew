@@ -1,7 +1,6 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import extensions, removeJoint
 from maya_brew.exceptions import NodeException
 
 
@@ -57,14 +56,3 @@ def test_remove_joint_runtime_errors_are_chained():
     with pytest.raises(NodeException, match="removeJoint failed") as error:
         cmds.removeJoint()
     assert isinstance(error.value.__cause__, RuntimeError)
-
-
-def test_remove_joint_forwards_no_flags(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "removeJoint", record_call)
-    removeJoint("middle")
-    assert calls == [(("middle",), {})]

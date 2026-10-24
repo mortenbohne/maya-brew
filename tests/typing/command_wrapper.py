@@ -2,11 +2,13 @@ from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
+    ambientLight,
     circle,
     cone,
     connectJoint,
     createNode,
     cylinder,
+    directionalLight,
     ikHandle,
     ikHandleDisplayScale,
     ikSolver,
@@ -19,6 +21,7 @@ from maya_brew.command_wrapper import (
     nurbsCube,
     nurbsPlane,
     nurbsSquare,
+    pointLight,
     polyCone,
     polyCube,
     polyCylinder,
@@ -32,12 +35,16 @@ from maya_brew.command_wrapper import (
     polySphere,
     polyTorus,
     removeJoint,
+    spaceLocator,
     sphere,
+    spotLight,
     torus,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
+    AmbientLight,
+    DirectionalLight,
     IkEffector,
     IkHandle,
     IkSolver,
@@ -50,6 +57,7 @@ from maya_brew.nodes.node_types import (
     MakeNurbSphere,
     MakeNurbsSquare,
     MakeNurbTorus,
+    PointLight,
     PolyCone,
     PolyCube,
     PolyCylinder,
@@ -62,6 +70,7 @@ from maya_brew.nodes.node_types import (
     PolyPyramid,
     PolySphere,
     PolyTorus,
+    SpotLight,
     Transform,
 )
 
@@ -85,6 +94,31 @@ def check_global_setting_types(mode: bool) -> None:
     ikHandleDisplayScale("handle")  # type: ignore[arg-type]
     ikSystemInfo("on")  # type: ignore[arg-type]
     jointDisplayScale("joint")  # type: ignore[arg-type]
+
+
+def check_light_and_locator_types(mode: bool) -> None:
+    ambient = cmds.ambientLight(intensity=0.8, name="ambient_1")
+    assert_type(ambient, AmbientLight)
+    assert_type(ambientLight(ambient, q=True, intensity=True), Any)
+    assert_type(ambientLight(str(ambient), query=mode, intensity=True), Any)
+    assert_type(ambientLight([ambient], e=True, intensity=0.4), Any)
+
+    directional = directionalLight(i=0.7)
+    assert_type(directional, DirectionalLight)
+    assert_type(directionalLight(directional, q=True, intensity=True), Any)
+
+    point = pointLight(i=0.6)
+    assert_type(point, PointLight)
+    assert_type(pointLight(point, e=True, intensity=0.3), Any)
+
+    spot = spotLight(ca=35.0)
+    assert_type(spot, SpotLight)
+    assert_type(spotLight(spot, q=True, coneAngle=True), Any)
+
+    locator = spaceLocator(name="locator_1")
+    assert_type(locator, Transform)
+    assert_type(spaceLocator(locator, q=True, position=True), Any)
+    assert_type(spaceLocator((locator,), e=True, p=(1.0, 2.0, 3.0)), Any)
 
 
 def check_joint_operation_types(target: Joint) -> None:

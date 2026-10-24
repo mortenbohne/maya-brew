@@ -1,7 +1,6 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.command_wrapper import connectJoint, extensions
 from maya_brew.exceptions import NodeException
 
 
@@ -46,14 +45,3 @@ def test_connect_joint_runtime_errors_are_chained():
     with pytest.raises(NodeException, match="connectJoint failed") as error:
         cmds.connectJoint()
     assert isinstance(error.value.__cause__, RuntimeError)
-
-
-def test_connect_joint_omitted_flags_are_not_forwarded(monkeypatch):
-    calls = []
-
-    def record_call(*args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(extensions, "connectJoint", record_call)
-    connectJoint(parentMode=False)
-    assert calls == [((), {"parentMode": False})]

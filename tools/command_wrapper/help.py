@@ -30,10 +30,12 @@ def command_flags(
     for line in help_text.splitlines():
         if not line.lstrip().startswith("-"):
             continue
-        match = re.fullmatch(r"\s*-(\w+)\s+-(\w+)\s*(.*?)\s*", line)
+        match = re.fullmatch(r"\s*-(\w+)\s+-(\w*)\s*(.*?)\s*", line)
         if match is None:
             raise ValueError(f"{command}: unsupported flag help line {line!r}")
         alias, name, maya_type = match.groups()
+        if not name:
+            name = alias
         annotation = overrides.get(
             name, overrides.get(alias, infer_annotation(maya_type))
         )

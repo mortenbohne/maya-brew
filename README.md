@@ -72,11 +72,13 @@ directly for commands that are not yet wrapped.
 
 Currently wrapped commands:
 
+- `ambientLight`
 - `connectJoint`
 - `circle`
 - `cone`
 - `cylinder`
 - `createNode`
+- `directionalLight`
 - `ikHandle`
 - `ikHandleDisplayScale`
 - `ikSolver`
@@ -89,6 +91,7 @@ Currently wrapped commands:
 - `nurbsCube`
 - `nurbsPlane`
 - `nurbsSquare`
+- `pointLight`
 - `polyCone`
 - `polyCube`
 - `polyCylinder`
@@ -102,7 +105,9 @@ Currently wrapped commands:
 - `polySphere`
 - `polyTorus`
 - `removeJoint`
+- `spaceLocator`
 - `sphere`
+- `spotLight`
 - `torus`
 
 Regenerate wrappers and stubs with:

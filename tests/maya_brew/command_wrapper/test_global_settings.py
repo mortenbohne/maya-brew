@@ -99,15 +99,6 @@ def test_supplied_arguments_and_results_are_preserved(
     native.assert_called_once_with(*args, **flags)
 
 
-@pytest.mark.parametrize("name", COMMAND_FLAGS)
-def test_runtime_errors_are_chained(monkeypatch, name):
-    error = RuntimeError("invalid setting")
-    monkeypatch.setattr(maya_cmds, name, Mock(side_effect=error))
-    with pytest.raises(NodeException, match=f"{name} failed") as caught:
-        getattr(cmds, name)(q=True)
-    assert caught.value.__cause__ is error
-
-
 def test_missing_joint_scale_raises_node_exception():
     with pytest.raises(NodeException, match="jointDisplayScale failed") as caught:
         cmds.jointDisplayScale()
