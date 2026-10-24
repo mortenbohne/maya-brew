@@ -3,6 +3,7 @@ from typing import Any, Literal, assert_type
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
     createNode,
+    ikHandle,
     joint,
     ls,
     polyCone,
@@ -21,6 +22,8 @@ from maya_brew.command_wrapper import (
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
+    IkEffector,
+    IkHandle,
     Joint,
     PolyCone,
     PolyCube,
@@ -40,6 +43,29 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_ik_handle_types(target: Joint, curve: Transform, mode: bool) -> None:
+    assert_type(
+        cmds.ikHandle(sj=target, ee="tip"),
+        tuple[IkHandle]
+        | tuple[IkHandle, IkEffector]
+        | tuple[IkHandle, IkEffector, Transform],
+    )
+    assert_type(
+        ikHandle([target, "tip"], solver="ikSplineSolver", c=curve, ccv=False),
+        tuple[IkHandle]
+        | tuple[IkHandle, IkEffector]
+        | tuple[IkHandle, IkEffector, Transform],
+    )
+    assert_type(ikHandle("handle", q=True, jointList=True), Any)
+    assert_type(ikHandle("handle", query=True, startJoint=True), Any)
+    assert_type(ikHandle("handle", e=True, weight=0.5), Any)
+    assert_type(ikHandle("handle", edit=True, endEffector=target), Any)
+    assert_type(ikHandle(exists="handle"), Any)
+    assert_type(ikHandle(ex=False, q=True), Any)
+    assert_type(ikHandle("handle", query=mode, sj=True), Any)
+    assert_type(ikHandle("handle", e=mode, w=0.5), Any)
 
 
 def check_joint_types(target: Joint, mode: bool) -> None:

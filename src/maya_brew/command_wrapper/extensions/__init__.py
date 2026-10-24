@@ -1,4 +1,5 @@
 from .create_node import createNode as createNode
+from .ik_handle import ikHandle as ikHandle
 from .joint import joint as joint
 from .ls import ls as ls
 from .poly_cone import polyCone as polyCone
@@ -16,6 +17,7 @@ from .poly_torus import polyTorus as polyTorus
 
 __all__ = [
     "createNode",
+    "ikHandle",
     "joint",
     "ls",
     "polyCone",

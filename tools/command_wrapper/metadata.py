@@ -34,6 +34,18 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         nullable_return_flags=("shared", "s"),
         node_flags=("parent", "p"),
     ),
+    extensions.ikHandle: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        flag_type_overrides={
+            **{
+                flag: "str | Node | bool"
+                for flag in ("startJoint", "endEffector", "curve", "solver")
+            },
+            **{
+                flag: "str | bool" for flag in ("exists", "name", "sticky", "twistType")
+            },
+        },
+    ),
     extensions.joint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
         flag_type_overrides={
