@@ -35,7 +35,9 @@ CASES = (
 )
 
 
-@pytest.mark.parametrize("case", [pytest.param(case, id=case.command) for case in CASES])
+@pytest.mark.parametrize(
+    "case", [pytest.param(case, id=case.command) for case in CASES]
+)
 def test_wrapper_forwards_only_supplied_arguments(monkeypatch, case):
     calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
 
@@ -45,4 +47,3 @@ def test_wrapper_forwards_only_supplied_arguments(monkeypatch, case):
     monkeypatch.setattr(extensions, case.command, record_call)
     getattr(command_wrapper, case.command)(*case.args, **case.kwargs)
     assert calls == [(case.args, case.kwargs)]
-

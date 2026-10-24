@@ -30,11 +30,7 @@ def _node_result(name: str, result: Any, expected_type: type[T]) -> T:
 def _single_node_result(name: str, result: Any, expected_type: type[T]) -> T:
     if isinstance(result, str):
         return cast(result, expected_type)
-    if (
-        isinstance(result, list)
-        and len(result) == 1
-        and isinstance(result[0], str)
-    ):
+    if isinstance(result, list) and len(result) == 1 and isinstance(result[0], str):
         return cast(result[0], expected_type)
     raise NodeException(f"Unexpected result from {name}: {result!r}")
 

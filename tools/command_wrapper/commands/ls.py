@@ -106,12 +106,12 @@ def generate_ls_overloads(argument_type: str, flags: dict[str, str]) -> str:
         "from typing import Literal, Never, TypeAlias, TypeVar, overload\n",
         "from maya_brew.nodes._foundation.node_extensions import Node\n",
         '\n_LsNodeT = TypeVar("_LsNodeT", bound=Node)\n',
-        *(
-            f'{name} = TypeVar("{name}", bound=Node)\n'
-            for name in tuple_type_variables
-        ),
+        *(f'{name} = TypeVar("{name}", bound=Node)\n' for name in tuple_type_variables),
         "_LsClass: TypeAlias = builtins.type[_LsNodeT]\n",
-        *(f"{name}: TypeAlias = {annotation}\n" for name, annotation in class_filter_aliases),
+        *(
+            f"{name}: TypeAlias = {annotation}\n"
+            for name, annotation in class_filter_aliases
+        ),
     ]
     for required in string_flags:
         lines.append(
@@ -156,4 +156,3 @@ def generate_ls_overloads(argument_type: str, flags: dict[str, str]) -> str:
         )
     lines.append(_render_overload(argument_type, flags, None, "list[Node | str]"))
     return "".join(lines)
-

@@ -179,8 +179,7 @@ def test_tuple_precision_limit_is_configurable(flags, monkeypatch):
     assert (
         "_LsClassFilter3: TypeAlias = tuple["
         "builtins.type[_LsNodeT1], builtins.type[_LsNodeT2], "
-        "builtins.type[_LsNodeT3]]"
-        in signature
+        "builtins.type[_LsNodeT3]]" in signature
     )
     assert "_LsClassFilter4" not in signature
     overloads = [
@@ -196,5 +195,3 @@ def test_optional_version_flags_are_not_invented(flags):
     del flags["ufe"]
     signature = generate_ls_overloads("str", flags)
     assert "ufe" not in signature
-
-

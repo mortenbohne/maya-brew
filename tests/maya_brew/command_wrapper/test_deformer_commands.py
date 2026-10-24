@@ -22,7 +22,11 @@ CASES = (
     DeformerCase("deltaMush", node_types.DeltaMush, "envelope", "envelope", 0.4),
     DeformerCase("lattice", node_types.Ffd, "divisions", "divisions", (2, 3, 4)),
     DeformerCase(
-        "proximityWrap", node_types.ProximityWrap, "freeDriverIndex", "applyUserDefaults", True
+        "proximityWrap",
+        node_types.ProximityWrap,
+        "freeDriverIndex",
+        "applyUserDefaults",
+        True,
     ),
     DeformerCase("sculpt", node_types.Sculpt, "mode", "mode", "flip"),
     DeformerCase("skinCluster", node_types.SkinCluster, "skinMethod", "skinMethod", 1),
@@ -126,8 +130,3 @@ def test_deformers_reject_wrong_node_types(monkeypatch, command, expected):
     monkeypatch.setattr(maya_cmds, command, lambda *args, **kwargs: [wrong_result])
     with pytest.raises(NodeCastingException, match=expected):
         getattr(cmds, command)(*creation_args(command))
-
-
-
-
-

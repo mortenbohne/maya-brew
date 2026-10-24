@@ -15,5 +15,3 @@ def CreateWrap(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> None:
     if result is not None:
         raise NodeException(f"Unexpected result from CreateWrap: {result!r}")
     return None
-
-

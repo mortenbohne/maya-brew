@@ -6,8 +6,8 @@ from .connect_joint import connectJoint as connectJoint
 from .create_jiggle_deformer import CreateJiggleDeformer as CreateJiggleDeformer
 from .create_node import createNode as createNode
 from .create_wrap import CreateWrap as CreateWrap
-from .delta_mush import deltaMush as deltaMush
 from .cylinder import cylinder as cylinder
+from .delta_mush import deltaMush as deltaMush
 from .directional_light import directionalLight as directionalLight
 from .ik_handle import ikHandle as ikHandle
 from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
@@ -38,9 +38,9 @@ from .poly_torus import polyTorus as polyTorus
 from .proximity_wrap import proximityWrap as proximityWrap
 from .remove_joint import removeJoint as removeJoint
 from .sculpt import sculpt as sculpt
+from .skin_cluster import skinCluster as skinCluster
 from .soft_mod import softMod as softMod
 from .space_locator import spaceLocator as spaceLocator
-from .skin_cluster import skinCluster as skinCluster
 from .sphere import sphere as sphere
 from .spot_light import spotLight as spotLight
 from .torus import torus as torus
