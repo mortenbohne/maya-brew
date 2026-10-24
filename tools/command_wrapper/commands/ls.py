@@ -85,29 +85,35 @@ def generate_ls_overloads(argument_type: str, flags: dict[str, str]) -> str:
         f"_LsNodeT{index}" for index in range(1, MAX_PRECISE_TUPLE_TYPES + 1)
     ]
     class_filters: list[tuple[str, str]] = []
+    class_filter_aliases: list[tuple[str, str]] = []
     for size in range(1, MAX_PRECISE_TUPLE_TYPES + 1):
         element_types = tuple_type_variables[:size]
+        alias = f"_LsClassFilter{size}"
         classes = ", ".join(f"builtins.type[{name}]" for name in element_types)
-        class_filters.append((f"tuple[{classes}]", " | ".join(element_types)))
-    class_filters.append(
+        class_filter_aliases.append((alias, f"tuple[{classes}]"))
+        class_filters.append((alias, " | ".join(element_types)))
+    class_filter_aliases.append(
         (
-            f"{node_class} | tuple[{node_class}, *tuple[{node_class}, ...]]",
-            "_LsNodeT",
+            "_LsClassFilterAny",
+            "_LsClass | tuple[_LsClass, *tuple[_LsClass, ...]]",
         )
     )
+    class_filters.append(("_LsClassFilterAny", "_LsNodeT"))
     node_only_flags: dict[str, str] = {
         flag: "Literal[False]" for flag in string_flags | metadata_flags
     }
     lines = [
         "\nimport builtins\n",
         "\nfrom collections.abc import Sequence\n",
-        "from typing import Literal, Never, TypeVar, overload\n",
+        "from typing import Literal, Never, TypeAlias, TypeVar, overload\n",
         "from maya_brew.nodes._foundation.node_extensions import Node\n",
         '\n_LsNodeT = TypeVar("_LsNodeT", bound=Node)\n',
         *(
             f'{name} = TypeVar("{name}", bound=Node)\n'
             for name in tuple_type_variables
         ),
+        "_LsClass: TypeAlias = builtins.type[_LsNodeT]\n",
+        *(f"{name}: TypeAlias = {annotation}\n" for name, annotation in class_filter_aliases),
     ]
     for required in string_flags:
         lines.append(

@@ -115,15 +115,11 @@ def test_each_class_filter_alias_preserves_the_node_type(signature):
 
 def test_generic_filters_use_qualified_classes_and_nonempty_tuples(signature):
     assert "import builtins\n" in signature
-    expected_filters = {
-        "builtins.type[_LsNodeT] | "
-        "tuple[builtins.type[_LsNodeT], *tuple[builtins.type[_LsNodeT], ...]]":
-        "_LsNodeT",
-    }
+    expected_filters = {"_LsClassFilterAny": "_LsNodeT"}
     for size in range(1, MAX_PRECISE_TUPLE_TYPES + 1):
-        variables = [f"_LsNodeT{i}" for i in range(1, size + 1)]
-        classes = ", ".join(f"builtins.type[{name}]" for name in variables)
-        expected_filters[f"tuple[{classes}]"] = " | ".join(variables)
+        expected_filters[f"_LsClassFilter{size}"] = " | ".join(
+            f"_LsNodeT{i}" for i in range(1, size + 1)
+        )
     for statement in ast.parse(signature).body:
         if not isinstance(statement, ast.FunctionDef):
             continue
@@ -164,6 +160,15 @@ def test_each_tuple_position_has_a_node_bound_type_variable(signature):
         f"_LsNodeT{i}" for i in range(1, MAX_PRECISE_TUPLE_TYPES + 1)
     ]:
         assert f'{name} = TypeVar("{name}", bound=Node)' in signature
+    assert "_LsClass: TypeAlias = builtins.type[_LsNodeT]" in signature
+    for size in range(1, MAX_PRECISE_TUPLE_TYPES + 1):
+        variables = [f"_LsNodeT{i}" for i in range(1, size + 1)]
+        classes = ", ".join(f"builtins.type[{name}]" for name in variables)
+        assert f"_LsClassFilter{size}: TypeAlias = tuple[{classes}]" in signature
+    assert (
+        "_LsClassFilterAny: TypeAlias = _LsClass | tuple[_LsClass, *tuple[_LsClass, ...]]"
+        in signature
+    )
 
 
 def test_tuple_precision_limit_is_configurable(flags, monkeypatch):
@@ -171,6 +176,8 @@ def test_tuple_precision_limit_is_configurable(flags, monkeypatch):
     signature = generate_ls_overloads("str", flags)
     assert '_LsNodeT3 = TypeVar("_LsNodeT3", bound=Node)' in signature
     assert "_LsNodeT4" not in signature
+    assert "_LsClassFilter3: TypeAlias = tuple[builtins.type[_LsNodeT1], builtins.type[_LsNodeT2], builtins.type[_LsNodeT3]]" in signature
+    assert "_LsClassFilter4" not in signature
     overloads = [
         statement
         for statement in ast.parse(signature).body
