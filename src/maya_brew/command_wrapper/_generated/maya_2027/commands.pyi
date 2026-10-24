@@ -126,6 +126,9 @@ def ikHandle(
 ) -> Any: ...
 
 
+def ikHandleDisplayScale(*args: float, query: bool = ..., q: bool = ...) -> float | None: ...
+
+
 class _IkSolverFlags(TypedDict, total=False):
     epsilon: float
     ep: float
@@ -163,6 +166,9 @@ def ikSolver(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_IkSolverModeFlags],
 ) -> Any: ...
+
+
+def ikSystemInfo(*args: bool, query: bool = ..., q: bool = ..., globalSnapHandle: bool = ..., gsh: bool = ...) -> bool | None: ...
 
 
 def insertJoint(*args: str | Node | Sequence[str | Node]) -> Joint: ...
@@ -307,6 +313,9 @@ def joint(
     ex: str | bool = ...,
     **kwargs: Unpack[_JointModeFlags],
 ) -> Any: ...
+
+
+def jointDisplayScale(*args: float, query: bool = ..., q: bool = ..., absolute: bool = ..., a: bool = ..., ikfk: float | bool = ..., ik: float | bool = ...) -> float | None: ...
 
 
 
@@ -3137,4 +3146,4 @@ def polyTorus(
 def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
 
 
-__all__ = ["connectJoint", "createNode", "ikHandle", "ikSolver", "insertJoint", "joint", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]

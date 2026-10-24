@@ -193,6 +193,22 @@ def ikHandle(
     )
 
 
+def ikHandleDisplayScale(
+    *args: float,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+) -> float | None:
+    "Preserve Maya's global scale result, including None in standalone mode."
+    kwargs = {
+        "query": query,
+        "q": q,
+    }
+    return extensions.ikHandleDisplayScale(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
 def ikSolver(
     *args: str | Node | Sequence[str | Node],
     edit: bool | Unset = UNSET,
@@ -224,6 +240,26 @@ def ikSolver(
         "st": st,
     }
     return extensions.ikSolver(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def ikSystemInfo(
+    *args: bool,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    globalSnapHandle: bool | Unset = UNSET,
+    gsh: bool | Unset = UNSET,
+) -> bool | None:
+    "Preserve Maya's system-control result, including None in standalone mode."
+    kwargs = {
+        "query": query,
+        "q": q,
+        "globalSnapHandle": globalSnapHandle,
+        "gsh": gsh,
+    }
+    return extensions.ikSystemInfo(
         *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
@@ -396,6 +432,30 @@ def joint(
         "zso": zso,
     }
     return extensions.joint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def jointDisplayScale(
+    *args: float,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    absolute: bool | Unset = UNSET,
+    a: bool | Unset = UNSET,
+    ikfk: float | bool | Unset = UNSET,
+    ik: float | bool | Unset = UNSET,
+) -> float | None:
+    "Preserve Maya's scale and diameter semantics; runtime errors become NodeException."
+    kwargs = {
+        "query": query,
+        "q": q,
+        "absolute": absolute,
+        "a": a,
+        "ikfk": ikfk,
+        "ik": ik,
+    }
+    return extensions.jointDisplayScale(
         *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
@@ -1779,4 +1839,4 @@ def removeJoint(
     )
 
 
-__all__ = ["connectJoint", "createNode", "ikHandle", "ikSolver", "insertJoint", "joint", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]

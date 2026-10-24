@@ -75,9 +75,12 @@ Currently wrapped commands:
 - `connectJoint`
 - `createNode`
 - `ikHandle`
+- `ikHandleDisplayScale`
 - `ikSolver`
+- `ikSystemInfo`
 - `insertJoint`
 - `joint`
+- `jointDisplayScale`
 - `ls`
 - `mirrorJoint`
 - `polyCone`

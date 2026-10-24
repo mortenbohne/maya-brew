@@ -5,9 +5,12 @@ from maya_brew.command_wrapper import (
     connectJoint,
     createNode,
     ikHandle,
+    ikHandleDisplayScale,
     ikSolver,
+    ikSystemInfo,
     insertJoint,
     joint,
+    jointDisplayScale,
     ls,
     mirrorJoint,
     polyCone,
@@ -49,6 +52,23 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_global_setting_types(mode: bool) -> None:
+    assert_type(cmds.ikHandleDisplayScale(0.5), float | None)
+    assert_type(ikHandleDisplayScale(query=True), float | None)
+    assert_type(ikHandleDisplayScale(q=mode), float | None)
+    assert_type(cmds.ikSystemInfo(globalSnapHandle=False), bool | None)
+    assert_type(ikSystemInfo(False, gsh=True), bool | None)
+    assert_type(ikSystemInfo(q=True, gsh=True), bool | None)
+    assert_type(ikSystemInfo(query=mode, globalSnapHandle=True), bool | None)
+    assert_type(cmds.jointDisplayScale(2.0, absolute=True), float | None)
+    assert_type(jointDisplayScale(1, a=False, ikfk=0.5), float | None)
+    assert_type(jointDisplayScale(query=True, ik=True), float | None)
+    assert_type(jointDisplayScale(q=mode, ikfk=True), float | None)
+    ikHandleDisplayScale("handle")  # type: ignore[arg-type]
+    ikSystemInfo("on")  # type: ignore[arg-type]
+    jointDisplayScale("joint")  # type: ignore[arg-type]
 
 
 def check_joint_operation_types(target: Joint) -> None:

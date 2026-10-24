@@ -38,6 +38,16 @@ Signature: TypeAlias = CommandSignature | NodeCreationSignature | PrimitiveSigna
 
 
 COMMANDS: dict[Callable[..., Any], Signature] = {
+    extensions.ikHandleDisplayScale: CommandSignature(
+        argument_type="float",
+        # Maya standalone does not provide quick help for this command.
+        flag_type_overrides={"query": "bool", "q": "bool"},
+    ),
+    extensions.ikSystemInfo: CommandSignature(argument_type="bool"),
+    extensions.jointDisplayScale: CommandSignature(
+        argument_type="float",
+        flag_type_overrides={"ikfk": "float | bool"},
+    ),
     extensions.insertJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),

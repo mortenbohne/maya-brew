@@ -12,7 +12,7 @@ T = TypeVar("T", bound=Node)
 def _call_command(
     name: str,
     command: Callable[..., Any],
-    args: Sequence[str],
+    args: Sequence[object],
     kwargs: dict[str, Any],
 ) -> Any:
     try:

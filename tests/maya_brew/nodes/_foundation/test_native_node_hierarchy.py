@@ -3,6 +3,7 @@ import pytest
 from maya_brew.exceptions import NodeTypeInheritanceError
 from maya_brew.nodes import _generated
 from maya_brew.nodes._foundation import native_node_hierarchy as hierarchy
+from maya_brew.nodes._foundation.node_registry import NodeRegistry
 
 
 def test_abstract_node_uses_single_type_chain():
@@ -49,13 +50,18 @@ def test_python_class_names(maya_name, class_name):
     assert hierarchy.python_class_name(maya_name) == class_name
 
 
-def test_generated_classes_match_maya_inheritance():
+def test_generated_and_fallback_classes_match_maya_inheritance():
     version = cmds.about(majorVersion=True)
     constants = pytest.importorskip(f"{_generated.__name__}.maya_{version}.constants")
     classes = constants.TYPE_CLASSES
     observed = hierarchy.discover_node_types()
-    assert observed.keys() == classes.keys()
-    for name, wrapper in classes.items():
+    # Display commands can register native manipulator types after generation.
+    assert classes.keys() <= observed.keys()
+    registry = NodeRegistry()
+    for name in observed:
+        wrapper = registry.get_or_create_class(name)
+        if name in classes:
+            assert wrapper is classes[name]
         assert hierarchy.python_class_name(name) == wrapper.__name__
         chain = tuple(
             base.__dict__["_maya_type"]

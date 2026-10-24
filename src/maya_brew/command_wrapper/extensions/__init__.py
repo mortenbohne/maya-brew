@@ -1,9 +1,12 @@
 from .connect_joint import connectJoint as connectJoint
 from .create_node import createNode as createNode
 from .ik_handle import ikHandle as ikHandle
+from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
 from .ik_solver import ikSolver as ikSolver
+from .ik_system_info import ikSystemInfo as ikSystemInfo
 from .insert_joint import insertJoint as insertJoint
 from .joint import joint as joint
+from .joint_display_scale import jointDisplayScale as jointDisplayScale
 from .ls import ls as ls
 from .mirror_joint import mirrorJoint as mirrorJoint
 from .poly_cone import polyCone as polyCone
@@ -24,9 +27,12 @@ __all__ = [
     "connectJoint",
     "createNode",
     "ikHandle",
+    "ikHandleDisplayScale",
     "ikSolver",
+    "ikSystemInfo",
     "insertJoint",
     "joint",
+    "jointDisplayScale",
     "ls",
     "mirrorJoint",
     "polyCone",
