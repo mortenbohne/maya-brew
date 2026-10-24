@@ -74,13 +74,13 @@ Currently wrapped commands:
 
 - `ambientLight`
 - `blendShape`
-- `connectJoint`
 - `circle`
 - `cone`
+- `connectJoint`
 - `CreateJiggleDeformer`
+- `createNode`
 - `CreateWrap`
 - `cylinder`
-- `createNode`
 - `deltaMush`
 - `directionalLight`
 - `ikHandle`
@@ -112,8 +112,8 @@ Currently wrapped commands:
 - `proximityWrap`
 - `removeJoint`
 - `sculpt`
-- `softMod`
 - `skinCluster`
+- `softMod`
 - `spaceLocator`
 - `sphere`
 - `spotLight`
