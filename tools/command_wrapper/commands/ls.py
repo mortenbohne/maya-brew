@@ -1,4 +1,4 @@
-MAX_PRECISE_TUPLE_TYPES = 16
+MAX_PRECISE_TUPLE_TYPES = 3
 
 
 # Maya combines these selectors additively with type/exactType, not as intersections.
