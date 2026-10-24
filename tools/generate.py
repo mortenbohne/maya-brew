@@ -1,4 +1,18 @@
-"""Generate native node snapshots and command wrappers with the target mayapy."""
+"""Generate versioned node and command artifacts for the active Maya runtime.
+
+Usage:
+    mayapy -m tools.generate
+
+The entry point coordinates two generation pipelines:
+
+1) Node hierarchy snapshots (`tools.node_hierarchy.generate`), which emit
+   classes/stubs and a `TYPE_CLASSES` map for the active Maya major version.
+2) Command wrapper files (`tools.command_wrapper.generate`), which emit runtime
+   wrappers and `.pyi` stubs based on extension metadata and `cmds.help()`.
+
+Artifacts are written under versioned generated packages so runtime loading can
+select the closest matching snapshot for the running Maya build.
+"""
 
 from pathlib import Path
 
@@ -15,6 +29,7 @@ logger.setLevel("INFO")
 
 
 def generate() -> None:
+    """Regenerate all versioned node and command artifacts for this Maya session."""
     nodes = discover_node_types()
     version = cmds.about(majorVersion=True)
     package_name = snapshot_package_name(version)

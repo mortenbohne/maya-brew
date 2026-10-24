@@ -2,8 +2,11 @@ from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
+    circle,
+    cone,
     connectJoint,
     createNode,
+    cylinder,
     ikHandle,
     ikHandleDisplayScale,
     ikSolver,
@@ -13,6 +16,9 @@ from maya_brew.command_wrapper import (
     jointDisplayScale,
     ls,
     mirrorJoint,
+    nurbsCube,
+    nurbsPlane,
+    nurbsSquare,
     polyCone,
     polyCube,
     polyCylinder,
@@ -26,6 +32,8 @@ from maya_brew.command_wrapper import (
     polySphere,
     polyTorus,
     removeJoint,
+    sphere,
+    torus,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
@@ -34,6 +42,14 @@ from maya_brew.nodes.node_types import (
     IkHandle,
     IkSolver,
     Joint,
+    MakeNurbCircle,
+    MakeNurbCone,
+    MakeNurbCube,
+    MakeNurbCylinder,
+    MakeNurbPlane,
+    MakeNurbSphere,
+    MakeNurbsSquare,
+    MakeNurbTorus,
     PolyCone,
     PolyCube,
     PolyCylinder,
@@ -136,6 +152,53 @@ def check_joint_types(target: Joint, mode: bool) -> None:
     assert_type(joint(exists=False), bool)
     assert_type(joint(target, query=mode, position=True), Any)
     assert_type(joint(target, e=mode, radius=2), Any)
+
+
+def check_nurbs_primitive_types(history: bool, create_object: bool) -> None:
+    circle_nodes = cmds.circle()
+    assert_type(circle_nodes, tuple[Transform, MakeNurbCircle])
+    assert_type(circle(ch=False), tuple[Transform])
+    assert_type(circle(object=False), tuple[MakeNurbCircle])
+    assert_type(circle(o=False, ch=False), tuple[MakeNurbCircle])
+    assert_type(
+        circle(constructionHistory=history, object=create_object),
+        tuple[Transform, MakeNurbCircle] | tuple[Transform] | tuple[MakeNurbCircle],
+    )
+    assert_type(circle(circle_nodes[1], query=True, radius=True), Any)
+    assert_type(circle(circle_nodes[1], q=True, r=True), Any)
+    assert_type(
+        circle(circle_nodes[1], edit=True, radius=3.0), Literal["Values edited."]
+    )
+
+    cone_nodes = cmds.cone()
+    assert_type(cone_nodes, tuple[Transform, MakeNurbCone])
+    assert_type(cone(cone_nodes[1], q=True, nodeState=True), NodeState)
+    assert_type(cone(cone_nodes[1], q=True, radius=True), Any)
+    assert_type(cone(cone_nodes[1], e=True, radius=3.0), Literal["Values edited."])
+
+    cylinder_nodes = cmds.cylinder()
+    assert_type(cylinder_nodes, tuple[Transform, MakeNurbCylinder])
+    assert_type(cylinder(cylinder_nodes[1], q=True, nodeState=True), NodeState)
+
+    sphere_nodes = cmds.sphere()
+    assert_type(sphere_nodes, tuple[Transform, MakeNurbSphere])
+    assert_type(sphere(sphere_nodes[1], q=True, nodeState=True), NodeState)
+
+    torus_nodes = cmds.torus()
+    assert_type(torus_nodes, tuple[Transform, MakeNurbTorus])
+    assert_type(torus(torus_nodes[1], q=True, nodeState=True), NodeState)
+
+    nurbs_plane_nodes = cmds.nurbsPlane()
+    assert_type(nurbs_plane_nodes, tuple[Transform, MakeNurbPlane])
+    assert_type(nurbsPlane(nurbs_plane_nodes[1], q=True, nodeState=True), NodeState)
+
+    nurbs_cube_nodes = cmds.nurbsCube()
+    assert_type(nurbs_cube_nodes, tuple[Transform, MakeNurbCube])
+    assert_type(nurbsCube(nurbs_cube_nodes[1], q=True, nodeState=True), NodeState)
+
+    nurbs_square_nodes = cmds.nurbsSquare()
+    assert_type(nurbs_square_nodes, tuple[Transform, MakeNurbsSquare])
+    assert_type(nurbsSquare(nurbs_square_nodes[1], q=True, nodeState=True), NodeState)
 
 
 def check_poly_primitive_types(history: bool, create_object: bool) -> None:

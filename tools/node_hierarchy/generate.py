@@ -1,4 +1,16 @@
-"""Build native node hierarchy source and typing stubs."""
+"""Build versioned node hierarchy artifacts from discovered Maya node types.
+
+Outputs are consumed by runtime type casting and by command stub generation.
+
+Generated files:
+
+- `classes.py`: explicit importable wrapper classes mirroring Maya inheritance
+- `classes.pyi`: typed class declarations for static analysis
+- `constants.py`: `TYPE_CLASSES` lookup from Maya type name to wrapper class
+
+The orchestration entry point in `tools.generate` writes these under
+`src/maya_brew/nodes/_generated/maya_<version>/`.
+"""
 
 # @not-generated
 

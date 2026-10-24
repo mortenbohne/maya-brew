@@ -1,4 +1,25 @@
-"""Generate command signatures from Maya help and handwritten extensions."""
+"""Generate command-wrapper runtime and typing artifacts.
+
+This module turns extension functions + metadata policies into:
+
+- runtime wrappers (`commands.py`) that forward only explicitly supplied flags
+  (via `UNSET` filtering), and
+- static typing stubs (`commands.pyi`) with mode-aware overloads.
+
+Generation uses Maya's `cmds.help()` output as the source of truth for flag
+availability and primitive command shape, then applies explicit metadata
+overrides where Maya help is ambiguous or underspecified.
+
+Policy-driven behavior:
+
+- `CommandSignature`: plain command overloads
+- `ModeSignature`: create/edit/query split with explicit presence-flag contracts
+- `NodeCreationSignature`: typed node factory overloads
+- `PrimitiveSignature`: shared history-primitive overload generation
+
+Some exceptional commands can still provide handwritten signature snippets via
+`tools/command_wrapper/signatures/*.pyi`.
+"""
 
 # @not-generated
 
@@ -209,7 +230,12 @@ def resolve_command_flags(
             **overrides,
         }
     if isinstance(policy, PrimitiveSignature):
-        overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
+        has_axis = any(
+            line.lstrip().startswith("-ax ") and " -axis " in line
+            for line in help_text.splitlines()
+        )
+        if has_axis:
+            overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
     flags = command_flags(function_name, help_text, overrides)
     if isinstance(policy, NodeCreationSignature):
         unknown_flags = (

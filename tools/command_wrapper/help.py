@@ -11,10 +11,21 @@ def command_flags(
         "String": "str",
         "Int": "int",
         "Float": "float",
+        "Angle": "float",
         "Boolean": "bool",
         "Length": "float",
         "on|off": "bool",
     }
+
+    def infer_annotation(maya_type: str) -> str | None:
+        direct = types.get(maya_type)
+        if direct is not None:
+            return direct
+        values = [types.get(part) for part in maya_type.split()]
+        if values and all(value is not None for value in values):
+            return f"tuple[{', '.join(values)}]"
+        return None
+
     flags: dict[str, str] = {}
     for line in help_text.splitlines():
         if not line.lstrip().startswith("-"):
@@ -23,7 +34,9 @@ def command_flags(
         if match is None:
             raise ValueError(f"{command}: unsupported flag help line {line!r}")
         alias, name, maya_type = match.groups()
-        annotation = overrides.get(name, overrides.get(alias, types.get(maya_type)))
+        annotation = overrides.get(
+            name, overrides.get(alias, infer_annotation(maya_type))
+        )
         if annotation is None:
             raise ValueError(
                 f"{command}.{name}: unsupported help type {maya_type!r}; "

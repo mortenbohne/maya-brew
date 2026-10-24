@@ -73,6 +73,9 @@ directly for commands that are not yet wrapped.
 Currently wrapped commands:
 
 - `connectJoint`
+- `circle`
+- `cone`
+- `cylinder`
 - `createNode`
 - `ikHandle`
 - `ikHandleDisplayScale`
@@ -83,6 +86,9 @@ Currently wrapped commands:
 - `jointDisplayScale`
 - `ls`
 - `mirrorJoint`
+- `nurbsCube`
+- `nurbsPlane`
+- `nurbsSquare`
 - `polyCone`
 - `polyCube`
 - `polyCylinder`
@@ -96,25 +102,20 @@ Currently wrapped commands:
 - `polySphere`
 - `polyTorus`
 - `removeJoint`
+- `sphere`
+- `torus`
 
-Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
-and tool-side metadata. The command registry uses `CommandSignature` for regular
-commands, `ModeSignature` for node commands with distinct creation and query/edit
-results, `NodeCreationSignature` for typed node creation, and `PrimitiveSignature`
-for shared polygon primitive overloads. Handwritten stubs supply exceptional
-typing contracts such as `ls`.
+Regenerate wrappers and stubs with:
 
-Mode signatures declare queryable flags using their creation types. Generation
-adds query booleans, resolves aliases from Maya help, and shares unchanged fields
-between creation and mode TypedDicts. Presence-sensitive flags such as `exists`
-and their return types remain explicit in the metadata.
+```bash
+mayapy -m tools.generate
+```
 
-Primitive signatures are composed from separate create, query, and edit generators.
-Mode selection and overload rendering are shared; flag availability and return
-types remain command-specific rather than inferred from Maya's short help output.
+This command inspects the current Maya runtime, regenerates versioned node
+hierarchy snapshots, and regenerates command wrapper runtime/stub files from
+Maya help + tool metadata.
 
-Primitive query/edit tests share a parameterized suite with independent per-command
-cases; expected values are not derived from the generation metadata.
+Generation internals and design notes live in docstrings under `tools/`.
 
 ### Generated hierarchies
 

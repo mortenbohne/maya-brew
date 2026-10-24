@@ -46,7 +46,7 @@ def _node_target_names(
     return targets
 
 
-def _poly_primitive(
+def _history_primitive(
     name: str,
     command: Callable[..., Any],
     args: Sequence[str | Node],

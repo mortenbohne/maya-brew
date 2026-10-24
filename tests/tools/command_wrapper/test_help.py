@@ -9,6 +9,7 @@ from tools.command_wrapper.help import command_flags
         ("String", "str"),
         ("Int", "int"),
         ("Float", "float"),
+        ("Angle", "float"),
         ("Boolean", "bool"),
         ("Length", "float"),
         ("on|off", "bool"),
@@ -30,6 +31,21 @@ def test_flag_overrides_complete_help():
         "value": "tuple[float, float]",
         "v": "tuple[float, float]",
         "extra": "str",
+    }
+
+
+@pytest.mark.parametrize(
+    "maya_type, annotation",
+    [
+        ("Length Length", "tuple[float, float]"),
+        ("Length Length Length", "tuple[float, float, float]"),
+        ("Int Int", "tuple[int, int]"),
+    ],
+)
+def test_multi_value_help_types_are_inferred(maya_type, annotation):
+    assert command_flags("example", f"  -v -value {maya_type}\n", {}) == {
+        "value": annotation,
+        "v": annotation,
     }
 
 
