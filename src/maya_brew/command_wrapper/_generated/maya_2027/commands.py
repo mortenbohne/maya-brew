@@ -1,10 +1,31 @@
 # AUTO-GENERATED; DO NOT EDIT.
 # @generated
 from collections.abc import Sequence
+from maya_brew.nodes.node_types import Joint
 from typing import Any
 from maya_brew.command_wrapper.extension_utils import UNSET, Unset
 from maya_brew.command_wrapper import extensions as extensions
 from maya_brew.nodes._foundation.node_extensions import Node
+
+
+def connectJoint(
+    *args: str | Node | Sequence[str | Node],
+    connectMode: bool | Unset = UNSET,
+    cm: bool | Unset = UNSET,
+    parentMode: bool | Unset = UNSET,
+    pm: bool | Unset = UNSET,
+) -> None:
+    "Accept wrapped targets individually or in flat sequences.\n\nPreserve Maya's selection behavior and return value.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+        "connectMode": connectMode,
+        "cm": cm,
+        "parentMode": parentMode,
+        "pm": pm,
+    }
+    return extensions.connectJoint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
 
 
 def createNode(
@@ -32,6 +53,410 @@ def createNode(
     }
     return extensions.createNode(
         node_type,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def ikHandle(
+    *args: str | Node | Sequence[str | Node],
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    autoPriority: bool | Unset = UNSET,
+    ap: bool | Unset = UNSET,
+    curve: str | Node | bool | Unset = UNSET,
+    c: str | Node | bool | Unset = UNSET,
+    createCurve: bool | Unset = UNSET,
+    ccv: bool | Unset = UNSET,
+    connectEffector: bool | Unset = UNSET,
+    ce: bool | Unset = UNSET,
+    createRootAxis: bool | Unset = UNSET,
+    cra: bool | Unset = UNSET,
+    disableHandles: bool | Unset = UNSET,
+    dh: bool | Unset = UNSET,
+    endEffector: str | Node | bool | Unset = UNSET,
+    ee: str | Node | bool | Unset = UNSET,
+    enableHandles: bool | Unset = UNSET,
+    eh: bool | Unset = UNSET,
+    exists: str | bool | Unset = UNSET,
+    ex: str | bool | Unset = UNSET,
+    freezeJoints: bool | Unset = UNSET,
+    fj: bool | Unset = UNSET,
+    forceSolver: bool | Unset = UNSET,
+    fs: bool | Unset = UNSET,
+    jointList: bool | Unset = UNSET,
+    jl: bool | Unset = UNSET,
+    name: str | bool | Unset = UNSET,
+    n: str | bool | Unset = UNSET,
+    numSpans: int | Unset = UNSET,
+    ns: int | Unset = UNSET,
+    priority: int | Unset = UNSET,
+    p: int | Unset = UNSET,
+    parentCurve: bool | Unset = UNSET,
+    pcv: bool | Unset = UNSET,
+    positionWeight: float | Unset = UNSET,
+    pw: float | Unset = UNSET,
+    rootOnCurve: bool | Unset = UNSET,
+    roc: bool | Unset = UNSET,
+    rootTwistMode: bool | Unset = UNSET,
+    rtm: bool | Unset = UNSET,
+    sticky: str | bool | Unset = UNSET,
+    s: str | bool | Unset = UNSET,
+    simplifyCurve: bool | Unset = UNSET,
+    scv: bool | Unset = UNSET,
+    snapHandleToEffector: bool | Unset = UNSET,
+    see: bool | Unset = UNSET,
+    snapHandleFlagToggle: bool | Unset = UNSET,
+    shf: bool | Unset = UNSET,
+    startJoint: str | Node | bool | Unset = UNSET,
+    sj: str | Node | bool | Unset = UNSET,
+    snapCurve: bool | Unset = UNSET,
+    snc: bool | Unset = UNSET,
+    solver: str | Node | bool | Unset = UNSET,
+    sol: str | Node | bool | Unset = UNSET,
+    setupForRPsolver: bool | Unset = UNSET,
+    srp: bool | Unset = UNSET,
+    twistType: str | bool | Unset = UNSET,
+    tws: str | bool | Unset = UNSET,
+    weight: float | Unset = UNSET,
+    w: float | Unset = UNSET,
+) -> Any:
+    "Return created handle/effector nodes as a tuple of wrappers.\n\nPreserve Maya's result order and length: an existing effector can leave only\nthe handle, and a returned spline curve adds its transform as a third item.\nEdits and queries, including node-name and joint-list queries, retain Maya's results.\nAccept wrapped targets individually or in flat sequences, and wrapped nodes\nfor startJoint/sj, endEffector/ee, curve/c, and solver/sol.\nSelection and flag behavior are unchanged, including exists/ex results\nwithout query mode. Maya runtime errors are raised as NodeException."
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "autoPriority": autoPriority,
+        "ap": ap,
+        "curve": curve,
+        "c": c,
+        "createCurve": createCurve,
+        "ccv": ccv,
+        "connectEffector": connectEffector,
+        "ce": ce,
+        "createRootAxis": createRootAxis,
+        "cra": cra,
+        "disableHandles": disableHandles,
+        "dh": dh,
+        "endEffector": endEffector,
+        "ee": ee,
+        "enableHandles": enableHandles,
+        "eh": eh,
+        "exists": exists,
+        "ex": ex,
+        "freezeJoints": freezeJoints,
+        "fj": fj,
+        "forceSolver": forceSolver,
+        "fs": fs,
+        "jointList": jointList,
+        "jl": jl,
+        "name": name,
+        "n": n,
+        "numSpans": numSpans,
+        "ns": ns,
+        "priority": priority,
+        "p": p,
+        "parentCurve": parentCurve,
+        "pcv": pcv,
+        "positionWeight": positionWeight,
+        "pw": pw,
+        "rootOnCurve": rootOnCurve,
+        "roc": roc,
+        "rootTwistMode": rootTwistMode,
+        "rtm": rtm,
+        "sticky": sticky,
+        "s": s,
+        "simplifyCurve": simplifyCurve,
+        "scv": scv,
+        "snapHandleToEffector": snapHandleToEffector,
+        "see": see,
+        "snapHandleFlagToggle": snapHandleFlagToggle,
+        "shf": shf,
+        "startJoint": startJoint,
+        "sj": sj,
+        "snapCurve": snapCurve,
+        "snc": snc,
+        "solver": solver,
+        "sol": sol,
+        "setupForRPsolver": setupForRPsolver,
+        "srp": srp,
+        "twistType": twistType,
+        "tws": tws,
+        "weight": weight,
+        "w": w,
+    }
+    return extensions.ikHandle(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def ikHandleDisplayScale(
+    *args: float,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+) -> float | None:
+    "Preserve Maya's global scale result, including None in standalone mode."
+    kwargs = {
+        "query": query,
+        "q": q,
+    }
+    return extensions.ikHandleDisplayScale(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    epsilon: float | Unset = UNSET,
+    ep: float | Unset = UNSET,
+    maxIterations: int | Unset = UNSET,
+    mxi: int | Unset = UNSET,
+    name: str | bool | Unset = UNSET,
+    n: str | bool | Unset = UNSET,
+    solverType: str | bool | Unset = UNSET,
+    st: str | bool | Unset = UNSET,
+) -> Any:
+    "Return a native solver wrapper on creation instead of its name.\n\nAccept wrapped targets individually or in flat sequences. Edits and queries\nretain Maya's results. Maya runtime errors are raised as NodeException."
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "epsilon": epsilon,
+        "ep": ep,
+        "maxIterations": maxIterations,
+        "mxi": mxi,
+        "name": name,
+        "n": n,
+        "solverType": solverType,
+        "st": st,
+    }
+    return extensions.ikSolver(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def ikSystemInfo(
+    *args: bool,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    globalSnapHandle: bool | Unset = UNSET,
+    gsh: bool | Unset = UNSET,
+) -> bool | None:
+    "Preserve Maya's system-control result, including None in standalone mode."
+    kwargs = {
+        "query": query,
+        "q": q,
+        "globalSnapHandle": globalSnapHandle,
+        "gsh": gsh,
+    }
+    return extensions.ikSystemInfo(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def insertJoint(
+    *args: str | Node | Sequence[str | Node],
+) -> Joint:
+    "Return the inserted Joint wrapper instead of its name.\n\nAccept wrapped targets individually or in flat sequences. Preserve Maya's\nselection and parenting behavior. Maya runtime errors become NodeException."
+    kwargs = {
+    }
+    return extensions.insertJoint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def joint(
+    *args: str | Node | Sequence[str | Node],
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    absolute: bool | Unset = UNSET,
+    a: bool | Unset = UNSET,
+    automaticLimits: bool | Unset = UNSET,
+    al: bool | Unset = UNSET,
+    autoOrientSecondaryAxis: bool | Unset = UNSET,
+    aos: bool | Unset = UNSET,
+    assumePreferredAngles: bool | Unset = UNSET,
+    apa: bool | Unset = UNSET,
+    angleX: float | str | bool | Unset = UNSET,
+    ax: float | str | bool | Unset = UNSET,
+    angleY: float | str | bool | Unset = UNSET,
+    ay: float | str | bool | Unset = UNSET,
+    angleZ: float | str | bool | Unset = UNSET,
+    az: float | str | bool | Unset = UNSET,
+    children: bool | Unset = UNSET,
+    ch: bool | Unset = UNSET,
+    component: bool | Unset = UNSET,
+    co: bool | Unset = UNSET,
+    degreeOfFreedom: str | bool | Unset = UNSET,
+    dof: str | bool | Unset = UNSET,
+    exists: str | bool | Unset = UNSET,
+    ex: str | bool | Unset = UNSET,
+    limitSwitchX: bool | Unset = UNSET,
+    lsx: bool | Unset = UNSET,
+    limitSwitchY: bool | Unset = UNSET,
+    lsy: bool | Unset = UNSET,
+    limitSwitchZ: bool | Unset = UNSET,
+    lsz: bool | Unset = UNSET,
+    limitX: tuple[float | str, float | str] | bool | Unset = UNSET,
+    lx: tuple[float | str, float | str] | bool | Unset = UNSET,
+    limitY: tuple[float | str, float | str] | bool | Unset = UNSET,
+    ly: tuple[float | str, float | str] | bool | Unset = UNSET,
+    limitZ: tuple[float | str, float | str] | bool | Unset = UNSET,
+    lz: tuple[float | str, float | str] | bool | Unset = UNSET,
+    name: str | bool | Unset = UNSET,
+    n: str | bool | Unset = UNSET,
+    orientation: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    o: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    orientJoint: str | Unset = UNSET,
+    oj: str | Unset = UNSET,
+    position: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    p: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    relative: bool | Unset = UNSET,
+    r: bool | Unset = UNSET,
+    radius: float | Unset = UNSET,
+    rad: float | Unset = UNSET,
+    rotationOrder: str | bool | Unset = UNSET,
+    roo: str | bool | Unset = UNSET,
+    scale: tuple[float, float, float] | bool | Unset = UNSET,
+    s: tuple[float, float, float] | bool | Unset = UNSET,
+    symmetryAxis: str | Unset = UNSET,
+    sa: str | Unset = UNSET,
+    secondaryAxisOrient: str | Unset = UNSET,
+    sao: str | Unset = UNSET,
+    scaleCompensate: bool | Unset = UNSET,
+    sc: bool | Unset = UNSET,
+    scaleOrientation: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    so: tuple[float | str, float | str, float | str] | bool | Unset = UNSET,
+    setPreferredAngles: bool | Unset = UNSET,
+    spa: bool | Unset = UNSET,
+    stiffnessX: float | Unset = UNSET,
+    stx: float | Unset = UNSET,
+    stiffnessY: float | Unset = UNSET,
+    sty: float | Unset = UNSET,
+    stiffnessZ: float | Unset = UNSET,
+    stz: float | Unset = UNSET,
+    symmetry: bool | Unset = UNSET,
+    sym: bool | Unset = UNSET,
+    zeroScaleOrient: bool | Unset = UNSET,
+    zso: bool | Unset = UNSET,
+) -> Any:
+    "Return a Joint wrapper on creation; edits and queries retain Maya's results.\n\nAccept wrapped nodes as targets, individually or in flat sequences.\nSelection, parenting, and flag behavior are unchanged. The exists/ex flag\nretains Maya's boolean result even without query mode.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "absolute": absolute,
+        "a": a,
+        "automaticLimits": automaticLimits,
+        "al": al,
+        "autoOrientSecondaryAxis": autoOrientSecondaryAxis,
+        "aos": aos,
+        "assumePreferredAngles": assumePreferredAngles,
+        "apa": apa,
+        "angleX": angleX,
+        "ax": ax,
+        "angleY": angleY,
+        "ay": ay,
+        "angleZ": angleZ,
+        "az": az,
+        "children": children,
+        "ch": ch,
+        "component": component,
+        "co": co,
+        "degreeOfFreedom": degreeOfFreedom,
+        "dof": dof,
+        "exists": exists,
+        "ex": ex,
+        "limitSwitchX": limitSwitchX,
+        "lsx": lsx,
+        "limitSwitchY": limitSwitchY,
+        "lsy": lsy,
+        "limitSwitchZ": limitSwitchZ,
+        "lsz": lsz,
+        "limitX": limitX,
+        "lx": lx,
+        "limitY": limitY,
+        "ly": ly,
+        "limitZ": limitZ,
+        "lz": lz,
+        "name": name,
+        "n": n,
+        "orientation": orientation,
+        "o": o,
+        "orientJoint": orientJoint,
+        "oj": oj,
+        "position": position,
+        "p": p,
+        "relative": relative,
+        "r": r,
+        "radius": radius,
+        "rad": rad,
+        "rotationOrder": rotationOrder,
+        "roo": roo,
+        "scale": scale,
+        "s": s,
+        "symmetryAxis": symmetryAxis,
+        "sa": sa,
+        "secondaryAxisOrient": secondaryAxisOrient,
+        "sao": sao,
+        "scaleCompensate": scaleCompensate,
+        "sc": sc,
+        "scaleOrientation": scaleOrientation,
+        "so": so,
+        "setPreferredAngles": setPreferredAngles,
+        "spa": spa,
+        "stiffnessX": stiffnessX,
+        "stx": stx,
+        "stiffnessY": stiffnessY,
+        "sty": sty,
+        "stiffnessZ": stiffnessZ,
+        "stz": stz,
+        "symmetry": symmetry,
+        "sym": sym,
+        "zeroScaleOrient": zeroScaleOrient,
+        "zso": zso,
+    }
+    return extensions.joint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def jointDisplayScale(
+    *args: float,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    absolute: bool | Unset = UNSET,
+    a: bool | Unset = UNSET,
+    ikfk: float | bool | Unset = UNSET,
+    ik: float | bool | Unset = UNSET,
+) -> float | None:
+    "Preserve Maya's scale and diameter semantics; runtime errors become NodeException."
+    kwargs = {
+        "query": query,
+        "q": q,
+        "absolute": absolute,
+        "a": a,
+        "ikfk": ikfk,
+        "ik": ik,
+    }
+    return extensions.jointDisplayScale(
+        *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
 
@@ -273,6 +698,38 @@ def ls(
         "v": v,
     }
     return extensions.ls(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def mirrorJoint(
+    *args: str | Node | Sequence[str | Node],
+    mirrorBehavior: bool | Unset = UNSET,
+    mb: bool | Unset = UNSET,
+    mirrorXY: bool | Unset = UNSET,
+    mxy: bool | Unset = UNSET,
+    mirrorXZ: bool | Unset = UNSET,
+    mxz: bool | Unset = UNSET,
+    mirrorYZ: bool | Unset = UNSET,
+    myz: bool | Unset = UNSET,
+    searchReplace: tuple[str, str] | Unset = UNSET,
+    sr: tuple[str, str] | Unset = UNSET,
+) -> tuple[Node, ...]:
+    "Return mirrored nodes as a tuple of native wrappers instead of names.\n\nNon-joint descendants retain their native wrapper types. Accept wrapped\ntargets individually or in flat sequences; preserve Maya's selection behavior.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+        "mirrorBehavior": mirrorBehavior,
+        "mb": mb,
+        "mirrorXY": mirrorXY,
+        "mxy": mxy,
+        "mirrorXZ": mirrorXZ,
+        "mxz": mxz,
+        "mirrorYZ": mirrorYZ,
+        "myz": myz,
+        "searchReplace": searchReplace,
+        "sr": sr,
+    }
+    return extensions.mirrorJoint(
         *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
@@ -1370,4 +1827,16 @@ def polyTorus(
     )
 
 
-__all__ = ["createNode", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+def removeJoint(
+    *args: str | Node | Sequence[str | Node],
+) -> None:
+    "Accept wrapped targets individually or in flat sequences.\n\nPreserve Maya's selection behavior and return value.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+    }
+    return extensions.removeJoint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]

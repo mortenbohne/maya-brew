@@ -2,8 +2,17 @@ from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
+    connectJoint,
     createNode,
+    ikHandle,
+    ikHandleDisplayScale,
+    ikSolver,
+    ikSystemInfo,
+    insertJoint,
+    joint,
+    jointDisplayScale,
     ls,
+    mirrorJoint,
     polyCone,
     polyCube,
     polyCylinder,
@@ -16,10 +25,14 @@ from maya_brew.command_wrapper import (
     polyPyramid,
     polySphere,
     polyTorus,
+    removeJoint,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
+    IkEffector,
+    IkHandle,
+    IkSolver,
     Joint,
     PolyCone,
     PolyCube,
@@ -39,6 +52,90 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_global_setting_types(mode: bool) -> None:
+    assert_type(cmds.ikHandleDisplayScale(0.5), float | None)
+    assert_type(ikHandleDisplayScale(query=True), float | None)
+    assert_type(ikHandleDisplayScale(q=mode), float | None)
+    assert_type(cmds.ikSystemInfo(globalSnapHandle=False), bool | None)
+    assert_type(ikSystemInfo(False, gsh=True), bool | None)
+    assert_type(ikSystemInfo(q=True, gsh=True), bool | None)
+    assert_type(ikSystemInfo(query=mode, globalSnapHandle=True), bool | None)
+    assert_type(cmds.jointDisplayScale(2.0, absolute=True), float | None)
+    assert_type(jointDisplayScale(1, a=False, ikfk=0.5), float | None)
+    assert_type(jointDisplayScale(query=True, ik=True), float | None)
+    assert_type(jointDisplayScale(q=mode, ikfk=True), float | None)
+    ikHandleDisplayScale("handle")  # type: ignore[arg-type]
+    ikSystemInfo("on")  # type: ignore[arg-type]
+    jointDisplayScale("joint")  # type: ignore[arg-type]
+
+
+def check_joint_operation_types(target: Joint) -> None:
+    assert_type(cmds.insertJoint(target), Joint)
+    assert_type(insertJoint([target]), Joint)
+    assert_type(insertJoint(), Joint)
+    assert_type(cmds.mirrorJoint(target, mirrorYZ=True), tuple[Node, ...])
+    assert_type(mirrorJoint([target], sr=("left_", "right_")), tuple[Node, ...])
+    assert_type(mirrorJoint(myz=True, mb=True), tuple[Node, ...])
+    assert_type(cmds.connectJoint(target, "parent", parentMode=True), None)
+    assert_type(connectJoint((target, "parent"), cm=True), None)
+    assert_type(connectJoint(), None)
+    assert_type(cmds.removeJoint(target), None)
+    assert_type(removeJoint([target, "other"]), None)
+    assert_type(removeJoint(), None)
+
+
+def check_ik_handle_types(target: Joint, curve: Transform, mode: bool) -> None:
+    assert_type(
+        cmds.ikHandle(sj=target, ee="tip"),
+        tuple[IkHandle]
+        | tuple[IkHandle, IkEffector]
+        | tuple[IkHandle, IkEffector, Transform],
+    )
+    assert_type(
+        ikHandle([target, "tip"], solver="ikSplineSolver", c=curve, ccv=False),
+        tuple[IkHandle]
+        | tuple[IkHandle, IkEffector]
+        | tuple[IkHandle, IkEffector, Transform],
+    )
+    assert_type(ikHandle("handle", q=True, jointList=True), Any)
+    assert_type(ikHandle("handle", query=True, startJoint=True), Any)
+    assert_type(ikHandle("handle", e=True, weight=0.5), Any)
+    assert_type(ikHandle("handle", edit=True, endEffector=target), Any)
+    assert_type(ikHandle(exists="handle"), Any)
+    assert_type(ikHandle(ex=False, q=True), Any)
+    assert_type(ikHandle("handle", query=mode, sj=True), Any)
+    assert_type(ikHandle("handle", e=mode, w=0.5), Any)
+
+
+def check_ik_solver_types(target: IkSolver, mode: bool) -> None:
+    assert_type(cmds.ikSolver(st="ikSCsolver"), IkSolver)
+    assert_type(ikSolver(solverType="ikRPsolver", epsilon=0.5), IkSolver)
+    assert_type(ikSolver(st="ikSplineSolver", q=False, e=False), IkSolver)
+    assert_type(ikSolver(target, q=True, epsilon=True), Any)
+    assert_type(ikSolver([target], query=True, name=True), Any)
+    assert_type(ikSolver((target,), e=True, mxi=25), Any)
+    assert_type(ikSolver(str(target), edit=True, ep=0.25), Any)
+    assert_type(ikSolver(target, query=mode, st=True), Any)
+    assert_type(ikSolver(target, e=mode, mxi=50), Any)
+
+
+def check_joint_types(target: Joint, mode: bool) -> None:
+    assert_type(cmds.joint(), Joint)
+    assert_type(joint(name="root", position=(0, 1, 2)), Joint)
+    assert_type(joint(target, p=(1, 2, 3), r=True), Joint)
+    assert_type(joint(q=False, edit=False, ax="90deg"), Joint)
+    assert_type(joint(lz=("-90deg", "90deg"), lsz=False), Joint)
+    assert_type(joint(target, query=True, position=True), Any)
+    assert_type(joint(target, q=True, name=True), Any)
+    assert_type(joint([target], edit=True, radius=2), Any)
+    assert_type(joint((target, "other"), e=True, oj="xyz", sao="yup"), Any)
+    assert_type(joint(exists="root"), bool)
+    assert_type(joint(ex="root", e=True), bool)
+    assert_type(joint(exists=False), bool)
+    assert_type(joint(target, query=mode, position=True), Any)
+    assert_type(joint(target, e=mode, radius=2), Any)
 
 
 def check_poly_primitive_types(history: bool, create_object: bool) -> None:

@@ -48,3 +48,12 @@ def test_invalid_help_requires_explicit_handling(help_text, message):
 
 def test_overrides_supply_flags_missing_from_help():
     assert command_flags("example", "", {"value": "str"}) == {"value": "str"}
+
+
+def test_explicitly_flagless_command():
+    assert (
+        command_flags(
+            "removeJoint", "Synopsis: removeJoint [String...]\nNo Flags.\n", {}
+        )
+        == {}
+    )

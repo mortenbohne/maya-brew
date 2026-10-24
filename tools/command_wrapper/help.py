@@ -31,7 +31,11 @@ def command_flags(
             )
         flags[name] = annotation
         flags[alias] = annotation
-    if not flags and not overrides:
+    if (
+        not flags
+        and not overrides
+        and not any(line.strip() == "No Flags." for line in help_text.splitlines())
+    ):
         raise ValueError(
             f"{command}: no flags found in Maya help; supply flag_type_overrides"
         )

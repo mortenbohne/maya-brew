@@ -3,6 +3,13 @@
 from typing import Literal
 
 
+def render_typed_dict(
+    name: str, fields: dict[str, str], base: str = "TypedDict"
+) -> str:
+    body = "".join(f"    {flag}: {annotation}\n" for flag, annotation in fields.items())
+    return f"\nclass {name}({base}, total=False):\n" + (body or "    pass\n")
+
+
 def mode_selectors(mode: Literal["query", "edit"]) -> list[list[str]]:
     if mode == "query":
         return [

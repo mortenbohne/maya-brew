@@ -5,6 +5,7 @@ from ... import _maya_cmds
 from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
 from ...nodes.casting import cast
+from ..extension_utils import _node_target_names
 
 
 def _maya_type_name(node_type: str | type[Node]) -> str:
@@ -38,12 +39,7 @@ def ls(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> list[Node | s
             kwargs[flag] = [_maya_type_name(node_type) for node_type in value]
         else:
             kwargs[flag] = _maya_type_name(value)
-    targets: list[str] = []
-    for argument in args:
-        if isinstance(argument, (str, Node)):
-            argument = [argument]
-        for target in argument:
-            targets.append(str(target) if isinstance(target, Node) else target)
+    targets = _node_target_names(args)
     try:
         result = _maya_cmds.ls(*targets, **kwargs)
     except RuntimeError as e:

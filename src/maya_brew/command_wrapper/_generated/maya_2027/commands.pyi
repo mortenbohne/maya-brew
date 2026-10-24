@@ -4,10 +4,13 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
-from typing import Any, Literal, TypeAlias, TypeVar, TypedDict, Unpack, overload
+from maya_brew.nodes.node_types import IkEffector, IkHandle, IkSolver, Joint, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
+from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
+
+
+def connectJoint(*args: str | Node | Sequence[str | Node], connectMode: bool = ..., cm: bool = ..., parentMode: bool = ..., pm: bool = ...) -> None: ...
 
 
 @overload
@@ -20,6 +23,299 @@ def createNode(node_type: type[T], *, name: str = ..., n: str = ..., parent: str
 
 @overload
 def createNode(node_type: str, *, name: str = ..., n: str = ..., parent: str | Node = ..., p: str | Node = ..., shared: bool = False, s: bool = False, skipSelect: bool = ..., ss: bool = ...) -> Node | None: ...
+
+
+class _IkHandleFlags(TypedDict, total=False):
+    autoPriority: bool
+    ap: bool
+    createCurve: bool
+    ccv: bool
+    connectEffector: bool
+    ce: bool
+    createRootAxis: bool
+    cra: bool
+    disableHandles: bool
+    dh: bool
+    enableHandles: bool
+    eh: bool
+    freezeJoints: bool
+    fj: bool
+    forceSolver: bool
+    fs: bool
+    jointList: bool
+    jl: bool
+    numSpans: int
+    ns: int
+    priority: int
+    p: int
+    parentCurve: bool
+    pcv: bool
+    positionWeight: float
+    pw: float
+    rootOnCurve: bool
+    roc: bool
+    rootTwistMode: bool
+    rtm: bool
+    simplifyCurve: bool
+    scv: bool
+    snapHandleToEffector: bool
+    see: bool
+    snapHandleFlagToggle: bool
+    shf: bool
+    snapCurve: bool
+    snc: bool
+    setupForRPsolver: bool
+    srp: bool
+    weight: float
+    w: float
+
+class _IkHandleCreateFlags(_IkHandleFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    curve: str | Node
+    c: str | Node
+    endEffector: str | Node
+    ee: str | Node
+    name: str
+    n: str
+    sticky: str
+    s: str
+    startJoint: str | Node
+    sj: str | Node
+    solver: str | Node
+    sol: str | Node
+    twistType: str
+    tws: str
+
+class _IkHandleModeFlags(_IkHandleFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    curve: str | Node | bool
+    c: str | Node | bool
+    endEffector: str | Node | bool
+    ee: str | Node | bool
+    name: str | bool
+    n: str | bool
+    sticky: str | bool
+    s: str | bool
+    startJoint: str | Node | bool
+    sj: str | Node | bool
+    solver: str | Node | bool
+    sol: str | Node | bool
+    twistType: str | bool
+    tws: str | bool
+
+@overload
+def ikHandle(
+    *args: str | Node | Sequence[str | Node],
+    exists: Never = ...,
+    ex: Never = ...,
+    **kwargs: Unpack[_IkHandleCreateFlags],
+) -> tuple[IkHandle] | tuple[IkHandle, IkEffector] | tuple[IkHandle, IkEffector, Transform]: ...
+
+@overload
+def ikHandle(
+    *args: str | Node | Sequence[str | Node],
+    exists: str | bool = ...,
+    ex: str | bool = ...,
+    **kwargs: Unpack[_IkHandleModeFlags],
+) -> Any: ...
+
+
+def ikHandleDisplayScale(*args: float, query: bool = ..., q: bool = ...) -> float | None: ...
+
+
+class _IkSolverFlags(TypedDict, total=False):
+    epsilon: float
+    ep: float
+    maxIterations: int
+    mxi: int
+
+class _IkSolverCreateFlags(_IkSolverFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    name: str
+    n: str
+    solverType: str
+    st: str
+
+class _IkSolverModeFlags(_IkSolverFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    name: str | bool
+    n: str | bool
+    solverType: str | bool
+    st: str | bool
+
+@overload
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_IkSolverCreateFlags],
+) -> IkSolver: ...
+
+@overload
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_IkSolverModeFlags],
+) -> Any: ...
+
+
+def ikSystemInfo(*args: bool, query: bool = ..., q: bool = ..., globalSnapHandle: bool = ..., gsh: bool = ...) -> bool | None: ...
+
+
+def insertJoint(*args: str | Node | Sequence[str | Node]) -> Joint: ...
+
+
+class _JointFlags(TypedDict, total=False):
+    absolute: bool
+    a: bool
+    automaticLimits: bool
+    al: bool
+    autoOrientSecondaryAxis: bool
+    aos: bool
+    assumePreferredAngles: bool
+    apa: bool
+    children: bool
+    ch: bool
+    component: bool
+    co: bool
+    limitSwitchX: bool
+    lsx: bool
+    limitSwitchY: bool
+    lsy: bool
+    limitSwitchZ: bool
+    lsz: bool
+    orientJoint: str
+    oj: str
+    relative: bool
+    r: bool
+    radius: float
+    rad: float
+    symmetryAxis: str
+    sa: str
+    secondaryAxisOrient: str
+    sao: str
+    scaleCompensate: bool
+    sc: bool
+    setPreferredAngles: bool
+    spa: bool
+    stiffnessX: float
+    stx: float
+    stiffnessY: float
+    sty: float
+    stiffnessZ: float
+    stz: float
+    symmetry: bool
+    sym: bool
+    zeroScaleOrient: bool
+    zso: bool
+
+class _JointCreateFlags(_JointFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    angleX: float | str
+    ax: float | str
+    angleY: float | str
+    ay: float | str
+    angleZ: float | str
+    az: float | str
+    degreeOfFreedom: str
+    dof: str
+    limitX: tuple[float | str, float | str]
+    lx: tuple[float | str, float | str]
+    limitY: tuple[float | str, float | str]
+    ly: tuple[float | str, float | str]
+    limitZ: tuple[float | str, float | str]
+    lz: tuple[float | str, float | str]
+    name: str
+    n: str
+    orientation: tuple[float | str, float | str, float | str]
+    o: tuple[float | str, float | str, float | str]
+    position: tuple[float | str, float | str, float | str]
+    p: tuple[float | str, float | str, float | str]
+    rotationOrder: str
+    roo: str
+    scale: tuple[float, float, float]
+    s: tuple[float, float, float]
+    scaleOrientation: tuple[float | str, float | str, float | str]
+    so: tuple[float | str, float | str, float | str]
+
+class _JointModeFlags(_JointFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    angleX: float | str | bool
+    ax: float | str | bool
+    angleY: float | str | bool
+    ay: float | str | bool
+    angleZ: float | str | bool
+    az: float | str | bool
+    degreeOfFreedom: str | bool
+    dof: str | bool
+    limitX: tuple[float | str, float | str] | bool
+    lx: tuple[float | str, float | str] | bool
+    limitY: tuple[float | str, float | str] | bool
+    ly: tuple[float | str, float | str] | bool
+    limitZ: tuple[float | str, float | str] | bool
+    lz: tuple[float | str, float | str] | bool
+    name: str | bool
+    n: str | bool
+    orientation: tuple[float | str, float | str, float | str] | bool
+    o: tuple[float | str, float | str, float | str] | bool
+    position: tuple[float | str, float | str, float | str] | bool
+    p: tuple[float | str, float | str, float | str] | bool
+    rotationOrder: str | bool
+    roo: str | bool
+    scale: tuple[float, float, float] | bool
+    s: tuple[float, float, float] | bool
+    scaleOrientation: tuple[float | str, float | str, float | str] | bool
+    so: tuple[float | str, float | str, float | str] | bool
+
+@overload
+def joint(
+    *args: str | Node | Sequence[str | Node],
+    exists: Never = ...,
+    ex: Never = ...,
+    **kwargs: Unpack[_JointCreateFlags],
+) -> Joint: ...
+
+@overload
+def joint(
+    *args: str | Node | Sequence[str | Node],
+    exists: str | bool,
+    ex: str | bool = ...,
+    **kwargs: Unpack[_JointModeFlags],
+) -> bool: ...
+
+@overload
+def joint(
+    *args: str | Node | Sequence[str | Node],
+    exists: str | bool = ...,
+    ex: str | bool,
+    **kwargs: Unpack[_JointModeFlags],
+) -> bool: ...
+
+@overload
+def joint(
+    *args: str | Node | Sequence[str | Node],
+    exists: str | bool = ...,
+    ex: str | bool = ...,
+    **kwargs: Unpack[_JointModeFlags],
+) -> Any: ...
+
+
+def jointDisplayScale(*args: float, query: bool = ..., q: bool = ..., absolute: bool = ..., a: bool = ..., ikfk: float | bool = ..., ik: float | bool = ...) -> float | None: ...
 
 
 
@@ -214,6 +510,9 @@ def ls(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_LsFlags],
 ) -> list[Node | str]: ...
+
+
+def mirrorJoint(*args: str | Node | Sequence[str | Node], mirrorBehavior: bool = ..., mb: bool = ..., mirrorXY: bool = ..., mxy: bool = ..., mirrorXZ: bool = ..., mxz: bool = ..., mirrorYZ: bool = ..., myz: bool = ..., searchReplace: tuple[str, str] = ..., sr: tuple[str, str] = ...) -> tuple[Node, ...]: ...
 
 
 
@@ -2844,4 +3143,7 @@ def polyTorus(
 ) -> Any: ...
 
 
-__all__ = ["createNode", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]
