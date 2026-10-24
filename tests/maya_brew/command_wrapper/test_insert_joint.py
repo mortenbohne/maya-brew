@@ -1,6 +1,5 @@
 import maya.cmds as maya_cmds
 import pytest
-
 from maya_brew import cmds
 from maya_brew.command_wrapper import extensions, insertJoint
 from maya_brew.exceptions import NodeCastingException, NodeException

@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any
 
 import maya.cmds as cmds
-
 from maya_brew.command_wrapper import _generated, _snapshot, extension_utils, extensions
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
