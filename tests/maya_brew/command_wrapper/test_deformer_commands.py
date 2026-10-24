@@ -4,6 +4,7 @@ from typing import Any
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
+from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
 from maya_brew.exceptions import (
     NodeCastingException,
     NodeException,
@@ -25,6 +26,7 @@ CASES = (
     DeformerCase("cluster", node_types.Cluster, "envelope", "envelope", 0.5),
     DeformerCase("deltaMush", node_types.DeltaMush, "envelope", "envelope", 0.4),
     DeformerCase("lattice", node_types.Ffd, "divisions", "divisions", (2, 3, 4)),
+    DeformerCase("nonLinear", node_types.NonLinear, "geometry", "geometry", "pSphereShape1"),
     DeformerCase(
         "proximityWrap",
         node_types.ProximityWrap,
@@ -55,6 +57,8 @@ def created_node(case):
         return cmds.deltaMush(mesh), case.wrapper_type
     if case.command == "lattice":
         return cmds.lattice(mesh), case.wrapper_type
+    if case.command == "nonLinear":
+        return cmds.nonLinear(mesh, type="bend"), case.wrapper_type
     if case.command == "proximityWrap":
         driver = cmds.polyCube(name="driver_mesh")[0]
         cmds.polyCube(name="driver_extra")
@@ -77,6 +81,8 @@ def creation_args(command: str) -> tuple[Any, ...]:
     if command == "blendShape":
         return ("source", "target")
     if command == "cluster":
+        return ("target",)
+    if command == "nonLinear":
         return ("target",)
     if command == "skinCluster":
         return ("joint1", "target")
@@ -127,6 +133,7 @@ def test_edits_match_maya(case, created_node, mode):
         ("cluster", "Expected Cluster"),
         ("deltaMush", "Expected DeltaMush"),
         ("lattice", "Expected Ffd"),
+        ("nonLinear", "Expected NonLinear"),
         ("proximityWrap", "Expected ProximityWrap"),
         ("sculpt", "Expected Sculpt"),
         ("skinCluster", "Expected SkinCluster"),
@@ -146,6 +153,8 @@ def test_cluster_weighted_node_requires_related_transforms() -> None:
     cluster_node = cmds.cluster(mesh)
     first = cmds.createNode("transform", n="cluster_weighted_a")
     second = cmds.createNode("transform", n="cluster_weighted_b")
+    assert first is not None
+    assert second is not None
 
     with pytest.raises(
         NodeException,
@@ -156,5 +165,18 @@ def test_cluster_weighted_node_requires_related_transforms() -> None:
     assert isinstance(error.value.__cause__, NodeException)
     assert isinstance(error.value.__cause__.__cause__, RuntimeError)
     assert "Transforms not related in hierarchy." in str(error.value.__cause__)
+
+
+def test_non_linear_type_accepts_enum_and_single_item_sequences() -> None:
+    mesh = cmds.polySphere()[0]
+    assert type(cmds.nonLinear(mesh, type=NonLinearType.BEND)) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, typ=[NonLinearType.FLARE])) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, type=["sine"])) is node_types.NonLinear
+
+
+def test_non_linear_type_rejects_multi_value_sequences() -> None:
+    mesh = cmds.polySphere()[0]
+    with pytest.raises(NodeException, match="expects exactly one type value"):
+        cmds.nonLinear(mesh, type=["bend", "twist"])
 
 

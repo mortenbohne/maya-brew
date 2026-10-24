@@ -20,6 +20,7 @@ from .joint_display_scale import jointDisplayScale as jointDisplayScale
 from .lattice import lattice as lattice
 from .ls import ls as ls
 from .mirror_joint import mirrorJoint as mirrorJoint
+from .non_linear import nonLinear as nonLinear
 from .nurbs_cube import nurbsCube as nurbsCube
 from .nurbs_plane import nurbsPlane as nurbsPlane
 from .nurbs_square import nurbsSquare as nurbsSquare
@@ -70,6 +71,7 @@ __all__ = [
     "lattice",
     "ls",
     "mirrorJoint",
+    "nonLinear",
     "nurbsCube",
     "nurbsPlane",
     "nurbsSquare",

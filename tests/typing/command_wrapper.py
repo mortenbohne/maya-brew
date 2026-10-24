@@ -18,6 +18,7 @@ from maya_brew.command_wrapper import (
     jointDisplayScale,
     ls,
     mirrorJoint,
+    nonLinear,
     nurbsCube,
     nurbsPlane,
     nurbsSquare,
@@ -76,6 +77,7 @@ from maya_brew.nodes.node_types import (
     MakeNurbSphere,
     MakeNurbsSquare,
     MakeNurbTorus,
+    NonLinear,
     PointLight,
     PolyCone,
     PolyCube,
@@ -98,6 +100,7 @@ from maya_brew.nodes.node_types import (
     Transform,
     Wire,
 )
+from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
 
 
 class CustomJoint(Joint):
@@ -173,6 +176,14 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(lattice("target", divisions=[2, 3, 4]), Ffd)
     assert_type(lattice("ffd1", q=True, divisions=True), Any)
     assert_type(lattice("ffd1", e=True, divisions=[2, 2, 2]), Any)
+
+    assert_type(nonLinear("target", type="bend", envelope=1.0), NonLinear)
+    assert_type(nonLinear("target", typ=NonLinearType.FLARE), NonLinear)
+    assert_type(nonLinear("target", type=[NonLinearType.SINE]), NonLinear)
+    assert_type(nonLinear("target", typ=["squash"]), NonLinear)
+    assert_type(nonLinear("nonLinear1", q=True, geometry=True), Any)
+    assert_type(nonLinear("nonLinear1", query=mode, g=True), Any)
+    assert_type(nonLinear("nonLinear1", e=True, geometry="pSphereShape1"), Any)
 
     assert_type(proximityWrap("driver", "target"), ProximityWrap)
     assert_type(proximityWrap("proximityWrap1", q=True, freeDriverIndex=True), Any)

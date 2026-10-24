@@ -94,6 +94,7 @@ Currently wrapped commands:
 - `lattice`
 - `ls`
 - `mirrorJoint`
+- `nonLinear`
 - `nurbsCube`
 - `nurbsPlane`
 - `nurbsSquare`

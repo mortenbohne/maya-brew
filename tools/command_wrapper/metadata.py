@@ -62,6 +62,13 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("Ffd",),
         queryable_flag_types={"divisions": "list[int]"},
     ),
+    extensions.nonLinear: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="NonLinear",
+        node_imports=("NonLinear",),
+        queryable_flag_types={"geometry": "str | Node | Sequence[str | Node]"},
+        flag_type_overrides={flag: "str | Sequence[str]" for flag in ("type", "typ")},
+    ),
     extensions.connectJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
