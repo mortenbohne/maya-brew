@@ -60,6 +60,12 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.connectJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
+    extensions.CreateJiggleDeformer: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
+    extensions.CreateWrap: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
     extensions.mirrorJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
         flag_type_overrides={"searchReplace": "tuple[str, str]"},

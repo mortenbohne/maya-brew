@@ -8,6 +8,30 @@ from maya_brew.command_wrapper import extensions as extensions
 from maya_brew.nodes._foundation.node_extensions import Node
 
 
+def CreateJiggleDeformer(
+    *args: str | Node | Sequence[str | Node],
+) -> None:
+    "Mirror Maya's runtime deformer command and return None."
+    kwargs = {
+    }
+    return extensions.CreateJiggleDeformer(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def CreateWrap(
+    *args: str | Node | Sequence[str | Node],
+) -> None:
+    "Mirror Maya's runtime wrap-creation command and return None."
+    kwargs = {
+    }
+    return extensions.CreateWrap(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
 def ambientLight(
     *args: str | Node | Sequence[str | Node],
     edit: bool | Unset = UNSET,
@@ -4137,4 +4161,4 @@ def wire(
     )
 
 
-__all__ = ["ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]

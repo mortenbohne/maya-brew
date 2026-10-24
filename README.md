@@ -77,6 +77,8 @@ Currently wrapped commands:
 - `connectJoint`
 - `circle`
 - `cone`
+- `CreateJiggleDeformer`
+- `CreateWrap`
 - `cylinder`
 - `createNode`
 - `deltaMush`

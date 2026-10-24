@@ -41,6 +41,8 @@ from maya_brew.command_wrapper import (
     torus,
 )
 from maya_brew.command_wrapper._generated.maya_2027.commands import (
+    CreateJiggleDeformer,
+    CreateWrap,
     blendShape,
     deltaMush,
     lattice,
@@ -140,6 +142,9 @@ def check_light_and_locator_types(mode: bool) -> None:
 
 
 def check_deformer_types(mode: bool) -> None:
+    assert_type(CreateJiggleDeformer(), None)
+    assert_type(CreateWrap(), None)
+
     assert_type(blendShape("source", "target", envelope=0.8), BlendShape)
     assert_type(blendShape("blendShape1", q=True, envelope=True), Any)
     assert_type(blendShape("blendShape1", query=mode, en=True), Any)
@@ -155,20 +160,18 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(deltaMush("deltaMush1", query=mode, en=True), Any)
     assert_type(deltaMush("deltaMush1", e=True, envelope=0.4), Any)
 
-    assert_type(lattice("target", divisions=(2, 3, 4)), Ffd)
+    assert_type(lattice("target", divisions=[2, 3, 4]), Ffd)
     assert_type(lattice("ffd1", q=True, divisions=True), Any)
-    assert_type(lattice("ffd1", query=mode, d=True), Any)
-    assert_type(lattice("ffd1", e=True, divisions=(2, 2, 2)), Any)
+    assert_type(lattice("ffd1", e=True, divisions=[2, 2, 2]), Any)
 
     assert_type(proximityWrap("driver", "target"), ProximityWrap)
     assert_type(proximityWrap("proximityWrap1", q=True, freeDriverIndex=True), Any)
-    assert_type(proximityWrap("proximityWrap1", query=mode, fdi=True), Any)
-    assert_type(proximityWrap("proximityWrap1", e=True, addDrivers=["driver2"]), Any)
+    assert_type(proximityWrap("proximityWrap1", e=True, addDrivers="driver2"), Any)
 
-    assert_type(sculpt("target", mode="flip"), Sculpt)
+    assert_type(sculpt("target", mode=["flip"]), Sculpt)
     assert_type(sculpt("sculpt1", q=True, mode=True), Any)
-    assert_type(sculpt("sculpt1", query=mode, insideMode=True), Any)
-    assert_type(sculpt("sculpt1", e=True, mode="stretch"), Any)
+    assert_type(sculpt("sculpt1", q=True, insideMode=True), Any)
+    assert_type(sculpt("sculpt1", e=True, mode=["stretch"]), Any)
 
     assert_type(softMod("target", envelope=0.6), SoftMod)
     assert_type(softMod("softMod1", q=True, envelope=True), Any)

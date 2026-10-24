@@ -23,6 +23,8 @@ CASES = (
     CreationCase("mirrorJoint", (), (None, "joint", [1], 1), {}),
     CreationCase("ambientLight", (), (None, [], ["node1", "node2"], 1, False), {}),
     CreationCase("blendShape", ("source", "target"), (None, [], ["a", "b"], 1, False), {}),
+    CreationCase("CreateJiggleDeformer", (), ("ok", [], ["a"], 1, False), {}),
+    CreationCase("CreateWrap", (), ("ok", [], ["a"], 1, False), {}),
     CreationCase("deltaMush", ("target",), (None, [], ["a", "b"], 1, False), {}),
     CreationCase("directionalLight", (), (None, [], ["node1", "node2"], 1, False), {}),
     CreationCase("lattice", ("target",), (None, [], [1], 1, False), {}),

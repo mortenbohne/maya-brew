@@ -15,6 +15,8 @@ class ForwardCase:
 
 CASES = (
     ForwardCase("connectJoint", (), {"parentMode": False}),
+    ForwardCase("CreateJiggleDeformer", (), {}),
+    ForwardCase("CreateWrap", (), {}),
     ForwardCase("ikSolver", (), {"st": "ikSCsolver", "ep": 0.0, "query": False}),
     ForwardCase(
         "joint", (), {"name": "supplied", "scaleCompensate": False, "query": False}

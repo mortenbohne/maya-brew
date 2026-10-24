@@ -10,6 +10,12 @@ from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, o
 T = TypeVar("T", bound=ConcreteNode)
 
 
+def CreateJiggleDeformer(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
+def CreateWrap(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
 class _AmbientLightFlags(TypedDict, total=False):
     ambientShade: float
     discRadius: float
@@ -5982,4 +5988,4 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]

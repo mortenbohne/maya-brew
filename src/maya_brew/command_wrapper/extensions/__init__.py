@@ -3,7 +3,9 @@ from .blend_shape import blendShape as blendShape
 from .circle import circle as circle
 from .cone import cone as cone
 from .connect_joint import connectJoint as connectJoint
+from .create_jiggle_deformer import CreateJiggleDeformer as CreateJiggleDeformer
 from .create_node import createNode as createNode
+from .create_wrap import CreateWrap as CreateWrap
 from .delta_mush import deltaMush as deltaMush
 from .cylinder import cylinder as cylinder
 from .directional_light import directionalLight as directionalLight
@@ -49,6 +51,8 @@ __all__ = [
     "blendShape",
     "circle",
     "cone",
+    "CreateJiggleDeformer",
+    "CreateWrap",
     "cylinder",
     "deltaMush",
     "directionalLight",
