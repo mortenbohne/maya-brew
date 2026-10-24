@@ -6,7 +6,6 @@ import pytest
 from maya_brew import cmds
 from maya_brew.exceptions import NodeException
 
-
 COMMAND_FLAGS = {
     "ikHandleDisplayScale": {"query", "q"},
     "ikSystemInfo": {"query", "q", "globalSnapHandle", "gsh"},
