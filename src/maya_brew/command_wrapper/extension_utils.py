@@ -68,4 +68,3 @@ def _history_primitive(
     ):
         raise NodeException(f"Unexpected result from {name}: {result!r}")
     return tuple(cast(name) for name in result)
-

@@ -1,8 +1,8 @@
 from .circle import circle as circle
 from .cone import cone as cone
-from .cylinder import cylinder as cylinder
 from .connect_joint import connectJoint as connectJoint
 from .create_node import createNode as createNode
+from .cylinder import cylinder as cylinder
 from .ik_handle import ikHandle as ikHandle
 from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
 from .ik_solver import ikSolver as ikSolver
