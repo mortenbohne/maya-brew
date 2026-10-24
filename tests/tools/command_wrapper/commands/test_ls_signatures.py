@@ -176,7 +176,12 @@ def test_tuple_precision_limit_is_configurable(flags, monkeypatch):
     signature = generate_ls_overloads("str", flags)
     assert '_LsNodeT3 = TypeVar("_LsNodeT3", bound=Node)' in signature
     assert "_LsNodeT4" not in signature
-    assert "_LsClassFilter3: TypeAlias = tuple[builtins.type[_LsNodeT1], builtins.type[_LsNodeT2], builtins.type[_LsNodeT3]]" in signature
+    assert (
+        "_LsClassFilter3: TypeAlias = tuple["
+        "builtins.type[_LsNodeT1], builtins.type[_LsNodeT2], "
+        "builtins.type[_LsNodeT3]]"
+        in signature
+    )
     assert "_LsClassFilter4" not in signature
     overloads = [
         statement

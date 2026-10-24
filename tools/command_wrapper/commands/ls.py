@@ -79,8 +79,6 @@ def generate_ls_overloads(argument_type: str, flags: dict[str, str]) -> str:
             for flag, annotation in additive_flags.items()
         },
     }
-    # Maya's `type` keyword must not shadow the builtin in IDE annotation lookup.
-    node_class = "builtins.type[_LsNodeT]"
     tuple_type_variables = [
         f"_LsNodeT{index}" for index in range(1, MAX_PRECISE_TUPLE_TYPES + 1)
     ]
