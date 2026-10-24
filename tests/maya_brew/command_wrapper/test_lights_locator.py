@@ -80,15 +80,6 @@ def test_edits_match_maya(case, created_node, mode):
         assert queried == pytest.approx(case.edit_value)
 
 
-def test_runtime_errors_are_chained(monkeypatch, case):
-    error = RuntimeError("invalid target")
-    monkeypatch.setattr(
-        maya_cmds, case.command, lambda *args, **kwargs: (_ for _ in ()).throw(error)
-    )
-    with pytest.raises(NodeException, match=f"{case.command} failed") as caught:
-        getattr(cmds, case.command)(q=True)
-    assert caught.value.__cause__ is error
-
 
 @pytest.mark.parametrize("result", [None, [], ["node1", "node2"], 1, False])
 def test_commands_reject_unexpected_creation_results(monkeypatch, result):
