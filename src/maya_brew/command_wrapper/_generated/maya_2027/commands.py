@@ -172,6 +172,42 @@ def ikHandle(
     )
 
 
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    epsilon: float | Unset = UNSET,
+    ep: float | Unset = UNSET,
+    maxIterations: int | Unset = UNSET,
+    mxi: int | Unset = UNSET,
+    name: str | bool | Unset = UNSET,
+    n: str | bool | Unset = UNSET,
+    solverType: str | bool | Unset = UNSET,
+    st: str | bool | Unset = UNSET,
+) -> Any:
+    "Return a native solver wrapper on creation instead of its name.\n\nAccept wrapped targets individually or in flat sequences. Edits and queries\nretain Maya's results. Maya runtime errors are raised as NodeException."
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "epsilon": epsilon,
+        "ep": ep,
+        "maxIterations": maxIterations,
+        "mxi": mxi,
+        "name": name,
+        "n": n,
+        "solverType": solverType,
+        "st": st,
+    }
+    return extensions.ikSolver(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
 def joint(
     *args: str | Node | Sequence[str | Node],
     edit: bool | Unset = UNSET,
@@ -1666,4 +1702,4 @@ def polyTorus(
     )
 
 
-__all__ = ["createNode", "ikHandle", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+__all__ = ["createNode", "ikHandle", "ikSolver", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]

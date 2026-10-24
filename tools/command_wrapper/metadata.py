@@ -46,6 +46,10 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
             },
         },
     ),
+    extensions.ikSolver: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        flag_type_overrides={"name": "str | bool", "solverType": "str | bool"},
+    ),
     extensions.joint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
         flag_type_overrides={

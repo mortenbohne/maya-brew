@@ -74,6 +74,7 @@ Currently wrapped commands:
 
 - `createNode`
 - `ikHandle`
+- `ikSolver`
 - `joint`
 - `ls`
 - `polyCone`

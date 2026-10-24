@@ -4,7 +4,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import IkEffector, IkHandle, Joint, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
+from maya_brew.nodes.node_types import IkEffector, IkHandle, IkSolver, Joint, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, Transform
 from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -125,6 +125,46 @@ def ikHandle(
     exists: str | bool = ...,
     ex: str | bool = ...,
     **kwargs: Unpack[_IkHandleModeFlags],
+) -> Any: ...
+
+
+
+
+class _IkSolverFlags(TypedDict, total=False):
+    epsilon: float
+    ep: float
+    maxIterations: int
+    mxi: int
+
+class _IkSolverCreateFlags(_IkSolverFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    name: str
+    n: str
+    solverType: str
+    st: str
+
+class _IkSolverModeFlags(_IkSolverFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    name: str | bool
+    n: str | bool
+    solverType: str | bool
+    st: str | bool
+
+@overload
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_IkSolverCreateFlags],
+) -> IkSolver: ...
+@overload
+def ikSolver(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_IkSolverModeFlags],
 ) -> Any: ...
 
 
@@ -3130,4 +3170,4 @@ def polyTorus(
 ) -> Any: ...
 
 
-__all__ = ["createNode", "ikHandle", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+__all__ = ["createNode", "ikHandle", "ikSolver", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]

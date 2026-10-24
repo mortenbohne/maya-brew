@@ -1,5 +1,6 @@
 from .create_node import createNode as createNode
 from .ik_handle import ikHandle as ikHandle
+from .ik_solver import ikSolver as ikSolver
 from .joint import joint as joint
 from .ls import ls as ls
 from .poly_cone import polyCone as polyCone
@@ -18,6 +19,7 @@ from .poly_torus import polyTorus as polyTorus
 __all__ = [
     "createNode",
     "ikHandle",
+    "ikSolver",
     "joint",
     "ls",
     "polyCone",

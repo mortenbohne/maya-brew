@@ -4,6 +4,7 @@ from maya_brew import cmds
 from maya_brew.command_wrapper import (
     createNode,
     ikHandle,
+    ikSolver,
     joint,
     ls,
     polyCone,
@@ -24,6 +25,7 @@ from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     IkEffector,
     IkHandle,
+    IkSolver,
     Joint,
     PolyCone,
     PolyCube,
@@ -66,6 +68,18 @@ def check_ik_handle_types(target: Joint, curve: Transform, mode: bool) -> None:
     assert_type(ikHandle(ex=False, q=True), Any)
     assert_type(ikHandle("handle", query=mode, sj=True), Any)
     assert_type(ikHandle("handle", e=mode, w=0.5), Any)
+
+
+def check_ik_solver_types(target: IkSolver, mode: bool) -> None:
+    assert_type(cmds.ikSolver(st="ikSCsolver"), IkSolver)
+    assert_type(ikSolver(solverType="ikRPsolver", epsilon=0.5), IkSolver)
+    assert_type(ikSolver(st="ikSplineSolver", q=False, e=False), IkSolver)
+    assert_type(ikSolver(target, q=True, epsilon=True), Any)
+    assert_type(ikSolver([target], query=True, name=True), Any)
+    assert_type(ikSolver((target,), e=True, mxi=25), Any)
+    assert_type(ikSolver(str(target), edit=True, ep=0.25), Any)
+    assert_type(ikSolver(target, query=mode, st=True), Any)
+    assert_type(ikSolver(target, e=mode, mxi=50), Any)
 
 
 def check_joint_types(target: Joint, mode: bool) -> None:
