@@ -704,6 +704,8 @@ def check_ls_class_filter_types(mode: bool, node_type: type[Transform]) -> None:
     assert_type(ls(type=[]), list[Node | str])
     assert_type(ls(type=[], objectsOnly=True), list[Node])
     ls(type=42)  # type: ignore[call-overload]
+    # Intentionally invalid flag to verify static typing catches unknown kwargs.
+    # pylint: disable-next=unexpected-keyword-arg
     ls(type=Transform, missingFlag=True)  # type: ignore[call-overload]
 
 
