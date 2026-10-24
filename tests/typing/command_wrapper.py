@@ -2,11 +2,14 @@ from typing import Any, Literal, assert_type
 
 from maya_brew import cmds
 from maya_brew.command_wrapper import (
+    connectJoint,
     createNode,
     ikHandle,
     ikSolver,
+    insertJoint,
     joint,
     ls,
+    mirrorJoint,
     polyCone,
     polyCube,
     polyCylinder,
@@ -19,6 +22,7 @@ from maya_brew.command_wrapper import (
     polyPyramid,
     polySphere,
     polyTorus,
+    removeJoint,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
@@ -45,6 +49,21 @@ from maya_brew.nodes.node_types import (
 
 class CustomJoint(Joint):
     pass
+
+
+def check_joint_operation_types(target: Joint) -> None:
+    assert_type(cmds.insertJoint(target), Joint)
+    assert_type(insertJoint([target]), Joint)
+    assert_type(insertJoint(), Joint)
+    assert_type(cmds.mirrorJoint(target, mirrorYZ=True), tuple[Node, ...])
+    assert_type(mirrorJoint([target], sr=("left_", "right_")), tuple[Node, ...])
+    assert_type(mirrorJoint(myz=True, mb=True), tuple[Node, ...])
+    assert_type(cmds.connectJoint(target, "parent", parentMode=True), None)
+    assert_type(connectJoint((target, "parent"), cm=True), None)
+    assert_type(connectJoint(), None)
+    assert_type(cmds.removeJoint(target), None)
+    assert_type(removeJoint([target, "other"]), None)
+    assert_type(removeJoint(), None)
 
 
 def check_ik_handle_types(target: Joint, curve: Transform, mode: bool) -> None:

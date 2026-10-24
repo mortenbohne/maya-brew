@@ -1,10 +1,31 @@
 # AUTO-GENERATED; DO NOT EDIT.
 # @generated
 from collections.abc import Sequence
+from maya_brew.nodes.node_types import Joint
 from typing import Any
 from maya_brew.command_wrapper.extension_utils import UNSET, Unset
 from maya_brew.command_wrapper import extensions as extensions
 from maya_brew.nodes._foundation.node_extensions import Node
+
+
+def connectJoint(
+    *args: str | Node | Sequence[str | Node],
+    connectMode: bool | Unset = UNSET,
+    cm: bool | Unset = UNSET,
+    parentMode: bool | Unset = UNSET,
+    pm: bool | Unset = UNSET,
+) -> None:
+    "Accept wrapped targets individually or in flat sequences.\n\nPreserve Maya's selection behavior and return value.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+        "connectMode": connectMode,
+        "cm": cm,
+        "parentMode": parentMode,
+        "pm": pm,
+    }
+    return extensions.connectJoint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
 
 
 def createNode(
@@ -203,6 +224,18 @@ def ikSolver(
         "st": st,
     }
     return extensions.ikSolver(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def insertJoint(
+    *args: str | Node | Sequence[str | Node],
+) -> Joint:
+    "Return the inserted Joint wrapper instead of its name.\n\nAccept wrapped targets individually or in flat sequences. Preserve Maya's\nselection and parenting behavior. Maya runtime errors become NodeException."
+    kwargs = {
+    }
+    return extensions.insertJoint(
         *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
@@ -605,6 +638,38 @@ def ls(
         "v": v,
     }
     return extensions.ls(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+def mirrorJoint(
+    *args: str | Node | Sequence[str | Node],
+    mirrorBehavior: bool | Unset = UNSET,
+    mb: bool | Unset = UNSET,
+    mirrorXY: bool | Unset = UNSET,
+    mxy: bool | Unset = UNSET,
+    mirrorXZ: bool | Unset = UNSET,
+    mxz: bool | Unset = UNSET,
+    mirrorYZ: bool | Unset = UNSET,
+    myz: bool | Unset = UNSET,
+    searchReplace: tuple[str, str] | Unset = UNSET,
+    sr: tuple[str, str] | Unset = UNSET,
+) -> tuple[Node, ...]:
+    "Return mirrored nodes as a tuple of native wrappers instead of names.\n\nNon-joint descendants retain their native wrapper types. Accept wrapped\ntargets individually or in flat sequences; preserve Maya's selection behavior.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+        "mirrorBehavior": mirrorBehavior,
+        "mb": mb,
+        "mirrorXY": mirrorXY,
+        "mxy": mxy,
+        "mirrorXZ": mirrorXZ,
+        "mxz": mxz,
+        "mirrorYZ": mirrorYZ,
+        "myz": myz,
+        "searchReplace": searchReplace,
+        "sr": sr,
+    }
+    return extensions.mirrorJoint(
         *args,
         **{flag: value for flag, value in kwargs.items() if value is not UNSET},
     )
@@ -1702,4 +1767,16 @@ def polyTorus(
     )
 
 
-__all__ = ["createNode", "ikHandle", "ikSolver", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+def removeJoint(
+    *args: str | Node | Sequence[str | Node],
+) -> None:
+    "Accept wrapped targets individually or in flat sequences.\n\nPreserve Maya's selection behavior and return value.\nMaya runtime errors are raised as NodeException."
+    kwargs = {
+    }
+    return extensions.removeJoint(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikSolver", "insertJoint", "joint", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]

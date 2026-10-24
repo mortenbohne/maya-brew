@@ -225,6 +225,14 @@ def test_regular_signature_uses_argument_type():
     assert "def example(*args: str | Node, name: str = ...) -> Any" in signature
 
 
+def test_flagless_signature_has_no_trailing_parameter_separator():
+    signature = generate.generate_command_overloads(
+        "example", CommandSignature(argument_type="str | Node"), {}, "None"
+    )
+    assert "def example(*args: str | Node) -> None" in signature
+    compile(signature, "example.pyi", "exec")
+
+
 def test_primitive_defaults_preserve_custom_overrides():
     flags = generate.resolve_command_flags(
         "polyTorus",

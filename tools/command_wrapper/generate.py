@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import maya.cmds as cmds
+
 from maya_brew.command_wrapper import _generated, _snapshot, extension_utils, extensions
 from maya_brew.exceptions import MayaBrewException
 from maya_brew.nodes._foundation import node_extensions
@@ -87,13 +88,14 @@ def generate_command_definition(
         f"    {flag}: {annotation} | {unset_class} = UNSET"
         for flag, annotation in flags.items()
     )
-    supplied_flags = ",\n".join(f'        "{flag}": {flag}' for flag in flags)
+    supplied_flags = "".join(f'        "{flag}": {flag},\n' for flag in flags)
     return (
         f"\n\ndef {function_name}(\n"
-        f"{signature_arguments}{runtime_flags},\n"
-        f") -> {return_type}:\n"
+        f"{signature_arguments}"
+        + (f"{runtime_flags},\n" if runtime_flags else "")
+        + f") -> {return_type}:\n"
         + (f"    {docstring!r}\n" if docstring else "")
-        + f"    {kwargs_name} = {{\n{supplied_flags},\n    }}\n"
+        + f"    {kwargs_name} = {{\n{supplied_flags}    }}\n"
         f"    return extensions.{function_name}(\n"
         f"{call_arguments}"
         f"        **{{flag: value for flag, value in {kwargs_name}.items() "
@@ -119,7 +121,9 @@ def generate_command_overloads(
             f"{flag}: {annotation} = ..." for flag, annotation in flags.items()
         )
         return (
-            f"\n\ndef {function_name}(*args: {policy.argument_type}, {stub_flags}) "
+            f"\n\ndef {function_name}(*args: {policy.argument_type}"
+            + (f", {stub_flags}" if stub_flags else "")
+            + ") "
             f"-> {return_type}: ...\n"
         )
     cases: list[tuple[str, str | None, str]]
@@ -262,6 +266,15 @@ def generate_command_files(
         return_type = inspect.formatannotation(return_annotation).replace(
             f"{node_extensions.__name__}.", ""
         )
+        if (
+            inspect.isclass(return_annotation)
+            and issubclass(return_annotation, node_extensions.Node)
+            and return_annotation is not node_extensions.Node
+        ):
+            return_type = return_annotation.__name__
+            node_import = f"from maya_brew.nodes.node_types import {return_type}\n"
+            runtime.insert(2, node_import)
+            stub.append(node_import)
         flags = resolve_command_flags(function_name, policy)
         runtime.append(
             generate_command_definition(

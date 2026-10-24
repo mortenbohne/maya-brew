@@ -10,6 +10,9 @@ from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, o
 T = TypeVar("T", bound=ConcreteNode)
 
 
+def connectJoint(*args: str | Node | Sequence[str | Node], connectMode: bool = ..., cm: bool = ..., parentMode: bool = ..., pm: bool = ...) -> None: ...
+
+
 @overload
 def createNode(node_type: type[T], *, name: str = ..., n: str = ..., parent: str | Node = ..., p: str | Node = ..., shared: Literal[False] = False, s: Literal[False] = False, skipSelect: bool = ..., ss: bool = ...) -> T: ...
 
@@ -166,6 +169,9 @@ def ikSolver(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_IkSolverModeFlags],
 ) -> Any: ...
+
+
+def insertJoint(*args: str | Node | Sequence[str | Node]) -> Joint: ...
 
 
 
@@ -540,6 +546,9 @@ def ls(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_LsFlags],
 ) -> list[Node | str]: ...
+
+
+def mirrorJoint(*args: str | Node | Sequence[str | Node], mirrorBehavior: bool = ..., mb: bool = ..., mirrorXY: bool = ..., mxy: bool = ..., mirrorXZ: bool = ..., mxz: bool = ..., mirrorYZ: bool = ..., myz: bool = ..., searchReplace: tuple[str, str] = ..., sr: tuple[str, str] = ...) -> tuple[Node, ...]: ...
 
 
 
@@ -3170,4 +3179,7 @@ def polyTorus(
 ) -> Any: ...
 
 
-__all__ = ["createNode", "ikHandle", "ikSolver", "joint", "ls", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus"]
+def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
+__all__ = ["connectJoint", "createNode", "ikHandle", "ikSolver", "insertJoint", "joint", "ls", "mirrorJoint", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint"]

@@ -29,6 +29,19 @@ Signature: TypeAlias = CommandSignature | NodeCreationSignature | PrimitiveSigna
 
 
 COMMANDS: dict[Callable[..., Any], Signature] = {
+    extensions.insertJoint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
+    extensions.connectJoint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
+    extensions.mirrorJoint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        flag_type_overrides={"searchReplace": "tuple[str, str]"},
+    ),
+    extensions.removeJoint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
     extensions.createNode: NodeCreationSignature(
         type_argument="node_type",
         nullable_return_flags=("shared", "s"),
