@@ -58,7 +58,6 @@ def test_insert_joint_runtime_errors_are_chained():
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-
 @pytest.fixture
 def transform():
     return cmds.createNode("transform")
@@ -70,4 +69,3 @@ def test_insert_joint_rejects_wrong_node_type(monkeypatch, transform):
     )
     with pytest.raises(NodeCastingException, match="Expected Joint"):
         cmds.insertJoint()
-

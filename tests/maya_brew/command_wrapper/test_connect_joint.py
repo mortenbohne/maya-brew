@@ -1,7 +1,6 @@
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-
 from maya_brew.exceptions import NodeException
 
 
@@ -46,5 +45,3 @@ def test_connect_joint_runtime_errors_are_chained():
     with pytest.raises(NodeException, match="connectJoint failed") as error:
         cmds.connectJoint()
     assert isinstance(error.value.__cause__, RuntimeError)
-
-

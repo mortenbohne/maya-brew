@@ -92,7 +92,6 @@ def test_ik_solver_runtime_errors_are_chained(flags):
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-
 @pytest.fixture
 def wrong_result_node():
     return cmds.createNode("transform")

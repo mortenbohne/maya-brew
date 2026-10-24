@@ -80,8 +80,6 @@ def test_edits_match_maya(case, created_node, mode):
         assert queried == pytest.approx(case.edit_value)
 
 
-
-
 def test_lights_reject_wrong_node_types(monkeypatch):
     wrong_result = str(cmds.createNode("transform"))
     monkeypatch.setattr(maya_cmds, "ambientLight", lambda *args, **kwargs: wrong_result)

@@ -24,7 +24,9 @@ CASES = (
 )
 
 
-@pytest.mark.parametrize("case", [pytest.param(case, id=case.command) for case in CASES])
+@pytest.mark.parametrize(
+    "case", [pytest.param(case, id=case.command) for case in CASES]
+)
 def test_runtime_errors_are_chained(monkeypatch, case):
     error = RuntimeError("invalid target")
     monkeypatch.setattr(maya_cmds, case.command, Mock(side_effect=error))

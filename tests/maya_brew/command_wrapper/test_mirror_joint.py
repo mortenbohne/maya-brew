@@ -82,5 +82,3 @@ def test_mirror_joint_runtime_errors_are_chained():
     with pytest.raises(NodeException, match="mirrorJoint failed") as error:
         cmds.mirrorJoint()
     assert isinstance(error.value.__cause__, RuntimeError)
-
-

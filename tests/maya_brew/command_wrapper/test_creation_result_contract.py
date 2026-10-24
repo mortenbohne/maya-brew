@@ -40,5 +40,3 @@ def test_creation_commands_reject_unexpected_results(monkeypatch, case, result):
     monkeypatch.setattr(maya_cmds, case.command, lambda *args, **kwargs: result)
     with pytest.raises(NodeException, match=f"Unexpected result from {case.command}"):
         getattr(cmds, case.command)(**case.kwargs)
-
-

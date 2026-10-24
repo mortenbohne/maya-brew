@@ -56,4 +56,3 @@ def test_remove_joint_runtime_errors_are_chained():
     with pytest.raises(NodeException, match="removeJoint failed") as error:
         cmds.removeJoint()
     assert isinstance(error.value.__cause__, RuntimeError)
-

@@ -261,7 +261,6 @@ def test_ik_handle_runtime_errors_are_chained(joint_chain):
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-
 def test_ik_handle_rejects_wrong_creation_node_type(monkeypatch, joint_chain):
     monkeypatch.setattr(
         maya_cmds, "ikHandle", lambda *args, **kwargs: [str(joint_chain[0])]

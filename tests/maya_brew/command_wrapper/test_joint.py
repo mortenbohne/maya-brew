@@ -333,7 +333,6 @@ def test_joint_symmetry_creation_returns_joint(symmetric_joint):
     assert maya_cmds.objExists(str(symmetric_joint))
 
 
-
 def test_joint_runtime_errors_are_chained(joint_chain):
     with pytest.raises(NodeException, match="joint failed") as error:
         cmds.joint(joint_chain[0], e=True, orientJoint="invalid")
@@ -343,5 +342,3 @@ def test_joint_runtime_errors_are_chained(joint_chain):
 def test_joint_missing_target_preserves_native_value_error():
     with pytest.raises(ValueError, match="No object matches name"):
         cmds.joint("missing_joint", e=True, radius=1)
-
-
