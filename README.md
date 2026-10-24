@@ -73,6 +73,9 @@ directly for commands that are not yet wrapped.
 Currently wrapped commands:
 
 - `connectJoint`
+- `circle`
+- `cone`
+- `cylinder`
 - `createNode`
 - `ikHandle`
 - `ikHandleDisplayScale`
@@ -83,6 +86,9 @@ Currently wrapped commands:
 - `jointDisplayScale`
 - `ls`
 - `mirrorJoint`
+- `nurbsCube`
+- `nurbsPlane`
+- `nurbsSquare`
 - `polyCone`
 - `polyCube`
 - `polyCylinder`
@@ -96,6 +102,8 @@ Currently wrapped commands:
 - `polySphere`
 - `polyTorus`
 - `removeJoint`
+- `sphere`
+- `torus`
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
 and tool-side metadata. The command registry uses `CommandSignature` for regular

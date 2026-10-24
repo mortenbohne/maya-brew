@@ -2,9 +2,9 @@ from typing import Any
 
 from ... import _maya_cmds
 from ...nodes._foundation.node_extensions import Node
-from ..extension_utils import _poly_primitive
+from ..extension_utils import _history_primitive
 
 
 def sphere(*args: str | Node, **kwargs: Any) -> Any:
     """Return created nodes as wrappers while preserving Maya query/edit behavior."""
-    return _poly_primitive("sphere", _maya_cmds.sphere, args, kwargs)
+    return _history_primitive("sphere", _maya_cmds.sphere, args, kwargs)

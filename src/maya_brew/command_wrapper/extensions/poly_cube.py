@@ -2,7 +2,7 @@ from typing import Any
 
 from ... import _maya_cmds
 from ...nodes._foundation.node_extensions import Node
-from ..extension_utils import _poly_primitive
+from ..extension_utils import _history_primitive
 
 
 def polyCube(*args: str | Node, **kwargs: Any) -> Any:
@@ -12,4 +12,4 @@ def polyCube(*args: str | Node, **kwargs: Any) -> Any:
     other queries and edits retain Maya's return values.
     Maya runtime errors are raised as NodeException.
     """
-    return _poly_primitive("polyCube", _maya_cmds.polyCube, args, kwargs)
+    return _history_primitive("polyCube", _maya_cmds.polyCube, args, kwargs)

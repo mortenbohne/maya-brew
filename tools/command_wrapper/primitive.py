@@ -1,4 +1,4 @@
-"""Generate the shared typing contract for polygon primitive commands."""
+"""Generate shared typing contracts for history-based primitive creation commands."""
 
 from tools.command_wrapper.modes import (
     mode_selectors,

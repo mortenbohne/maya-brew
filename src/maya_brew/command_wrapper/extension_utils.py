@@ -46,7 +46,7 @@ def _node_target_names(
     return targets
 
 
-def _poly_primitive(
+def _history_primitive(
     name: str,
     command: Callable[..., Any],
     args: Sequence[str | Node],
@@ -68,3 +68,4 @@ def _poly_primitive(
     ):
         raise NodeException(f"Unexpected result from {name}: {result!r}")
     return tuple(cast(name) for name in result)
+
