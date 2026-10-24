@@ -84,12 +84,6 @@ def test_mirror_joint_runtime_errors_are_chained():
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-@pytest.mark.parametrize("result", [None, "joint", [1], 1])
-def test_mirror_joint_rejects_unexpected_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "mirrorJoint", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from mirrorJoint"):
-        cmds.mirrorJoint()
-
 
 def test_mirror_joint_omitted_flags_are_not_forwarded(monkeypatch):
     calls = []

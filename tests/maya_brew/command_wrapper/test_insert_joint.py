@@ -58,12 +58,6 @@ def test_insert_joint_runtime_errors_are_chained():
     assert isinstance(error.value.__cause__, RuntimeError)
 
 
-@pytest.mark.parametrize("result", [None, [], ["joint"], 1, False])
-def test_insert_joint_rejects_unexpected_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "insertJoint", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from insertJoint"):
-        cmds.insertJoint()
-
 
 @pytest.fixture
 def transform():

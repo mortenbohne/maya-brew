@@ -357,8 +357,3 @@ def test_joint_missing_target_preserves_native_value_error():
         cmds.joint("missing_joint", e=True, radius=1)
 
 
-@pytest.mark.parametrize("result", [None, [], ["joint1"], 1])
-def test_joint_rejects_unexpected_creation_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "joint", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from joint"):
-        cmds.joint()

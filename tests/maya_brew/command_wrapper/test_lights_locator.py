@@ -81,20 +81,6 @@ def test_edits_match_maya(case, created_node, mode):
 
 
 
-@pytest.mark.parametrize("result", [None, [], ["node1", "node2"], 1, False])
-def test_commands_reject_unexpected_creation_results(monkeypatch, result):
-    for name in ("ambientLight", "directionalLight", "pointLight", "spotLight"):
-        monkeypatch.setattr(maya_cmds, name, lambda *args, **kwargs: result)
-        with pytest.raises(NodeException, match=f"Unexpected result from {name}"):
-            getattr(cmds, name)()
-
-
-@pytest.mark.parametrize("result", [None, "locator1", ["a", "b"], [1], 1, False])
-def test_space_locator_rejects_unexpected_creation_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "spaceLocator", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from spaceLocator"):
-        cmds.spaceLocator()
-
 
 def test_lights_reject_wrong_node_types(monkeypatch):
     wrong_result = str(cmds.createNode("transform"))

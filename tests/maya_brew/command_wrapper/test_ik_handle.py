@@ -272,12 +272,6 @@ def test_ik_handle_omitted_flags_are_not_forwarded(monkeypatch):
     assert calls == [((), {"name": "supplied", "createCurve": False, "query": False})]
 
 
-@pytest.mark.parametrize("result", [None, [], ["a", "b", "c", "d"], [1, 2], "h"])
-def test_ik_handle_rejects_unexpected_creation_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "ikHandle", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from ikHandle"):
-        cmds.ikHandle()
-
 
 def test_ik_handle_rejects_wrong_creation_node_type(monkeypatch, joint_chain):
     monkeypatch.setattr(

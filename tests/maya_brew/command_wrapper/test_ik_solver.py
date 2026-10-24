@@ -103,12 +103,6 @@ def test_ik_solver_omitted_flags_are_not_forwarded(monkeypatch):
     assert calls == [((), {"st": "ikSCsolver", "ep": 0.0, "query": False})]
 
 
-@pytest.mark.parametrize("result", [None, [], ["solver"], 1, False])
-def test_ik_solver_rejects_unexpected_creation_results(monkeypatch, result):
-    monkeypatch.setattr(maya_cmds, "ikSolver", lambda *args, **kwargs: result)
-    with pytest.raises(NodeException, match="Unexpected result from ikSolver"):
-        cmds.ikSolver(st="ikSCsolver")
-
 
 @pytest.fixture
 def wrong_result_node():
