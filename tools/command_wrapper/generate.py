@@ -57,6 +57,7 @@ from tools.node_hierarchy.generate import CLASSES_MODULE
 HEADER = "# AUTO-GENERATED; DO NOT EDIT.\n# @generated\n"
 CONCRETE_NODES_MODULE = "concrete_nodes"
 CONCRETE_NODE_ALIAS = "ConcreteNode"
+LS_STUB_MODULE = "_commands_ls"
 
 
 def generate_concrete_node_stub(hierarchy: dict[str, NodeType], version: str) -> str:
@@ -298,6 +299,7 @@ def generate_command_files(
         f"from .{CONCRETE_NODES_MODULE} import {CONCRETE_NODE_ALIAS}\n",
         f'\nT = TypeVar("T", bound={CONCRETE_NODE_ALIAS})\n',
     ]
+    split_stubs: dict[str, str] = {}
     command_names = []
     for function, policy in sorted(COMMANDS.items(), key=lambda item: item[0].__name__):
         function_name = function.__name__
@@ -330,30 +332,37 @@ def generate_command_files(
                 inspect.getdoc(function),
             )
         )
-        stub.append(
-            generate_command_overloads(
-                function_name,
-                policy,
-                flags,
-                return_type,
-                (
-                    resolve_command_flags(function_name, policy, creation=True)
-                    if isinstance(policy, ModeSignature)
-                    else None
-                ),
-            )
+        signature = generate_command_overloads(
+            function_name,
+            policy,
+            flags,
+            return_type,
+            (
+                resolve_command_flags(function_name, policy, creation=True)
+                if isinstance(policy, ModeSignature)
+                else None
+            ),
         )
+        if isinstance(policy, LsSignature):
+            split_stubs[f"{LS_STUB_MODULE}.pyi"] = consolidate_stub_imports(
+                HEADER + signature
+            )
+            stub.append(f"from .{LS_STUB_MODULE} import {function_name} as {function_name}\n")
+        else:
+            stub.append(signature)
     exports = (
         "\n\n__all__ = [" + ", ".join(f'"{name}"' for name in command_names) + "]\n"
     )
     runtime.append(exports)
     stub.append(exports)
-    return {
+    artifacts = {
         f"{_snapshot.COMMANDS_MODULE}.py": "".join(runtime),
         f"{_snapshot.COMMANDS_MODULE}.pyi": consolidate_stub_imports("".join(stub)),
         f"{CONCRETE_NODES_MODULE}.pyi": generate_concrete_node_stub(hierarchy, version),
         "__init__.py": HEADER,
     }
+    artifacts.update(split_stubs)
+    return artifacts
 
 
 def write_wrappers(hierarchy: dict[str, NodeType], version: str) -> None:

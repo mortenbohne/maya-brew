@@ -43,6 +43,7 @@ def test_command_stub_is_deterministic(hierarchy, artifacts):
     assert set(artifacts) == {
         "commands.py",
         "commands.pyi",
+        "_commands_ls.pyi",
         "concrete_nodes.pyi",
         "__init__.py",
     }
@@ -80,7 +81,7 @@ def ls_signature():
 def test_ls_signature_is_in_generated_stub(artifacts, ls_signature):
     generated_definitions = {
         ast.dump(statement)
-        for statement in ast.parse(artifacts["commands.pyi"]).body
+        for statement in ast.parse(artifacts["_commands_ls.pyi"]).body
         if isinstance(statement, (ast.ClassDef, ast.FunctionDef))
     }
     for statement in ast.parse(ls_signature).body:
