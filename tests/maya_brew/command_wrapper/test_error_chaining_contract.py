@@ -25,4 +25,3 @@ def test_runtime_errors_are_chained(monkeypatch, name):
     with pytest.raises(NodeException, match=f"{name} failed") as caught:
         getattr(cmds, name)(q=True)
     assert caught.value.__cause__ is error
-

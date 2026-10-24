@@ -57,6 +57,7 @@ from maya_brew.nodes.node_types import (
     MakeNurbSphere,
     MakeNurbsSquare,
     MakeNurbTorus,
+    PointLight,
     PolyCone,
     PolyCube,
     PolyCylinder,
@@ -69,7 +70,6 @@ from maya_brew.nodes.node_types import (
     PolyPyramid,
     PolySphere,
     PolyTorus,
-    PointLight,
     SpotLight,
     Transform,
 )
