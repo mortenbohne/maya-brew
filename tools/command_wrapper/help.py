@@ -10,6 +10,7 @@ def command_flags(
         "": "bool",
         "String": "str",
         "Int": "int",
+        "UnsignedInt": "int",
         "Float": "float",
         "Angle": "float",
         "Boolean": "bool",
@@ -18,12 +19,14 @@ def command_flags(
     }
 
     def infer_annotation(maya_type: str) -> str | None:
+        maya_type = re.sub(r"\s*\([^)]*\)", "", maya_type).strip()
         direct = types.get(maya_type)
         if direct is not None:
             return direct
         values = [types.get(part) for part in maya_type.split()]
         if values and all(value is not None for value in values):
-            return f"tuple[{', '.join(values)}]"
+            parts = [value for value in values if value is not None]
+            return f"tuple[{', '.join(parts)}]"
         return None
 
     flags: dict[str, str] = {}

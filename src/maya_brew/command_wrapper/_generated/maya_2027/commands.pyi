@@ -1,13 +1,20 @@
 # AUTO-GENERATED; DO NOT EDIT.
 # @generated
+from ._commands_ls import ls as ls
 from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import AmbientLight, DirectionalLight, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, SpotLight, Transform
-from typing import Any, Literal, Never, TypeAlias, TypeVar, TypedDict, Unpack, overload
+from maya_brew.nodes.node_types import AmbientLight, BlendShape, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Transform, Wire
+from typing import Any, Literal, Never, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
+
+
+def CreateJiggleDeformer(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
+def CreateWrap(*args: str | Node | Sequence[str | Node]) -> None: ...
 
 
 class _AmbientLightFlags(TypedDict, total=False):
@@ -66,6 +73,133 @@ def ambientLight(
 def ambientLight(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_AmbientLightModeFlags],
+) -> Any: ...
+
+
+class _BlendShapeFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    automatic: bool
+    at: bool
+    before: bool
+    bf: bool
+    copyDelta: tuple[int, int, int]
+    cd: tuple[int, int, int]
+    copyInBetweenDelta: tuple[int, int, int, int]
+    cid: tuple[int, int, int, int]
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    copyWeights: tuple[int, int, int]
+    cw: tuple[int, int, int]
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    editTarget: bool
+    edt: bool
+    export: str
+    ep: str
+    exportTarget: tuple[int, int]
+    et: tuple[int, int]
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    flipTarget: tuple[int, int]
+    ft: tuple[int, int]
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    inBetween: bool
+    ib: bool
+    inBetweenIndex: int
+    ibi: int
+    inBetweenType: str
+    ibt: str
+    includeHiddenSelections: bool
+    ihs: bool
+    ip: str
+    ignoreSelected: bool
+    mirrorDirection: int
+    md: int
+    mergeSource: int
+    mgs: int
+    mergeTarget: int
+    mgt: int
+    mirrorTarget: tuple[int, int]
+    mt: tuple[int, int]
+    name: str
+    n: str
+    normalizationGroups: bool
+    ng: bool
+    origin: str
+    o: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    resetTargetDelta: tuple[int, int]
+    rtd: tuple[int, int]
+    symmetryAxis: str
+    sa: str
+    suppressDialog: bool
+    sd: bool
+    symmetryEdge: str
+    se: str
+    split: bool
+    sp: bool
+    symmetrySpace: int
+    ss: int
+    target: tuple[str, int, str, float]
+    t: tuple[str, int, str, float]
+    topologyCheck: bool
+    tc: bool
+    transform: str
+    tr: str
+    tangentSpace: bool
+    ts: bool
+    useComponentTags: bool
+    uct: bool
+    weight: tuple[int, float]
+    w: tuple[int, float]
+    weightCount: int
+    wc: int
+
+class _BlendShapeCreateFlags(_BlendShapeFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+
+class _BlendShapeModeFlags(_BlendShapeFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+
+@overload
+def blendShape(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_BlendShapeCreateFlags],
+) -> BlendShape: ...
+
+@overload
+def blendShape(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_BlendShapeModeFlags],
 ) -> Any: ...
 
 
@@ -776,6 +910,86 @@ def cylinder(
 ) -> Any: ...
 
 
+class _DeltaMushFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    inwardConstraint: float
+    iwc: float
+    name: str
+    n: str
+    outwardConstraint: float
+    owc: float
+    parallel: bool
+    par: bool
+    pinBorderVertices: bool
+    pbv: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    smoothingIterations: int
+    si: int
+    split: bool
+    sp: bool
+    smoothingStep: float
+    ss: float
+    useComponentTags: bool
+    uct: bool
+
+class _DeltaMushCreateFlags(_DeltaMushFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+
+class _DeltaMushModeFlags(_DeltaMushFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+
+@overload
+def deltaMush(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeltaMushCreateFlags],
+) -> DeltaMush: ...
+
+@overload
+def deltaMush(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeltaMushModeFlags],
+) -> Any: ...
+
+
 class _DirectionalLightFlags(TypedDict, total=False):
     discRadius: float
     drs: float
@@ -1131,198 +1345,100 @@ def joint(
 def jointDisplayScale(*args: float, query: bool = ..., q: bool = ..., absolute: bool = ..., a: bool = ..., ikfk: float | bool = ..., ik: float | bool = ...) -> float | None: ...
 
 
-
-
-_LsTypeFilter: TypeAlias = str | type[Node] | Sequence[str | type[Node]]
-
-class _LsFilterFlags(TypedDict, total=False):
-    absoluteName: bool
-    an: bool
-    allPaths: bool
-    ap: bool
-    assemblies: bool
-    cameras: bool
-    ca: bool
-    containers: bool
-    con: bool
-    containerType: str | list[str] | tuple[str, ...]
-    ct: str | list[str] | tuple[str, ...]
-    dagObjects: bool
-    dag: bool
-    dependencyNodes: bool
-    dep: bool
-    defaultNodes: bool
-    dn: bool
-    exactType: _LsTypeFilter
-    et: _LsTypeFilter
-    excludeType: _LsTypeFilter
-    ext: _LsTypeFilter
-    flatten: bool
-    fl: bool
-    geometry: bool
-    g: bool
-    ghost: bool
-    gh: bool
-    head: int
-    hd: int
-    hilite: bool
-    hl: bool
-    intermediateObjects: bool
-    io: bool
-    invisible: bool
-    iv: bool
-    long: bool
-    l: bool
-    leaf: bool
-    lf: bool
-    lockedNodes: bool
-    ln: bool
-    lights: bool
-    lt: bool
-    live: bool
-    lv: bool
-    materials: bool
-    mat: bool
-    modified: bool
-    mod: bool
-    noIntermediate: bool
-    ni: bool
-    orderedComponentSelection: bool
-    ocs: bool
-    orderedSelection: bool
-    os: bool
-    planes: bool
-    pl: bool
-    persistentNodes: bool
-    pn: bool
-    partitions: bool
+class _LatticeFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    commonParent: bool
+    cp: bool
+    dualBase: bool
+    db: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    freezeMapping: bool
+    fm: bool
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    ldivisions: tuple[int, int, int]
+    ldv: tuple[int, int, int]
+    latticeReset: bool
+    lr: bool
+    minimumSize: float
+    mns: float
+    name: str
+    n: str
+    objectCentered: bool
+    oc: bool
+    outsideFalloffDistance: float
+    ofd: float
+    outsideLattice: int
+    ol: int
+    parallel: bool
+    par: bool
+    position: tuple[float, float, float]
+    pos: tuple[float, float, float]
+    prune: bool
     pr: bool
-    preSelectHilite: bool
-    psh: bool
-    recursive: bool
-    r: bool
-    references: bool
-    rf: bool
-    renderGlobals: bool
-    rg: bool
-    referencedNodes: bool
-    rn: bool
-    readOnly: bool
-    ro: bool
-    renderQualities: bool
-    rq: bool
-    renderResolutions: bool
-    rr: bool
-    renderSetups: bool
-    rs: bool
-    shapes: bool
-    s: bool
-    sets: bool
-    set: bool
-    selection: bool
-    sl: bool
-    shortNames: bool
-    sn: bool
-    textures: bool
-    tex: bool
-    tail: int
-    tl: int
-    templated: bool
-    tm: bool
-    transforms: bool
-    tr: bool
-    type: _LsTypeFilter
-    typ: _LsTypeFilter
-    undeletable: bool
-    ud: bool
-    untemplated: bool
-    ut: bool
-    visible: bool
-    v: bool
+    remove: bool
+    rm: bool
+    rotation: tuple[float, float, float]
+    ro: tuple[float, float, float]
+    removeTweaks: bool
+    rt: bool
+    scale: tuple[float, float, float]
+    s: tuple[float, float, float]
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
 
-class _LsMetadataFlags(_LsFilterFlags, total=False):
-    objectsOnly: bool
-    o: bool
-    showType: bool
-    st: bool
-    showNamespace: bool
-    sns: bool
-    ufeObjects: bool
-    ufe: bool
+class _LatticeCreateFlags(_LatticeFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    divisions: list[int]
+    dv: list[int]
 
-class _LsNodeFlags(_LsFilterFlags, total=False):
-    uuid: Literal[False]
-    uid: Literal[False]
-    nodeTypes: Literal[False]
-    nt: Literal[False]
-    showType: Literal[False]
-    st: Literal[False]
-    showNamespace: Literal[False]
-    sns: Literal[False]
-    ufeObjects: Literal[False]
-    ufe: Literal[False]
-
-class _LsFlags(_LsMetadataFlags, total=False):
-    uuid: bool
-    uid: bool
-    nodeTypes: bool
-    nt: bool
+class _LatticeModeFlags(_LatticeFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    divisions: list[int] | bool
+    dv: list[int] | bool
 
 @overload
-def ls(
+def lattice(
     *args: str | Node | Sequence[str | Node],
-    uuid: Literal[True],
-    uid: bool = ...,
-    nodeTypes: bool = ...,
-    nt: bool = ...,
-    **kwargs: Unpack[_LsMetadataFlags],
-) -> list[str]: ...
+    **kwargs: Unpack[_LatticeCreateFlags],
+) -> Ffd: ...
+
 @overload
-def ls(
+def lattice(
     *args: str | Node | Sequence[str | Node],
-    uid: Literal[True],
-    uuid: bool = ...,
-    nodeTypes: bool = ...,
-    nt: bool = ...,
-    **kwargs: Unpack[_LsMetadataFlags],
-) -> list[str]: ...
-@overload
-def ls(
-    *args: str | Node | Sequence[str | Node],
-    nodeTypes: Literal[True],
-    nt: bool = ...,
-    uuid: bool = ...,
-    uid: bool = ...,
-    **kwargs: Unpack[_LsMetadataFlags],
-) -> list[str]: ...
-@overload
-def ls(
-    *args: str | Node | Sequence[str | Node],
-    nt: Literal[True],
-    nodeTypes: bool = ...,
-    uuid: bool = ...,
-    uid: bool = ...,
-    **kwargs: Unpack[_LsMetadataFlags],
-) -> list[str]: ...
-@overload
-def ls(
-    *args: str | Node | Sequence[str | Node],
-    objectsOnly: Literal[True],
-    o: bool = ...,
-    **kwargs: Unpack[_LsNodeFlags],
-) -> list[Node]: ...
-@overload
-def ls(
-    *args: str | Node | Sequence[str | Node],
-    o: Literal[True],
-    objectsOnly: bool = ...,
-    **kwargs: Unpack[_LsNodeFlags],
-) -> list[Node]: ...
-@overload
-def ls(
-    *args: str | Node | Sequence[str | Node],
-    **kwargs: Unpack[_LsFlags],
-) -> list[Node | str]: ...
+    **kwargs: Unpack[_LatticeModeFlags],
+) -> Any: ...
 
 
 def mirrorJoint(*args: str | Node | Sequence[str | Node], mirrorBehavior: bool = ..., mb: bool = ..., mirrorXY: bool = ..., mxy: bool = ..., mirrorXZ: bool = ..., mxz: bool = ..., mirrorYZ: bool = ..., myz: bool = ..., searchReplace: tuple[str, str] = ..., sr: tuple[str, str] = ...) -> tuple[Node, ...]: ...
@@ -4650,7 +4766,384 @@ def polyTorus(
 ) -> Any: ...
 
 
+class _ProximityWrapFlags(TypedDict, total=False):
+    addDrivers: str
+    ad: str
+    applyUserDefaults: bool
+    aud: bool
+    canBeAdded: str
+    cba: str
+    driverIndices: str
+    di: str
+    dumpInfo: bool
+    dui: bool
+    name: str
+    n: str
+    removeDrivers: str
+    rd: str
+
+class _ProximityWrapCreateFlags(_ProximityWrapFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    freeDriverIndex: int
+    fdi: int
+
+class _ProximityWrapModeFlags(_ProximityWrapFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    freeDriverIndex: int | bool
+    fdi: int | bool
+
+@overload
+def proximityWrap(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_ProximityWrapCreateFlags],
+) -> ProximityWrap: ...
+
+@overload
+def proximityWrap(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_ProximityWrapModeFlags],
+) -> Any: ...
+
+
 def removeJoint(*args: str | Node | Sequence[str | Node]) -> None: ...
+
+
+class _SculptFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    dropoffDistance: float
+    dds: float
+    dropoffType: str
+    drt: str
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    groupWithLocator: bool
+    gwl: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    objectCentered: bool
+    oc: bool
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    sculptTool: str
+    st: str
+    useComponentTags: bool
+    uct: bool
+
+class _SculptCreateFlags(_SculptFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    insideMode: list[str]
+    im: list[str]
+    mode: list[str]
+    m: list[str]
+    maxDisplacement: list[float]
+    mxd: list[float]
+
+class _SculptModeFlags(_SculptFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    insideMode: list[str] | bool
+    im: list[str] | bool
+    mode: list[str] | bool
+    m: list[str] | bool
+    maxDisplacement: list[float] | bool
+    mxd: list[float] | bool
+
+@overload
+def sculpt(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SculptCreateFlags],
+) -> Sculpt: ...
+
+@overload
+def sculpt(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SculptModeFlags],
+) -> Any: ...
+
+
+class _SkinClusterFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    addInfluence: str
+    ai: str
+    afterReference: bool
+    ar: bool
+    addToSelection: bool
+    ats: bool
+    before: bool
+    bf: bool
+    bindMethod: int
+    bm: int
+    baseShape: str
+    bsh: str
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    dropoffRate: float
+    dr: float
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    forceNormalizeWeights: bool
+    fnw: bool
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    heatmapFalloff: float
+    hmf: float
+    ignoreBindPose: bool
+    ibp: bool
+    ignoreHierarchy: bool
+    ih: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    influence: str
+    inf: str
+    ignoreSelected: bool
+    lockWeights: bool
+    lw: bool
+    moveJointsMode: bool
+    mjm: bool
+    multi: bool
+    mul: bool
+    name: str
+    n: str
+    nurbsSamples: int
+    ns: int
+    obeyMaxInfluences: bool
+    omi: bool
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    polySmoothness: float
+    ps: float
+    recacheBindMatrices: bool
+    rbm: bool
+    removeFromSelection: bool
+    rfs: bool
+    removeInfluence: str
+    ri: str
+    remove: bool
+    rm: bool
+    removeUnusedInfluence: bool
+    rui: bool
+    selectInfluenceVerts: str
+    siv: str
+    split: bool
+    sp: bool
+    smoothWeights: float
+    sw: float
+    smoothWeightsMaxIterations: int
+    swi: int
+    toSelectedBones: bool
+    tsb: bool
+    toSkeletonAndTransforms: bool
+    tst: bool
+    unbind: bool
+    ub: bool
+    unbindKeepHistory: bool
+    ubk: bool
+    useComponentTags: bool
+    uct: bool
+    useGeometry: bool
+    ug: bool
+    volumeBind: float
+    vb: float
+    volumeType: int
+    vt: int
+    weightDistribution: int
+    wd: int
+    weightedInfluence: bool
+    wi: bool
+    weight: float
+    wt: float
+
+class _SkinClusterCreateFlags(_SkinClusterFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    maximumInfluences: int
+    mi: int
+    normalizeWeights: int
+    nw: int
+    skinMethod: int
+    sm: int
+
+class _SkinClusterModeFlags(_SkinClusterFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    maximumInfluences: int | bool
+    mi: int | bool
+    normalizeWeights: int | bool
+    nw: int | bool
+    skinMethod: int | bool
+    sm: int | bool
+
+@overload
+def skinCluster(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SkinClusterCreateFlags],
+) -> SkinCluster: ...
+
+@overload
+def skinCluster(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SkinClusterModeFlags],
+) -> Any: ...
+
+
+class _SoftModFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    bindState: bool
+    bs: bool
+    curveInterpolation: int
+    ci: int
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    curvePoint: float
+    cp: float
+    curveValue: float
+    cv: float
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    falloffAroundSelection: bool
+    fas: bool
+    falloffBasedOnX: bool
+    fbx: bool
+    falloffBasedOnY: bool
+    fby: bool
+    falloffBasedOnZ: bool
+    fbz: bool
+    falloffCenter: tuple[float, float, float]
+    fc: tuple[float, float, float]
+    falloffMasking: bool
+    fm: bool
+    frontOfChain: bool
+    foc: bool
+    falloffMode: int
+    fom: int
+    falloffRadius: float
+    fr: float
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    relative: bool
+    rel: bool
+    resetGeometry: bool
+    rg: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+    weightedNode: tuple[str, str]
+    wn: tuple[str, str]
+
+class _SoftModCreateFlags(_SoftModFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+
+class _SoftModModeFlags(_SoftModFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+
+@overload
+def softMod(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SoftModCreateFlags],
+) -> SoftMod: ...
+
+@overload
+def softMod(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_SoftModModeFlags],
+) -> Any: ...
 
 
 class _SpaceLocatorFlags(TypedDict, total=False):
@@ -5218,4 +5711,88 @@ def torus(
 ) -> Any: ...
 
 
-__all__ = ["ambientLight", "circle", "cone", "connectJoint", "createNode", "cylinder", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "removeJoint", "spaceLocator", "sphere", "spotLight", "torus"]
+class _WireFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    crossingEffect: float
+    ce: float
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    dropoffDistance: tuple[int, float]
+    dds: tuple[int, float]
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    groupWithBase: bool
+    gw: bool
+    holder: tuple[int, str]
+    ho: tuple[int, str]
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    localInfluence: float
+    li: float
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+    wire: str
+    w: str
+    wireCount: int
+    wc: int
+
+class _WireCreateFlags(_WireFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+
+class _WireModeFlags(_WireFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+
+@overload
+def wire(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_WireCreateFlags],
+) -> Wire: ...
+
+@overload
+def wire(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_WireModeFlags],
+) -> Any: ...
+
+
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]

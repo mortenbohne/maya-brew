@@ -27,6 +27,44 @@ def _node_result(name: str, result: Any, expected_type: type[T]) -> T:
     return cast(result, expected_type)
 
 
+def _single_node_result(name: str, result: Any, expected_type: type[T]) -> T:
+    if isinstance(result, str):
+        return cast(result, expected_type)
+    if isinstance(result, list) and len(result) == 1 and isinstance(result[0], str):
+        return cast(result[0], expected_type)
+    raise NodeException(f"Unexpected result from {name}: {result!r}")
+
+
+def _first_node_result(name: str, result: Any, expected_type: type[T]) -> T:
+    if isinstance(result, str):
+        return cast(result, expected_type)
+    if isinstance(result, list) and result and isinstance(result[0], str):
+        return cast(result[0], expected_type)
+    raise NodeException(f"Unexpected result from {name}: {result!r}")
+
+
+def mode_node_command(
+    name: str,
+    command_getter: Callable[[], Callable[..., Any]],
+    expected_type: type[T],
+    result_processor: Callable[[str, Any, type[T]], T],
+    docstring: str,
+) -> Callable[..., Any]:
+    """Build a command wrapper that preserves Maya edit/query results."""
+
+    def wrapper(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
+        targets = _node_target_names(args)
+        result = _call_command(name, command_getter(), targets, kwargs)
+        if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")):
+            return result
+        return result_processor(name, result, expected_type)
+
+    wrapper.__name__ = name
+    wrapper.__qualname__ = name
+    wrapper.__doc__ = docstring
+    return wrapper
+
+
 class Unset:
     """Distinguish omitted command flags from explicitly supplied values."""
 

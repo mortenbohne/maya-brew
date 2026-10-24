@@ -10,15 +10,15 @@ Generation uses Maya's `cmds.help()` output as the source of truth for flag
 availability and primitive command shape, then applies explicit metadata
 overrides where Maya help is ambiguous or underspecified.
 
+Command-specific generators live in `tools.command_wrapper.commands`.
+
 Policy-driven behavior:
 
 - `CommandSignature`: plain command overloads
 - `ModeSignature`: create/edit/query split with explicit presence-flag contracts
 - `NodeCreationSignature`: typed node factory overloads
 - `PrimitiveSignature`: shared history-primitive overload generation
-
-Some exceptional commands can still provide handwritten signature snippets via
-`tools/command_wrapper/signatures/*.pyi`.
+- `LsSignature`: class-filter-aware node listing overloads
 """
 
 # @not-generated
@@ -39,10 +39,12 @@ from maya_brew.nodes._foundation.native_node_hierarchy import (
     python_class_name,
 )
 from maya_brew.nodes._foundation.node_registry import snapshot_package_name
+from tools.command_wrapper.commands.ls import generate_ls_overloads
 from tools.command_wrapper.help import command_flags
 from tools.command_wrapper.metadata import (
     COMMANDS,
     CommandSignature,
+    LsSignature,
     ModeSignature,
     NodeCreationSignature,
     PrimitiveSignature,
@@ -55,6 +57,7 @@ from tools.node_hierarchy.generate import CLASSES_MODULE
 HEADER = "# AUTO-GENERATED; DO NOT EDIT.\n# @generated\n"
 CONCRETE_NODES_MODULE = "concrete_nodes"
 CONCRETE_NODE_ALIAS = "ConcreteNode"
+LS_STUB_MODULE = "_commands_ls"
 
 
 def generate_concrete_node_stub(hierarchy: dict[str, NodeType], version: str) -> str:
@@ -139,9 +142,8 @@ def generate_command_overloads(
         if creation_flags is None:
             raise ValueError(f"{function_name}: creation flags are required")
         return generate_mode_overloads(function_name, policy, flags, creation_flags)
-    signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
-    if signature_path.is_file():
-        return "\n\n" + signature_path.read_text(encoding="utf-8")
+    if isinstance(policy, LsSignature):
+        return generate_ls_overloads(policy.argument_type, flags)
     node_class = node_extensions.Node.__name__
     if isinstance(policy, CommandSignature):
         stub_flags = ", ".join(
@@ -297,6 +299,7 @@ def generate_command_files(
         f"from .{CONCRETE_NODES_MODULE} import {CONCRETE_NODE_ALIAS}\n",
         f'\nT = TypeVar("T", bound={CONCRETE_NODE_ALIAS})\n',
     ]
+    split_stubs: dict[str, str] = {}
     command_names = []
     for function, policy in sorted(COMMANDS.items(), key=lambda item: item[0].__name__):
         function_name = function.__name__
@@ -329,30 +332,39 @@ def generate_command_files(
                 inspect.getdoc(function),
             )
         )
-        stub.append(
-            generate_command_overloads(
-                function_name,
-                policy,
-                flags,
-                return_type,
-                (
-                    resolve_command_flags(function_name, policy, creation=True)
-                    if isinstance(policy, ModeSignature)
-                    else None
-                ),
-            )
+        signature = generate_command_overloads(
+            function_name,
+            policy,
+            flags,
+            return_type,
+            (
+                resolve_command_flags(function_name, policy, creation=True)
+                if isinstance(policy, ModeSignature)
+                else None
+            ),
         )
+        if isinstance(policy, LsSignature):
+            split_stubs[f"{LS_STUB_MODULE}.pyi"] = consolidate_stub_imports(
+                HEADER + signature
+            )
+            stub.append(
+                f"from .{LS_STUB_MODULE} import {function_name} as {function_name}\n"
+            )
+        else:
+            stub.append(signature)
     exports = (
         "\n\n__all__ = [" + ", ".join(f'"{name}"' for name in command_names) + "]\n"
     )
     runtime.append(exports)
     stub.append(exports)
-    return {
+    artifacts = {
         f"{_snapshot.COMMANDS_MODULE}.py": "".join(runtime),
         f"{_snapshot.COMMANDS_MODULE}.pyi": consolidate_stub_imports("".join(stub)),
         f"{CONCRETE_NODES_MODULE}.pyi": generate_concrete_node_stub(hierarchy, version),
         "__init__.py": HEADER,
     }
+    artifacts.update(split_stubs)
+    return artifacts
 
 
 def write_wrappers(hierarchy: dict[str, NodeType], version: str) -> None:
