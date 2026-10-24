@@ -6,7 +6,7 @@ from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
 from ...nodes.casting import cast
 from ...nodes.node_types import IkEffector, IkHandle, Transform
-from ..extension_utils import _node_target_names
+from ..extension_utils import _call_command, _node_target_names
 
 
 def ikHandle(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
@@ -33,10 +33,7 @@ def ikHandle(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
     ):
         if isinstance(kwargs.get(flag), Node):
             kwargs[flag] = str(kwargs[flag])
-    try:
-        result = _maya_cmds.ikHandle(*targets, **kwargs)
-    except RuntimeError as e:
-        raise NodeException(f"ikHandle failed: {e}") from e
+    result = _call_command("ikHandle", _maya_cmds.ikHandle, targets, kwargs)
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")) or any(
         flag in kwargs for flag in ("exists", "ex")
     ):

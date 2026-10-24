@@ -22,10 +22,12 @@ from tools.command_wrapper.help import command_flags
 from tools.command_wrapper.metadata import (
     COMMANDS,
     CommandSignature,
+    ModeSignature,
     NodeCreationSignature,
     PrimitiveSignature,
     Signature,
 )
+from tools.command_wrapper.mode_command import generate_mode_overloads
 from tools.command_wrapper.primitive import generate_primitive_overloads
 from tools.node_hierarchy.generate import CLASSES_MODULE
 
@@ -108,9 +110,14 @@ def generate_command_overloads(
     policy: Signature,
     flags: dict[str, str],
     return_type: str,
+    creation_flags: dict[str, str] | None = None,
 ) -> str:
     if isinstance(policy, PrimitiveSignature):
         return generate_primitive_overloads(function_name, policy.history_type, flags)
+    if isinstance(policy, ModeSignature):
+        if creation_flags is None:
+            raise ValueError(f"{function_name}: creation flags are required")
+        return generate_mode_overloads(function_name, policy, flags, creation_flags)
     signature_path = Path(__file__).with_name("signatures") / f"{function_name}.pyi"
     if signature_path.is_file():
         return "\n\n" + signature_path.read_text(encoding="utf-8")
@@ -179,7 +186,9 @@ def command_parameter_names(
     return None, parameters[1].name
 
 
-def resolve_command_flags(function_name: str, policy: Signature) -> dict[str, str]:
+def resolve_command_flags(
+    function_name: str, policy: Signature, *, creation: bool = False
+) -> dict[str, str]:
     try:
         help_text = cmds.help(function_name)
     except RuntimeError as e:
@@ -191,6 +200,14 @@ def resolve_command_flags(function_name: str, policy: Signature) -> dict[str, st
             f"Expected command help text for {function_name}, got {type(help_text).__name__}"
         )
     overrides = policy.flag_type_overrides
+    if isinstance(policy, ModeSignature):
+        overrides = {
+            **{
+                flag: annotation if creation else f"{annotation} | bool"
+                for flag, annotation in policy.queryable_flag_types.items()
+            },
+            **overrides,
+        }
     if isinstance(policy, PrimitiveSignature):
         overrides = {"axis": "tuple[float, float, float] | bool", **overrides}
     flags = command_flags(function_name, help_text, overrides)
@@ -287,7 +304,17 @@ def generate_command_files(
             )
         )
         stub.append(
-            generate_command_overloads(function_name, policy, flags, return_type)
+            generate_command_overloads(
+                function_name,
+                policy,
+                flags,
+                return_type,
+                (
+                    resolve_command_flags(function_name, policy, creation=True)
+                    if isinstance(policy, ModeSignature)
+                    else None
+                ),
+            )
         )
     exports = (
         "\n\n__all__ = [" + ", ".join(f'"{name}"' for name in command_names) + "]\n"

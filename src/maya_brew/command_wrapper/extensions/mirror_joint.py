@@ -5,7 +5,7 @@ from ... import _maya_cmds
 from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
 from ...nodes.casting import cast
-from ..extension_utils import _node_target_names
+from ..extension_utils import _call_command, _node_target_names
 
 
 def mirrorJoint(
@@ -18,10 +18,7 @@ def mirrorJoint(
     Maya runtime errors are raised as NodeException.
     """
     targets = _node_target_names(args)
-    try:
-        result: Any = _maya_cmds.mirrorJoint(*targets, **kwargs)
-    except RuntimeError as e:
-        raise NodeException(f"mirrorJoint failed: {e}") from e
+    result = _call_command("mirrorJoint", _maya_cmds.mirrorJoint, targets, kwargs)
     if not isinstance(result, list) or not all(
         isinstance(name, str) for name in result
     ):

@@ -12,6 +12,15 @@ class CommandSignature:
 
 
 @dataclass(frozen=True)
+class ModeSignature(CommandSignature):
+    creation_return_type: str = "Node"
+    node_imports: tuple[str, ...] = ()
+    queryable_flag_types: dict[str, str] = field(default_factory=dict)
+    presence_flags: tuple[str, ...] = ()
+    presence_return_type: str = "Any"
+
+
+@dataclass(frozen=True)
 class NodeCreationSignature:
     type_argument: str
     nullable_return_flags: tuple[str, ...] = ()
@@ -47,37 +56,47 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         nullable_return_flags=("shared", "s"),
         node_flags=("parent", "p"),
     ),
-    extensions.ikHandle: CommandSignature(
+    extensions.ikHandle: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
-        flag_type_overrides={
+        creation_return_type=(
+            "tuple[IkHandle] | tuple[IkHandle, IkEffector]"
+            " | tuple[IkHandle, IkEffector, Transform]"
+        ),
+        node_imports=("IkHandle", "IkEffector", "Transform"),
+        presence_flags=("exists", "ex"),
+        queryable_flag_types={
             **{
-                flag: "str | Node | bool"
+                flag: "str | Node"
                 for flag in ("startJoint", "endEffector", "curve", "solver")
             },
-            **{
-                flag: "str | bool" for flag in ("exists", "name", "sticky", "twistType")
-            },
+            **{flag: "str" for flag in ("exists", "name", "sticky", "twistType")},
         },
     ),
-    extensions.ikSolver: CommandSignature(
+    extensions.ikSolver: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
-        flag_type_overrides={"name": "str | bool", "solverType": "str | bool"},
+        creation_return_type="IkSolver",
+        node_imports=("IkSolver",),
+        queryable_flag_types={"name": "str", "solverType": "str"},
     ),
-    extensions.joint: CommandSignature(
+    extensions.joint: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
-        flag_type_overrides={
-            **{flag: "float | str | bool" for flag in ("angleX", "angleY", "angleZ")},
+        creation_return_type="Joint",
+        node_imports=("Joint",),
+        presence_flags=("exists", "ex"),
+        presence_return_type="bool",
+        queryable_flag_types={
+            **{flag: "float | str" for flag in ("angleX", "angleY", "angleZ")},
             **{
-                flag: "tuple[float | str, float | str] | bool"
+                flag: "tuple[float | str, float | str]"
                 for flag in ("limitX", "limitY", "limitZ")
             },
             **{
-                flag: "tuple[float | str, float | str, float | str] | bool"
+                flag: "tuple[float | str, float | str, float | str]"
                 for flag in ("orientation", "position", "scaleOrientation")
             },
-            "scale": "tuple[float, float, float] | bool",
+            "scale": "tuple[float, float, float]",
             **{
-                flag: "str | bool"
+                flag: "str"
                 for flag in ("degreeOfFreedom", "exists", "name", "rotationOrder")
             },
         },

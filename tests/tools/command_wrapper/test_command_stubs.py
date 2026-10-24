@@ -10,6 +10,7 @@ from tools.command_wrapper import generate
 from tools.command_wrapper.metadata import (
     COMMANDS,
     CommandSignature,
+    ModeSignature,
     NodeCreationSignature,
     PrimitiveSignature,
 )
@@ -69,9 +70,7 @@ def test_generated_commands_preserve_wrapper_docstrings(artifacts):
         assert inspect.getdoc(namespace[function.__name__]) == inspect.getdoc(function)
 
 
-@pytest.fixture(
-    params=[extensions.ls, extensions.joint, extensions.ikHandle, extensions.ikSolver]
-)
+@pytest.fixture(params=[extensions.ls])
 def handwritten_signature(request):
     function = request.param
     return (
@@ -163,6 +162,54 @@ def test_handwritten_signature_matches_help_flags(handwritten_signature):
     for name, declared_flags in signatures:
         assert name == function.__name__
         assert declared_flags == flags.keys()
+
+
+@pytest.mark.parametrize(
+    "function, count",
+    [(extensions.joint, 4), (extensions.ikHandle, 2), (extensions.ikSolver, 2)],
+    ids=["joint", "ikHandle", "ikSolver"],
+)
+def test_mode_signatures_match_help_flags(function, count):
+    policy = COMMANDS[function]
+    assert isinstance(policy, ModeSignature)
+    name = function.__name__
+    flags = generate.resolve_command_flags(name, policy)
+    signature = generate.generate_command_overloads(
+        name,
+        policy,
+        flags,
+        "Any",
+        generate.resolve_command_flags(name, policy, creation=True),
+    )
+    signatures = list(signature_flag_names(signature))
+    assert len(signatures) == count
+    for command, declared_flags in signatures:
+        assert command == name
+        assert declared_flags == flags.keys()
+
+
+@pytest.mark.parametrize(
+    "function, flag, alias, creation_type",
+    [
+        (
+            extensions.joint,
+            "position",
+            "p",
+            "tuple[float | str, float | str, float | str]",
+        ),
+        (extensions.joint, "angleX", "ax", "float | str"),
+        (extensions.ikHandle, "startJoint", "sj", "str | Node"),
+        (extensions.ikSolver, "solverType", "st", "str"),
+    ],
+)
+def test_queryable_flag_aliases_have_explicit_creation_types(
+    function, flag, alias, creation_type
+):
+    policy = COMMANDS[function]
+    creation = generate.resolve_command_flags(function.__name__, policy, creation=True)
+    modes = generate.resolve_command_flags(function.__name__, policy)
+    assert creation[flag] == creation[alias] == creation_type
+    assert modes[flag] == modes[alias] == f"{creation_type} | bool"
 
 
 @pytest.fixture(

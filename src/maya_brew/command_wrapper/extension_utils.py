@@ -1,10 +1,30 @@
 from collections.abc import Callable, Sequence
-from typing import Any
+from typing import Any, TypeVar
 
 from ..exceptions import NodeException
 from ..nodes._foundation.node_extensions import Node
 from ..nodes.casting import cast
 from ..nodes.node_state import NodeState
+
+T = TypeVar("T", bound=Node)
+
+
+def _call_command(
+    name: str,
+    command: Callable[..., Any],
+    args: Sequence[str],
+    kwargs: dict[str, Any],
+) -> Any:
+    try:
+        return command(*args, **kwargs)
+    except RuntimeError as e:
+        raise NodeException(f"{name} failed: {e}") from e
+
+
+def _node_result(name: str, result: Any, expected_type: type[T]) -> T:
+    if not isinstance(result, str):
+        raise NodeException(f"Unexpected result from {name}: {result!r}")
+    return cast(result, expected_type)
 
 
 class Unset:
@@ -32,13 +52,8 @@ def _poly_primitive(
     args: Sequence[str | Node],
     kwargs: dict[str, Any],
 ) -> Any:
-    try:
-        result = command(
-            *(str(target) if isinstance(target, Node) else target for target in args),
-            **kwargs,
-        )
-    except RuntimeError as e:
-        raise NodeException(f"{name} failed: {e}") from e
+    targets = [str(target) if isinstance(target, Node) else target for target in args]
+    result = _call_command(name, command, targets, kwargs)
     if (kwargs.get("query") or kwargs.get("q")) and (
         kwargs.get("nodeState") or kwargs.get("nds")
     ):

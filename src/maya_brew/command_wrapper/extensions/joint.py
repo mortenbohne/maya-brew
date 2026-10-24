@@ -2,11 +2,9 @@ from collections.abc import Sequence
 from typing import Any
 
 from ... import _maya_cmds
-from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
-from ...nodes.casting import cast
 from ...nodes.node_types import Joint
-from ..extension_utils import _node_target_names
+from ..extension_utils import _call_command, _node_result, _node_target_names
 
 
 def joint(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
@@ -18,14 +16,9 @@ def joint(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
     Maya runtime errors are raised as NodeException.
     """
     targets = _node_target_names(args)
-    try:
-        result = _maya_cmds.joint(*targets, **kwargs)
-    except RuntimeError as e:
-        raise NodeException(f"joint failed: {e}") from e
+    result = _call_command("joint", _maya_cmds.joint, targets, kwargs)
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")) or any(
         flag in kwargs for flag in ("exists", "ex")
     ):
         return result
-    if not isinstance(result, str):
-        raise NodeException(f"Unexpected result from joint: {result!r}")
-    return cast(result, Joint)
+    return _node_result("joint", result, Joint)

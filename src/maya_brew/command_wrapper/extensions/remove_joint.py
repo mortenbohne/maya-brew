@@ -2,9 +2,8 @@ from collections.abc import Sequence
 from typing import Any
 
 from ... import _maya_cmds
-from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
-from ..extension_utils import _node_target_names
+from ..extension_utils import _call_command, _node_target_names
 
 
 def removeJoint(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> None:
@@ -14,7 +13,4 @@ def removeJoint(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> None
     Maya runtime errors are raised as NodeException.
     """
     targets = _node_target_names(args)
-    try:
-        _maya_cmds.removeJoint(*targets, **kwargs)
-    except RuntimeError as e:
-        raise NodeException(f"removeJoint failed: {e}") from e
+    _call_command("removeJoint", _maya_cmds.removeJoint, targets, kwargs)

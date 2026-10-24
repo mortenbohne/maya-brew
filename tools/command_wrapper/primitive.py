@@ -1,6 +1,10 @@
 """Generate the shared typing contract for polygon primitive commands."""
 
-from tools.command_wrapper.modes import mode_selectors, render_overload
+from tools.command_wrapper.modes import (
+    mode_selectors,
+    render_overload,
+    render_typed_dict,
+)
 
 
 def generate_primitive_overloads(
@@ -31,10 +35,7 @@ def generate_primitive_overloads(
         f"from maya_brew.nodes.node_types import {history_type}, Transform\n",
     ]
     for name, fields in ((mode_flags, mode_fields), (create_flags, create_fields)):
-        lines.append(f"\nclass {name}(TypedDict, total=False):\n")
-        lines.extend(
-            f"    {flag}: {annotation}\n" for flag, annotation in fields.items()
-        )
+        lines.append(render_typed_dict(name, fields))
 
     lines.extend(
         [

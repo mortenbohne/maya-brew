@@ -96,13 +96,22 @@ Currently wrapped commands:
 
 Run `mayapy -m tools.generate` to regenerate signatures from Maya's command help
 and tool-side metadata. The command registry uses `CommandSignature` for regular
-commands, `NodeCreationSignature` for typed node creation, and `PrimitiveSignature`
-for shared polygon primitive overloads. Handwritten stubs supply command-specific
-typing where needed.
+commands, `ModeSignature` for node commands with distinct creation and query/edit
+results, `NodeCreationSignature` for typed node creation, and `PrimitiveSignature`
+for shared polygon primitive overloads. Handwritten stubs supply exceptional
+typing contracts such as `ls`.
+
+Mode signatures declare queryable flags using their creation types. Generation
+adds query booleans, resolves aliases from Maya help, and shares unchanged fields
+between creation and mode TypedDicts. Presence-sensitive flags such as `exists`
+and their return types remain explicit in the metadata.
 
 Primitive signatures are composed from separate create, query, and edit generators.
 Mode selection and overload rendering are shared; flag availability and return
 types remain command-specific rather than inferred from Maya's short help output.
+
+Primitive query/edit tests share a parameterized suite with independent per-command
+cases; expected values are not derived from the generation metadata.
 
 ### Generated hierarchies
 
