@@ -347,7 +347,9 @@ def generate_command_files(
             split_stubs[f"{LS_STUB_MODULE}.pyi"] = consolidate_stub_imports(
                 HEADER + signature
             )
-            stub.append(f"from .{LS_STUB_MODULE} import {function_name} as {function_name}\n")
+            stub.append(
+                f"from .{LS_STUB_MODULE} import {function_name} as {function_name}\n"
+            )
         else:
             stub.append(signature)
     exports = (

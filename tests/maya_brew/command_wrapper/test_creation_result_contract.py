@@ -18,20 +18,28 @@ class CreationCase:
 CASES = (
     CreationCase("joint", (), (None, [], ["joint1"], 1), {}),
     CreationCase("ikHandle", (), (None, [], ["a", "b", "c", "d"], [1, 2], "h"), {}),
-    CreationCase("ikSolver", (), (None, [], ["solver"], 1, False), {"st": "ikSCsolver"}),
+    CreationCase(
+        "ikSolver", (), (None, [], ["solver"], 1, False), {"st": "ikSCsolver"}
+    ),
     CreationCase("insertJoint", (), (None, [], ["joint"], 1, False), {}),
     CreationCase("mirrorJoint", (), (None, "joint", [1], 1), {}),
     CreationCase("ambientLight", (), (None, [], ["node1", "node2"], 1, False), {}),
-    CreationCase("blendShape", ("source", "target"), (None, [], ["a", "b"], 1, False), {}),
+    CreationCase(
+        "blendShape", ("source", "target"), (None, [], ["a", "b"], 1, False), {}
+    ),
     CreationCase("CreateJiggleDeformer", (), ("ok", [], ["a"], 1, False), {}),
     CreationCase("CreateWrap", (), ("ok", [], ["a"], 1, False), {}),
     CreationCase("deltaMush", ("target",), (None, [], ["a", "b"], 1, False), {}),
     CreationCase("directionalLight", (), (None, [], ["node1", "node2"], 1, False), {}),
     CreationCase("lattice", ("target",), (None, [], [1], 1, False), {}),
     CreationCase("pointLight", (), (None, [], ["node1", "node2"], 1, False), {}),
-    CreationCase("proximityWrap", ("driver", "target"), (None, [], ["a", "b"], [1], 1, False), {}),
+    CreationCase(
+        "proximityWrap", ("driver", "target"), (None, [], ["a", "b"], [1], 1, False), {}
+    ),
     CreationCase("sculpt", ("target",), (None, [], [1], 1, False), {}),
-    CreationCase("skinCluster", ("joint1", "target"), (None, [], ["a", "b"], 1, False), {}),
+    CreationCase(
+        "skinCluster", ("joint1", "target"), (None, [], ["a", "b"], 1, False), {}
+    ),
     CreationCase("softMod", ("target",), (None, [], [1], 1, False), {}),
     CreationCase("spotLight", (), (None, [], ["node1", "node2"], 1, False), {}),
     CreationCase("spaceLocator", (), (None, "locator1", ["a", "b"], [1], 1, False), {}),

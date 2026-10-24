@@ -1,5 +1,4 @@
 import maya.cmds as maya_cmds
-
 from maya_brew import cmds
 
 
@@ -37,5 +36,3 @@ def test_create_wrap_matches_maya():
 
     assert actual is expected is None
     assert actual_count == expected_count
-
-

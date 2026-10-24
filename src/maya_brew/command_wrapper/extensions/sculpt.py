@@ -14,4 +14,3 @@ def sculpt(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")):
         return result
     return _first_node_result("sculpt", result, Sculpt)
-

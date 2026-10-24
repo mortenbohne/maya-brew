@@ -14,4 +14,3 @@ def proximityWrap(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> An
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")):
         return result
     return _single_node_result("proximityWrap", result, ProximityWrap)
-

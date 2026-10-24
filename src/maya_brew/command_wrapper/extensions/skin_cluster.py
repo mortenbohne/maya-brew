@@ -18,4 +18,3 @@ def skinCluster(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
     if any(kwargs.get(flag) for flag in ("edit", "e", "query", "q")):
         return result
     return _single_node_result("skinCluster", result, SkinCluster)
-
