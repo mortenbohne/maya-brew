@@ -17,10 +17,18 @@ CASES = (
     ErrorCase("ikSystemInfo"),
     ErrorCase("jointDisplayScale"),
     ErrorCase("ambientLight"),
+    ErrorCase("blendShape"),
+    ErrorCase("deltaMush"),
     ErrorCase("directionalLight"),
+    ErrorCase("lattice"),
     ErrorCase("pointLight"),
+    ErrorCase("proximityWrap"),
+    ErrorCase("sculpt"),
+    ErrorCase("skinCluster"),
+    ErrorCase("softMod"),
     ErrorCase("spotLight"),
     ErrorCase("spaceLocator"),
+    ErrorCase("wire"),
 )
 
 

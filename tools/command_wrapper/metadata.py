@@ -51,6 +51,12 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.insertJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
+    extensions.lattice: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Ffd",
+        node_imports=("Ffd",),
+        queryable_flag_types={"divisions": "list[int]"},
+    ),
     extensions.connectJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
@@ -99,6 +105,18 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
             "rotation": "tuple[float, float, float]",
         },
     ),
+    extensions.blendShape: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="BlendShape",
+        node_imports=("BlendShape",),
+        queryable_flag_types={"envelope": "float"},
+    ),
+    extensions.deltaMush: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="DeltaMush",
+        node_imports=("DeltaMush",),
+        queryable_flag_types={"envelope": "float"},
+    ),
     extensions.directionalLight: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="DirectionalLight",
@@ -146,6 +164,16 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
             "position": "tuple[float, float, float]",
         },
     ),
+    extensions.skinCluster: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="SkinCluster",
+        node_imports=("SkinCluster",),
+        queryable_flag_types={
+            "skinMethod": "int",
+            "normalizeWeights": "int",
+            "maximumInfluences": "int",
+        },
+    ),
     extensions.joint: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="Joint",
@@ -177,6 +205,34 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.polyTorus: PrimitiveSignature(
         history_type="PolyTorus",
         flag_type_overrides={"twist": "float"},
+    ),
+    extensions.proximityWrap: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="ProximityWrap",
+        node_imports=("ProximityWrap",),
+        queryable_flag_types={"freeDriverIndex": "int"},
+    ),
+    extensions.sculpt: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Sculpt",
+        node_imports=("Sculpt",),
+        queryable_flag_types={
+            "mode": "list[str]",
+            "insideMode": "list[str]",
+            "maxDisplacement": "list[float]",
+        },
+    ),
+    extensions.softMod: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="SoftMod",
+        node_imports=("SoftMod",),
+        queryable_flag_types={"envelope": "float"},
+    ),
+    extensions.wire: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Wire",
+        node_imports=("Wire",),
+        queryable_flag_types={"envelope": "float"},
     ),
     extensions.polyPipe: PrimitiveSignature(history_type="PolyPipe"),
     extensions.polyPyramid: PrimitiveSignature(history_type="PolyPyramid"),

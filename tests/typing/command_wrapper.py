@@ -40,11 +40,24 @@ from maya_brew.command_wrapper import (
     spotLight,
     torus,
 )
+from maya_brew.command_wrapper._generated.maya_2027.commands import (
+    blendShape,
+    deltaMush,
+    lattice,
+    proximityWrap,
+    sculpt,
+    skinCluster,
+    softMod,
+    wire,
+)
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     AmbientLight,
+    BlendShape,
+    DeltaMush,
     DirectionalLight,
+    Ffd,
     IkEffector,
     IkHandle,
     IkSolver,
@@ -70,8 +83,13 @@ from maya_brew.nodes.node_types import (
     PolyPyramid,
     PolySphere,
     PolyTorus,
+    ProximityWrap,
+    Sculpt,
+    SkinCluster,
+    SoftMod,
     SpotLight,
     Transform,
+    Wire,
 )
 
 
@@ -119,6 +137,48 @@ def check_light_and_locator_types(mode: bool) -> None:
     assert_type(locator, Transform)
     assert_type(spaceLocator(locator, q=True, position=True), Any)
     assert_type(spaceLocator((locator,), e=True, p=(1.0, 2.0, 3.0)), Any)
+
+
+def check_deformer_types(mode: bool) -> None:
+    assert_type(blendShape("source", "target", envelope=0.8), BlendShape)
+    assert_type(blendShape("blendShape1", q=True, envelope=True), Any)
+    assert_type(blendShape("blendShape1", query=mode, en=True), Any)
+    assert_type(blendShape("blendShape1", e=True, envelope=0.25), Any)
+
+    assert_type(skinCluster("joint1", "target", skinMethod=0), SkinCluster)
+    assert_type(skinCluster("skinCluster1", q=True, skinMethod=True), Any)
+    assert_type(skinCluster("skinCluster1", query=mode, sm=True), Any)
+    assert_type(skinCluster("skinCluster1", e=True, normalizeWeights=1), Any)
+
+    assert_type(deltaMush("target", envelope=1.0), DeltaMush)
+    assert_type(deltaMush("deltaMush1", q=True, envelope=True), Any)
+    assert_type(deltaMush("deltaMush1", query=mode, en=True), Any)
+    assert_type(deltaMush("deltaMush1", e=True, envelope=0.4), Any)
+
+    assert_type(lattice("target", divisions=(2, 3, 4)), Ffd)
+    assert_type(lattice("ffd1", q=True, divisions=True), Any)
+    assert_type(lattice("ffd1", query=mode, d=True), Any)
+    assert_type(lattice("ffd1", e=True, divisions=(2, 2, 2)), Any)
+
+    assert_type(proximityWrap("driver", "target"), ProximityWrap)
+    assert_type(proximityWrap("proximityWrap1", q=True, freeDriverIndex=True), Any)
+    assert_type(proximityWrap("proximityWrap1", query=mode, fdi=True), Any)
+    assert_type(proximityWrap("proximityWrap1", e=True, addDrivers=["driver2"]), Any)
+
+    assert_type(sculpt("target", mode="flip"), Sculpt)
+    assert_type(sculpt("sculpt1", q=True, mode=True), Any)
+    assert_type(sculpt("sculpt1", query=mode, insideMode=True), Any)
+    assert_type(sculpt("sculpt1", e=True, mode="stretch"), Any)
+
+    assert_type(softMod("target", envelope=0.6), SoftMod)
+    assert_type(softMod("softMod1", q=True, envelope=True), Any)
+    assert_type(softMod("softMod1", query=mode, en=True), Any)
+    assert_type(softMod("softMod1", e=True, envelope=0.2), Any)
+
+    assert_type(wire("target", envelope=1.0), Wire)
+    assert_type(wire("wire1", q=True, envelope=True), Any)
+    assert_type(wire("wire1", query=mode, en=True), Any)
+    assert_type(wire("wire1", e=True, envelope=0.5), Any)
 
 
 def check_joint_operation_types(target: Joint) -> None:

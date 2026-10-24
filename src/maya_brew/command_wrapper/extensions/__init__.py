@@ -1,8 +1,10 @@
 from .ambient_light import ambientLight as ambientLight
+from .blend_shape import blendShape as blendShape
 from .circle import circle as circle
 from .cone import cone as cone
 from .connect_joint import connectJoint as connectJoint
 from .create_node import createNode as createNode
+from .delta_mush import deltaMush as deltaMush
 from .cylinder import cylinder as cylinder
 from .directional_light import directionalLight as directionalLight
 from .ik_handle import ikHandle as ikHandle
@@ -12,6 +14,7 @@ from .ik_system_info import ikSystemInfo as ikSystemInfo
 from .insert_joint import insertJoint as insertJoint
 from .joint import joint as joint
 from .joint_display_scale import jointDisplayScale as jointDisplayScale
+from .lattice import lattice as lattice
 from .ls import ls as ls
 from .mirror_joint import mirrorJoint as mirrorJoint
 from .nurbs_cube import nurbsCube as nurbsCube
@@ -30,17 +33,24 @@ from .poly_prism import polyPrism as polyPrism
 from .poly_pyramid import polyPyramid as polyPyramid
 from .poly_sphere import polySphere as polySphere
 from .poly_torus import polyTorus as polyTorus
+from .proximity_wrap import proximityWrap as proximityWrap
 from .remove_joint import removeJoint as removeJoint
+from .sculpt import sculpt as sculpt
+from .soft_mod import softMod as softMod
 from .space_locator import spaceLocator as spaceLocator
+from .skin_cluster import skinCluster as skinCluster
 from .sphere import sphere as sphere
 from .spot_light import spotLight as spotLight
 from .torus import torus as torus
+from .wire import wire as wire
 
 __all__ = [
     "ambientLight",
+    "blendShape",
     "circle",
     "cone",
     "cylinder",
+    "deltaMush",
     "directionalLight",
     "connectJoint",
     "createNode",
@@ -51,6 +61,7 @@ __all__ = [
     "insertJoint",
     "joint",
     "jointDisplayScale",
+    "lattice",
     "ls",
     "mirrorJoint",
     "nurbsCube",
@@ -69,9 +80,14 @@ __all__ = [
     "polyPyramid",
     "polySphere",
     "polyTorus",
+    "proximityWrap",
     "removeJoint",
+    "sculpt",
+    "softMod",
     "spaceLocator",
+    "skinCluster",
     "sphere",
     "spotLight",
     "torus",
+    "wire",
 ]
