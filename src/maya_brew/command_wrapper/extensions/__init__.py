@@ -45,6 +45,7 @@ from .soft_mod import softMod as softMod
 from .space_locator import spaceLocator as spaceLocator
 from .sphere import sphere as sphere
 from .spot_light import spotLight as spotLight
+from .tension import tension as tension
 from .torus import torus as torus
 from .wire import wire as wire
 
@@ -96,6 +97,7 @@ __all__ = [
     "spaceLocator",
     "sphere",
     "spotLight",
+    "tension",
     "torus",
     "wire",
 ]

@@ -37,6 +37,7 @@ CASES = (
     DeformerCase("sculpt", node_types.Sculpt, "mode", "mode", "flip"),
     DeformerCase("skinCluster", node_types.SkinCluster, "skinMethod", "skinMethod", 1),
     DeformerCase("softMod", node_types.SoftMod, "envelope", "envelope", 0.5),
+    DeformerCase("tension", node_types.Tension, "envelope", "envelope", 0.55),
     DeformerCase("wire", node_types.Wire, "envelope", "envelope", 0.7),
 )
 
@@ -73,6 +74,8 @@ def created_node(case):
         return cmds.skinCluster([root, tip], mesh, skinMethod=0), case.wrapper_type
     if case.command == "softMod":
         return cmds.softMod(mesh), case.wrapper_type
+    if case.command == "tension":
+        return cmds.tension(mesh), case.wrapper_type
     curve = maya_cmds.curve(degree=1, point=[(0.0, 0.0, 0.0), (0.0, 2.0, 0.0)])
     return cmds.wire(mesh, wire=curve), case.wrapper_type
 
@@ -138,6 +141,7 @@ def test_edits_match_maya(case, created_node, mode):
         ("sculpt", "Expected Sculpt"),
         ("skinCluster", "Expected SkinCluster"),
         ("softMod", "Expected SoftMod"),
+        ("tension", "Expected Tension"),
         ("wire", "Expected Wire"),
     ],
 )
@@ -160,7 +164,7 @@ def test_cluster_weighted_node_requires_related_transforms() -> None:
         NodeException,
         match="cluster weightedNode expects related parent/child transforms",
     ) as error:
-        cmds.cluster(cluster_node, e=True, weightedNode=(first, second))
+        cmds.cluster(cluster_node, e=True, weightedNode=(str(first), str(second)))
 
     assert isinstance(error.value.__cause__, NodeException)
     assert isinstance(error.value.__cause__.__cause__, RuntimeError)

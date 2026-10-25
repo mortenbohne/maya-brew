@@ -252,6 +252,18 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("SoftMod",),
         queryable_flag_types={"envelope": "float"},
     ),
+    extensions.tension: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Tension",
+        node_imports=("Tension",),
+        queryable_flag_types={
+            "envelope": "float",
+            "inwardConstraint": "float",
+            "outwardConstraint": "float",
+            "smoothingIterations": "int",
+            "smoothingStep": "float",
+        },
+    ),
     extensions.wire: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="Wire",

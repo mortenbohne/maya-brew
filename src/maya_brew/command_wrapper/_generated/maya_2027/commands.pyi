@@ -5,7 +5,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Transform, Wire
+from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, Transform, Wire
 from typing import Any, Literal, Never, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -5641,6 +5641,94 @@ def spotLight(
 ) -> Any: ...
 
 
+class _TensionFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    pinBorderVertices: bool
+    pbv: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+
+class _TensionCreateFlags(_TensionFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+    inwardConstraint: float
+    iwc: float
+    outwardConstraint: float
+    owc: float
+    smoothingIterations: int
+    si: int
+    smoothingStep: float
+    ss: float
+
+class _TensionModeFlags(_TensionFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+    inwardConstraint: float | bool
+    iwc: float | bool
+    outwardConstraint: float | bool
+    owc: float | bool
+    smoothingIterations: int | bool
+    si: int | bool
+    smoothingStep: float | bool
+    ss: float | bool
+
+@overload
+def tension(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TensionCreateFlags],
+) -> Tension: ...
+
+@overload
+def tension(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TensionModeFlags],
+) -> Any: ...
+
+
 
 class _TorusModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
@@ -5949,4 +6037,4 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "torus", "wire"]

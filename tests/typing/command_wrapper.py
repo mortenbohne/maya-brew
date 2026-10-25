@@ -52,6 +52,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     sculpt,
     skinCluster,
     softMod,
+    tension,
     wire,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
@@ -97,6 +98,7 @@ from maya_brew.nodes.node_types import (
     SkinCluster,
     SoftMod,
     SpotLight,
+    Tension,
     Transform,
     Wire,
 )
@@ -198,6 +200,11 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(softMod("softMod1", q=True, envelope=True), Any)
     assert_type(softMod("softMod1", query=mode, en=True), Any)
     assert_type(softMod("softMod1", e=True, envelope=0.2), Any)
+
+    assert_type(tension("target", envelope=0.6), Tension)
+    assert_type(tension("tension1", q=True, envelope=True), Any)
+    assert_type(tension("tension1", query=mode, en=True), Any)
+    assert_type(tension("tension1", e=True, envelope=0.2), Any)
 
     assert_type(wire("target", envelope=1.0), Wire)
     assert_type(wire("wire1", q=True, envelope=True), Any)

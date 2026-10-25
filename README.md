@@ -119,6 +119,7 @@ Currently wrapped commands:
 - `spaceLocator`
 - `sphere`
 - `spotLight`
+- `tension`
 - `torus`
 - `wire`
 
