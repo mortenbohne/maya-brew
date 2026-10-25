@@ -46,6 +46,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     CreateWrap,
     blendShape,
     cluster,
+    deformer,
     deltaMush,
     flexor,
     lattice,
@@ -111,6 +112,7 @@ from maya_brew.command_wrapper.extensions.flexor import (
     FlexorDeformerCommand,
     FlexorType,
 )
+from maya_brew.command_wrapper.extensions.deformer import DeformerType
 from maya_brew.command_wrapper.extensions.texture_deformer import (
     TextureDeformerDirection,
     TextureDeformerPointSpace,
@@ -177,6 +179,11 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(cluster("cluster1", q=True, envelope=True), Any)
     assert_type(cluster("cluster1", query=mode, en=True), Any)
     assert_type(cluster("cluster1", e=True, envelope=0.3), Any)
+
+    assert_type(deformer("target", type=DeformerType.CLUSTER), Node)
+    assert_type(deformer("deformer1", q=True, geometry=True), Any)
+    assert_type(deformer("deformer1", query=mode, g=True), Any)
+    assert_type(deformer("deformer1", e=True, geometry="pSphereShape1"), Any)
 
     assert_type(skinCluster("joint1", "target", skinMethod=0), SkinCluster)
     assert_type(skinCluster("skinCluster1", q=True, skinMethod=True), Any)

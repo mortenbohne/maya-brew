@@ -83,6 +83,7 @@ Currently wrapped commands:
 - `CreateWrap`
 - `cylinder`
 - `deltaMush`
+- `deformer`
 - `directionalLight`
 - `flexor`
 - `ikHandle`

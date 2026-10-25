@@ -144,6 +144,11 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("Cluster",),
         queryable_flag_types={"envelope": "float"},
     ),
+    extensions.deformer: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Node",
+        queryable_flag_types={"geometry": "str | Node | Sequence[str | Node]"},
+    ),
     extensions.deltaMush: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="DeltaMush",

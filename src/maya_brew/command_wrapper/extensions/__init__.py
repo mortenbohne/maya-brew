@@ -9,6 +9,7 @@ from .create_node import createNode as createNode
 from .create_wrap import CreateWrap as CreateWrap
 from .cylinder import cylinder as cylinder
 from .delta_mush import deltaMush as deltaMush
+from .deformer import deformer as deformer
 from .directional_light import directionalLight as directionalLight
 from .flexor import flexor as flexor
 from .ik_handle import ikHandle as ikHandle
@@ -63,6 +64,7 @@ __all__ = [
     "CreateWrap",
     "cylinder",
     "deltaMush",
+    "deformer",
     "directionalLight",
     "flexor",
     "ikHandle",

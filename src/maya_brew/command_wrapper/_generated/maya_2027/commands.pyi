@@ -988,6 +988,76 @@ def cylinder(
 ) -> Any: ...
 
 
+class _DeformerFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    type: str
+    typ: str
+    useComponentTags: bool
+    uct: bool
+
+class _DeformerCreateFlags(_DeformerFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+
+class _DeformerModeFlags(_DeformerFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+
+@overload
+def deformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeformerCreateFlags],
+) -> Node: ...
+
+@overload
+def deformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeformerModeFlags],
+) -> Any: ...
+
+
 class _DeltaMushFlags(TypedDict, total=False):
     after: bool
     af: bool
@@ -6180,4 +6250,4 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deformer", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]
