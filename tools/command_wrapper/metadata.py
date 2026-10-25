@@ -94,6 +94,9 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
     extensions.removeJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
+    extensions.wrinkle: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
     extensions.createNode: NodeCreationSignature(
         type_argument="node_type",
         nullable_return_flags=("shared", "s"),

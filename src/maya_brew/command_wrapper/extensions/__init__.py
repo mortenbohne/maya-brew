@@ -51,6 +51,7 @@ from .tension import tension as tension
 from .texture_deformer import textureDeformer as textureDeformer
 from .torus import torus as torus
 from .wire import wire as wire
+from .wrinkle import wrinkle as wrinkle
 
 __all__ = [
     "ambientLight",
@@ -106,4 +107,5 @@ __all__ = [
     "textureDeformer",
     "torus",
     "wire",
+    "wrinkle",
 ]

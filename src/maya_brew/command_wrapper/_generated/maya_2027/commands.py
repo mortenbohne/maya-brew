@@ -4794,4 +4794,68 @@ def wire(
     )
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deformer", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]
+def wrinkle(
+    *args: str | Node | Sequence[str | Node],
+    axis: tuple[float, float, float] | Unset = UNSET,
+    ax: tuple[float, float, float] | Unset = UNSET,
+    branchDepth: int | Unset = UNSET,
+    bd: int | Unset = UNSET,
+    branchCount: int | Unset = UNSET,
+    brc: int | Unset = UNSET,
+    crease: str | Unset = UNSET,
+    cr: str | Unset = UNSET,
+    center: tuple[float, float, float] | Unset = UNSET,
+    ct: tuple[float, float, float] | Unset = UNSET,
+    dropoffDistance: float | Unset = UNSET,
+    dds: float | Unset = UNSET,
+    envelope: float | Unset = UNSET,
+    en: float | Unset = UNSET,
+    randomness: float | Unset = UNSET,
+    rnd: float | Unset = UNSET,
+    style: str | Unset = UNSET,
+    st: str | Unset = UNSET,
+    thickness: float | Unset = UNSET,
+    th: float | Unset = UNSET,
+    uvSpace: tuple[float, float, float, float, float] | Unset = UNSET,
+    uv: tuple[float, float, float, float, float] | Unset = UNSET,
+    wrinkleCount: int | Unset = UNSET,
+    wc: int | Unset = UNSET,
+    wrinkleIntensity: float | Unset = UNSET,
+    wi: float | Unset = UNSET,
+) -> tuple[Node, ...]:
+    'Return wrinkle-created nodes as wrapped native node instances.'
+    kwargs = {
+        "axis": axis,
+        "ax": ax,
+        "branchDepth": branchDepth,
+        "bd": bd,
+        "branchCount": branchCount,
+        "brc": brc,
+        "crease": crease,
+        "cr": cr,
+        "center": center,
+        "ct": ct,
+        "dropoffDistance": dropoffDistance,
+        "dds": dds,
+        "envelope": envelope,
+        "en": en,
+        "randomness": randomness,
+        "rnd": rnd,
+        "style": style,
+        "st": st,
+        "thickness": thickness,
+        "th": th,
+        "uvSpace": uvSpace,
+        "uv": uv,
+        "wrinkleCount": wrinkleCount,
+        "wc": wc,
+        "wrinkleIntensity": wrinkleIntensity,
+        "wi": wi,
+    }
+    return extensions.wrinkle(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deformer", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire", "wrinkle"]

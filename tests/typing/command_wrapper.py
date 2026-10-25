@@ -57,6 +57,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     tension,
     textureDeformer,
     wire,
+    wrinkle,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
@@ -118,6 +119,7 @@ from maya_brew.command_wrapper.extensions.texture_deformer import (
     TextureDeformerPointSpace,
     TextureDeformerVectorSpace,
 )
+from maya_brew.command_wrapper.extensions.wrinkle import WrinkleStyle
 
 
 class CustomJoint(Joint):
@@ -252,6 +254,9 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(wire("wire1", q=True, envelope=True), Any)
     assert_type(wire("wire1", query=mode, en=True), Any)
     assert_type(wire("wire1", e=True, envelope=0.5), Any)
+
+    assert_type(wrinkle("target"), tuple[Node, ...])
+    assert_type(wrinkle("target", style=WrinkleStyle.RADIAL), tuple[Node, ...])
 
 
 def check_joint_operation_types(target: Joint) -> None:

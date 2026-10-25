@@ -125,6 +125,7 @@ Currently wrapped commands:
 - `textureDeformer`
 - `torus`
 - `wire`
+- `wrinkle`
 
 Regenerate wrappers and stubs with:
 
