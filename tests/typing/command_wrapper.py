@@ -209,7 +209,7 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(flexor(query=mode, type=True), Any)
     assert_type(flexor(e=True, type=FlexorType.SCULPT), Any)
 
-    assert_type(nonLinear("target", type="bend", envelope=1.0), NonLinear)
+    assert_type(nonLinear("target", type="bend"), NonLinear)
     assert_type(nonLinear("target", typ=NonLinearType.FLARE), NonLinear)
     assert_type(nonLinear("target", type=NonLinearType.SINE), NonLinear)
     assert_type(nonLinear("target", typ="squash"), NonLinear)
