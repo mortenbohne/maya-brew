@@ -5,6 +5,11 @@ import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
 from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.texture_deformer import (
+    TextureDeformerDirection,
+    TextureDeformerPointSpace,
+    TextureDeformerVectorSpace,
+)
 from maya_brew.exceptions import (
     NodeCastingException,
     NodeException,
@@ -38,6 +43,7 @@ CASES = (
     DeformerCase("skinCluster", node_types.SkinCluster, "skinMethod", "skinMethod", 1),
     DeformerCase("softMod", node_types.SoftMod, "envelope", "envelope", 0.5),
     DeformerCase("tension", node_types.Tension, "envelope", "envelope", 0.55),
+    DeformerCase("textureDeformer", node_types.TextureDeformer, "strength", "strength", 0.25),
     DeformerCase("wire", node_types.Wire, "envelope", "envelope", 0.7),
 )
 
@@ -76,6 +82,8 @@ def created_node(case):
         return cmds.softMod(mesh), case.wrapper_type
     if case.command == "tension":
         return cmds.tension(mesh), case.wrapper_type
+    if case.command == "textureDeformer":
+        return cmds.textureDeformer(mesh), case.wrapper_type
     curve = maya_cmds.curve(degree=1, point=[(0.0, 0.0, 0.0), (0.0, 2.0, 0.0)])
     return cmds.wire(mesh, wire=curve), case.wrapper_type
 
@@ -142,6 +150,7 @@ def test_edits_match_maya(case, created_node, mode):
         ("skinCluster", "Expected SkinCluster"),
         ("softMod", "Expected SoftMod"),
         ("tension", "Expected Tension"),
+        ("textureDeformer", "Expected TextureDeformer"),
         ("wire", "Expected Wire"),
     ],
 )
@@ -171,16 +180,30 @@ def test_cluster_weighted_node_requires_related_transforms() -> None:
     assert "Transforms not related in hierarchy." in str(error.value.__cause__)
 
 
-def test_non_linear_type_accepts_enum_and_single_item_sequences() -> None:
+def test_non_linear_type_accepts_named_constants() -> None:
     mesh = cmds.polySphere()[0]
     assert type(cmds.nonLinear(mesh, type=NonLinearType.BEND)) is node_types.NonLinear
-    assert type(cmds.nonLinear(mesh, typ=[NonLinearType.FLARE])) is node_types.NonLinear
-    assert type(cmds.nonLinear(mesh, type=["sine"])) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, typ=NonLinearType.FLARE)) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, type="sine")) is node_types.NonLinear
 
 
-def test_non_linear_type_rejects_multi_value_sequences() -> None:
+def test_non_linear_type_rejects_sequence_values() -> None:
     mesh = cmds.polySphere()[0]
-    with pytest.raises(NodeException, match="expects exactly one type value"):
+    with pytest.raises(NodeException, match="Unsupported nonLinear type value"):
         cmds.nonLinear(mesh, type=["bend", "twist"])
+
+
+def test_texture_deformer_string_option_constants_and_wrapped_geometry() -> None:
+    mesh = cmds.polySphere()[0]
+    deformer = cmds.textureDeformer(
+        mesh,
+        direction=TextureDeformerDirection.VECTOR,
+        pointSpace=TextureDeformerPointSpace.UV,
+        vectorSpace=TextureDeformerVectorSpace.TANGENT,
+    )
+    assert type(deformer) is node_types.TextureDeformer
+
+    driver = cmds.polyCube()[0]
+    assert cmds.textureDeformer(deformer, e=True, geometry=driver) is None
 
 

@@ -5,7 +5,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, Transform, Wire
+from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, TextureDeformer, Transform, Wire
 from typing import Any, Literal, Never, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -1564,8 +1564,8 @@ class _NonLinearFlags(TypedDict, total=False):
     rm: bool
     split: bool
     sp: bool
-    type: str | Sequence[str]
-    typ: str | Sequence[str]
+    type: str
+    typ: str
     useComponentTags: bool
     uct: bool
 
@@ -5662,8 +5662,6 @@ class _TensionFlags(TypedDict, total=False):
     foc: bool
     fixedSetupData: str
     fsd: str
-    geometry: str
-    g: str
     geometryIndices: bool
     gi: bool
     includeHiddenSelections: bool
@@ -5691,6 +5689,8 @@ class _TensionCreateFlags(_TensionFlags, total=False):
     q: Literal[False]
     envelope: float
     en: float
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
     inwardConstraint: float
     iwc: float
     outwardConstraint: float
@@ -5707,6 +5707,8 @@ class _TensionModeFlags(_TensionFlags, total=False):
     q: bool
     envelope: float | bool
     en: float | bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
     inwardConstraint: float | bool
     iwc: float | bool
     outwardConstraint: float | bool
@@ -5726,6 +5728,100 @@ def tension(
 def tension(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_TensionModeFlags],
+) -> Any: ...
+
+
+class _TextureDeformerFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    direction: str
+    d: str
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    pointSpace: str
+    ps: str
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+    vectorSpace: str
+    vsp: str
+
+class _TextureDeformerCreateFlags(_TextureDeformerFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+    offset: float
+    o: float
+    strength: float
+    s: float
+    vectorOffset: tuple[float, float, float]
+    vo: tuple[float, float, float]
+    vectorStrength: tuple[float, float, float]
+    vs: tuple[float, float, float]
+
+class _TextureDeformerModeFlags(_TextureDeformerFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+    offset: float | bool
+    o: float | bool
+    strength: float | bool
+    s: float | bool
+    vectorOffset: tuple[float, float, float] | bool
+    vo: tuple[float, float, float] | bool
+    vectorStrength: tuple[float, float, float] | bool
+    vs: tuple[float, float, float] | bool
+
+@overload
+def textureDeformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TextureDeformerCreateFlags],
+) -> TextureDeformer: ...
+
+@overload
+def textureDeformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TextureDeformerModeFlags],
 ) -> Any: ...
 
 
@@ -6037,4 +6133,4 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]

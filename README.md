@@ -120,6 +120,7 @@ Currently wrapped commands:
 - `sphere`
 - `spotLight`
 - `tension`
+- `textureDeformer`
 - `torus`
 - `wire`
 

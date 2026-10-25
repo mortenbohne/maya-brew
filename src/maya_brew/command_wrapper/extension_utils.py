@@ -84,6 +84,15 @@ def _node_target_names(
     return targets
 
 
+def _normalize_node_flag_value(value: Any) -> Any:
+    """Convert wrapped nodes in flag values to Maya string paths."""
+    if isinstance(value, Node):
+        return str(value)
+    if isinstance(value, Sequence) and not isinstance(value, str):
+        return [str(item) if isinstance(item, Node) else item for item in value]
+    return value
+
+
 def _history_primitive(
     name: str,
     command: Callable[..., Any],

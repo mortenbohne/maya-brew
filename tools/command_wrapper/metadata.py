@@ -67,7 +67,7 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         creation_return_type="NonLinear",
         node_imports=("NonLinear",),
         queryable_flag_types={"geometry": "str | Node | Sequence[str | Node]"},
-        flag_type_overrides={flag: "str | Sequence[str]" for flag in ("type", "typ")},
+        flag_type_overrides={flag: "str" for flag in ("type", "typ")},
     ),
     extensions.connectJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
@@ -262,6 +262,24 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
             "outwardConstraint": "float",
             "smoothingIterations": "int",
             "smoothingStep": "float",
+            "geometry": "str | Node | Sequence[str | Node]",
+        },
+    ),
+    extensions.textureDeformer: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="TextureDeformer",
+        node_imports=("TextureDeformer",),
+        queryable_flag_types={
+            "envelope": "float",
+            "offset": "float",
+            "strength": "float",
+            "geometry": "str | Node | Sequence[str | Node]",
+            "vectorOffset": "tuple[float, float, float]",
+            "vectorStrength": "tuple[float, float, float]",
+        },
+        flag_type_overrides={
+            flag: "str"
+            for flag in ("direction", "d", "pointSpace", "ps", "vectorSpace", "vsp")
         },
     ),
     extensions.wire: ModeSignature(

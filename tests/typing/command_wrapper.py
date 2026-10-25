@@ -53,6 +53,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     skinCluster,
     softMod,
     tension,
+    textureDeformer,
     wire,
 )
 from maya_brew.nodes._foundation.node_extensions import Node
@@ -99,10 +100,16 @@ from maya_brew.nodes.node_types import (
     SoftMod,
     SpotLight,
     Tension,
+    TextureDeformer,
     Transform,
     Wire,
 )
 from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.texture_deformer import (
+    TextureDeformerDirection,
+    TextureDeformerPointSpace,
+    TextureDeformerVectorSpace,
+)
 
 
 class CustomJoint(Joint):
@@ -181,8 +188,8 @@ def check_deformer_types(mode: bool) -> None:
 
     assert_type(nonLinear("target", type="bend", envelope=1.0), NonLinear)
     assert_type(nonLinear("target", typ=NonLinearType.FLARE), NonLinear)
-    assert_type(nonLinear("target", type=[NonLinearType.SINE]), NonLinear)
-    assert_type(nonLinear("target", typ=["squash"]), NonLinear)
+    assert_type(nonLinear("target", type=NonLinearType.SINE), NonLinear)
+    assert_type(nonLinear("target", typ="squash"), NonLinear)
     assert_type(nonLinear("nonLinear1", q=True, geometry=True), Any)
     assert_type(nonLinear("nonLinear1", query=mode, g=True), Any)
     assert_type(nonLinear("nonLinear1", e=True, geometry="pSphereShape1"), Any)
@@ -205,6 +212,20 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(tension("tension1", q=True, envelope=True), Any)
     assert_type(tension("tension1", query=mode, en=True), Any)
     assert_type(tension("tension1", e=True, envelope=0.2), Any)
+
+    assert_type(textureDeformer("target", strength=0.8), TextureDeformer)
+    assert_type(
+        textureDeformer(
+            "target",
+            direction=TextureDeformerDirection.VECTOR,
+            pointSpace=TextureDeformerPointSpace.UV,
+            vectorSpace=TextureDeformerVectorSpace.TANGENT,
+        ),
+        TextureDeformer,
+    )
+    assert_type(textureDeformer("textureDeformer1", q=True, strength=True), Any)
+    assert_type(textureDeformer("textureDeformer1", query=mode, s=True), Any)
+    assert_type(textureDeformer("textureDeformer1", e=True, strength=0.5), Any)
 
     assert_type(wire("target", envelope=1.0), Wire)
     assert_type(wire("wire1", q=True, envelope=True), Any)

@@ -46,6 +46,7 @@ from .space_locator import spaceLocator as spaceLocator
 from .sphere import sphere as sphere
 from .spot_light import spotLight as spotLight
 from .tension import tension as tension
+from .texture_deformer import textureDeformer as textureDeformer
 from .torus import torus as torus
 from .wire import wire as wire
 
@@ -98,6 +99,7 @@ __all__ = [
     "sphere",
     "spotLight",
     "tension",
+    "textureDeformer",
     "torus",
     "wire",
 ]
