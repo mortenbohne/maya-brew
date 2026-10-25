@@ -13,15 +13,17 @@ class WrinkleStyle:
     LINES = "lines"
 
 
-def wrinkle(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> tuple[Node, ...]:
+def wrinkle(
+    *args: str | Node | Sequence[str | Node], **kwargs: Any
+) -> tuple[Node, ...]:
     """Return wrinkle-created nodes as wrapped native node instances.
 
     Note: Maya 2027 runtime accepts ``style`` values ``"radial"`` and ``"lines"``.
     """
     targets = _node_target_names(args)
     result = _call_command("wrinkle", _maya_cmds.wrinkle, targets, kwargs)
-    if not isinstance(result, list) or not all(isinstance(name, str) for name in result):
+    if not isinstance(result, list) or not all(
+        isinstance(name, str) for name in result
+    ):
         raise NodeException(f"Unexpected result from wrinkle: {result!r}")
     return tuple(cast(name) for name in result)
-
-

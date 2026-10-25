@@ -3,7 +3,11 @@ from typing import Any
 
 from ... import _maya_cmds
 from ...nodes._foundation.node_extensions import Node
-from ..extension_utils import _normalize_node_flag_value, _single_node_result, mode_node_command
+from ..extension_utils import (
+    _normalize_node_flag_value,
+    _single_node_result,
+    mode_node_command,
+)
 
 
 class DeformerType:
@@ -38,7 +42,3 @@ def deformer(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
         if flag in kwargs:
             kwargs[flag] = _normalize_node_flag_value(kwargs[flag])
     return _deformer_command(*args, **kwargs)
-
-
-
-

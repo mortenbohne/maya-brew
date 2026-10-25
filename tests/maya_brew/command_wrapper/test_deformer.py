@@ -1,6 +1,5 @@
 import maya.cmds as maya_cmds
 import pytest
-
 from maya_brew import cmds
 from maya_brew.command_wrapper.extensions.deformer import DeformerType
 from maya_brew.nodes import node_types
@@ -25,7 +24,3 @@ def test_deformer_geometry_query_matches_maya(target_kind: str) -> None:
     assert cmds.deformer(target, q=True, geometry=True) == maya_cmds.deformer(
         str(node), q=True, geometry=True
     )
-
-
-
-

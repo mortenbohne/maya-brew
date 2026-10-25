@@ -59,6 +59,18 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     wire,
     wrinkle,
 )
+from maya_brew.command_wrapper.extensions.deformer import DeformerType
+from maya_brew.command_wrapper.extensions.flexor import (
+    FlexorDeformerCommand,
+    FlexorType,
+)
+from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.texture_deformer import (
+    TextureDeformerDirection,
+    TextureDeformerPointSpace,
+    TextureDeformerVectorSpace,
+)
+from maya_brew.command_wrapper.extensions.wrinkle import WrinkleStyle
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
@@ -108,18 +120,6 @@ from maya_brew.nodes.node_types import (
     Transform,
     Wire,
 )
-from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
-from maya_brew.command_wrapper.extensions.flexor import (
-    FlexorDeformerCommand,
-    FlexorType,
-)
-from maya_brew.command_wrapper.extensions.deformer import DeformerType
-from maya_brew.command_wrapper.extensions.texture_deformer import (
-    TextureDeformerDirection,
-    TextureDeformerPointSpace,
-    TextureDeformerVectorSpace,
-)
-from maya_brew.command_wrapper.extensions.wrinkle import WrinkleStyle
 
 
 class CustomJoint(Joint):

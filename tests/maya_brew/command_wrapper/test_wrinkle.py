@@ -1,5 +1,4 @@
 import pytest
-
 from maya_brew import cmds
 from maya_brew.command_wrapper.extensions.wrinkle import WrinkleStyle
 from maya_brew.exceptions import NodeException
@@ -26,5 +25,3 @@ def test_wrinkle_rejects_unsupported_tangential_style() -> None:
     mesh = cmds.polySphere()[0]
     with pytest.raises(NodeException, match="Invalid style specified"):
         cmds.wrinkle(mesh, style="tangential")
-
-

@@ -5,7 +5,11 @@ from ... import _maya_cmds
 from ...exceptions import NodeException
 from ...nodes._foundation.node_extensions import Node
 from ...nodes.node_types import TextureDeformer
-from ..extension_utils import _first_node_result, _normalize_node_flag_value, mode_node_command
+from ..extension_utils import (
+    _first_node_result,
+    _normalize_node_flag_value,
+    mode_node_command,
+)
 
 
 class TextureDeformerDirection:
@@ -50,9 +54,7 @@ def textureDeformer(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> 
             normalized_kwargs[flag] = value
     for flag in ("geometry", "g"):
         if flag in normalized_kwargs:
-            normalized_kwargs[flag] = _normalize_node_flag_value(normalized_kwargs[flag])
+            normalized_kwargs[flag] = _normalize_node_flag_value(
+                normalized_kwargs[flag]
+            )
     return _texture_deformer_command(*args, **normalized_kwargs)
-
-
-
-

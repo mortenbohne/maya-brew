@@ -43,8 +43,7 @@ def nonLinear(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
             normalized_kwargs[flag] = value
     for flag in ("geometry", "g"):
         if flag in normalized_kwargs:
-            normalized_kwargs[flag] = _normalize_node_flag_value(normalized_kwargs[flag])
+            normalized_kwargs[flag] = _normalize_node_flag_value(
+                normalized_kwargs[flag]
+            )
     return _non_linear_command(*args, **normalized_kwargs)
-
-
-

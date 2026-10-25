@@ -1,6 +1,5 @@
 import maya.cmds as maya_cmds
 import pytest
-
 from maya_brew import cmds
 from maya_brew.command_wrapper.extensions.flexor import (
     FlexorDeformerCommand,
@@ -26,4 +25,3 @@ def test_flexor_rejects_non_string_type_and_deformer_command_values() -> None:
         cmds.flexor(type=1)
     with pytest.raises(NodeException, match="Unsupported flexor deformerCommand value"):
         cmds.flexor(type=FlexorType.SCULPT, deformerCommand=1)
-

@@ -31,7 +31,9 @@ CASES = (
     DeformerCase("cluster", node_types.Cluster, "envelope", "envelope", 0.5),
     DeformerCase("deltaMush", node_types.DeltaMush, "envelope", "envelope", 0.4),
     DeformerCase("lattice", node_types.Ffd, "divisions", "divisions", (2, 3, 4)),
-    DeformerCase("nonLinear", node_types.NonLinear, "geometry", "geometry", "pSphereShape1"),
+    DeformerCase(
+        "nonLinear", node_types.NonLinear, "geometry", "geometry", "pSphereShape1"
+    ),
     DeformerCase(
         "proximityWrap",
         node_types.ProximityWrap,
@@ -43,7 +45,9 @@ CASES = (
     DeformerCase("skinCluster", node_types.SkinCluster, "skinMethod", "skinMethod", 1),
     DeformerCase("softMod", node_types.SoftMod, "envelope", "envelope", 0.5),
     DeformerCase("tension", node_types.Tension, "envelope", "envelope", 0.55),
-    DeformerCase("textureDeformer", node_types.TextureDeformer, "strength", "strength", 0.25),
+    DeformerCase(
+        "textureDeformer", node_types.TextureDeformer, "strength", "strength", 0.25
+    ),
     DeformerCase("wire", node_types.Wire, "envelope", "envelope", 0.7),
 )
 
@@ -205,5 +209,3 @@ def test_texture_deformer_string_option_constants_and_wrapped_geometry() -> None
 
     driver = cmds.polyCube()[0]
     assert cmds.textureDeformer(deformer, e=True, geometry=driver) is None
-
-

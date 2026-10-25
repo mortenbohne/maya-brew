@@ -7,7 +7,6 @@ from ...nodes._foundation.node_extensions import Node
 from ...nodes.node_types import Cluster
 from ..extension_utils import _first_node_result, mode_node_command
 
-
 _cluster_command = mode_node_command(
     name="cluster",
     command_getter=lambda: _maya_cmds.cluster,
@@ -28,6 +27,3 @@ def cluster(*args: str | Node | Sequence[str | Node], **kwargs: Any) -> Any:
                 "cluster weightedNode expects related parent/child transforms"
             ) from e
         raise
-
-
-

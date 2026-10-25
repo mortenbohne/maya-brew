@@ -41,4 +41,3 @@ def flexor(*args: str | Node, **kwargs: Any) -> Any:
                 raise NodeException(f"Unsupported flexor {flag} value: {value!r}")
             normalized_kwargs[flag] = value
     return _flexor_command(*args, **normalized_kwargs)
-
