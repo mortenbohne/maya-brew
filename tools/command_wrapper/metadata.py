@@ -62,6 +62,15 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("Ffd",),
         queryable_flag_types={"divisions": "list[int]"},
     ),
+    extensions.flexor: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="FlexorShape",
+        node_imports=("FlexorShape",),
+        queryable_flag_types={
+            "type": "str",
+            "deformerCommand": "str",
+        },
+    ),
     extensions.nonLinear: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
         creation_return_type="NonLinear",

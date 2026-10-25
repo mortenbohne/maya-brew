@@ -47,6 +47,7 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     blendShape,
     cluster,
     deltaMush,
+    flexor,
     lattice,
     proximityWrap,
     sculpt,
@@ -66,6 +67,7 @@ from maya_brew.nodes.node_types import (
     DeltaMush,
     DirectionalLight,
     Ffd,
+    FlexorShape,
     IkEffector,
     IkHandle,
     IkSolver,
@@ -105,6 +107,10 @@ from maya_brew.nodes.node_types import (
     Wire,
 )
 from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.flexor import (
+    FlexorDeformerCommand,
+    FlexorType,
+)
 from maya_brew.command_wrapper.extensions.texture_deformer import (
     TextureDeformerDirection,
     TextureDeformerPointSpace,
@@ -185,6 +191,14 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(lattice("target", divisions=[2, 3, 4]), Ffd)
     assert_type(lattice("ffd1", q=True, divisions=True), Any)
     assert_type(lattice("ffd1", e=True, divisions=[2, 2, 2]), Any)
+
+    assert_type(
+        flexor(type=FlexorType.SCULPT, deformerCommand=FlexorDeformerCommand.SCULPT),
+        FlexorShape,
+    )
+    assert_type(flexor(q=True, l=True), Any)
+    assert_type(flexor(query=mode, type=True), Any)
+    assert_type(flexor(e=True, type=FlexorType.SCULPT), Any)
 
     assert_type(nonLinear("target", type="bend", envelope=1.0), NonLinear)
     assert_type(nonLinear("target", typ=NonLinearType.FLARE), NonLinear)

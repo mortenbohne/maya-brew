@@ -982,6 +982,57 @@ def directionalLight(
     )
 
 
+def flexor(
+    *args: str | Node | Sequence[str | Node],
+    edit: bool | Unset = UNSET,
+    e: bool | Unset = UNSET,
+    query: bool | Unset = UNSET,
+    q: bool | Unset = UNSET,
+    atBones: bool | Unset = UNSET,
+    ab: bool | Unset = UNSET,
+    atJoints: bool | Unset = UNSET,
+    aj: bool | Unset = UNSET,
+    deformerCommand: str | bool | Unset = UNSET,
+    dc: str | bool | Unset = UNSET,
+    list: bool | Unset = UNSET,
+    l: bool | Unset = UNSET,
+    name: str | Unset = UNSET,
+    n: str | Unset = UNSET,
+    noScale: bool | Unset = UNSET,
+    ns: bool | Unset = UNSET,
+    toSkeleton: bool | Unset = UNSET,
+    ts: bool | Unset = UNSET,
+    type: str | bool | Unset = UNSET,
+    typ: str | bool | Unset = UNSET,
+) -> Any:
+    kwargs = {
+        "edit": edit,
+        "e": e,
+        "query": query,
+        "q": q,
+        "atBones": atBones,
+        "ab": ab,
+        "atJoints": atJoints,
+        "aj": aj,
+        "deformerCommand": deformerCommand,
+        "dc": dc,
+        "list": list,
+        "l": l,
+        "name": name,
+        "n": n,
+        "noScale": noScale,
+        "ns": ns,
+        "toSkeleton": toSkeleton,
+        "ts": ts,
+        "type": type,
+        "typ": typ,
+    }
+    return extensions.flexor(
+        *args,
+        **{flag: value for flag, value in kwargs.items() if value is not UNSET},
+    )
+
+
 def ikHandle(
     *args: str | Node | Sequence[str | Node],
     edit: bool | Unset = UNSET,
@@ -4642,4 +4693,4 @@ def wire(
     )
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]

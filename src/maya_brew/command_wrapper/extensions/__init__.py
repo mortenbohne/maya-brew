@@ -10,6 +10,7 @@ from .create_wrap import CreateWrap as CreateWrap
 from .cylinder import cylinder as cylinder
 from .delta_mush import deltaMush as deltaMush
 from .directional_light import directionalLight as directionalLight
+from .flexor import flexor as flexor
 from .ik_handle import ikHandle as ikHandle
 from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
 from .ik_solver import ikSolver as ikSolver
@@ -63,6 +64,7 @@ __all__ = [
     "cylinder",
     "deltaMush",
     "directionalLight",
+    "flexor",
     "ikHandle",
     "ikHandleDisplayScale",
     "ikSolver",

@@ -5,7 +5,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, TextureDeformer, Transform, Wire
+from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, FlexorShape, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, TextureDeformer, Transform, Wire
 from typing import Any, Literal, Never, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -1127,6 +1127,53 @@ def directionalLight(
 def directionalLight(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_DirectionalLightModeFlags],
+) -> Any: ...
+
+
+class _FlexorFlags(TypedDict, total=False):
+    atBones: bool
+    ab: bool
+    atJoints: bool
+    aj: bool
+    list: bool
+    l: bool
+    name: str
+    n: str
+    noScale: bool
+    ns: bool
+    toSkeleton: bool
+    ts: bool
+
+class _FlexorCreateFlags(_FlexorFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    deformerCommand: str
+    dc: str
+    type: str
+    typ: str
+
+class _FlexorModeFlags(_FlexorFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    deformerCommand: str | bool
+    dc: str | bool
+    type: str | bool
+    typ: str | bool
+
+@overload
+def flexor(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_FlexorCreateFlags],
+) -> FlexorShape: ...
+
+@overload
+def flexor(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_FlexorModeFlags],
 ) -> Any: ...
 
 
@@ -6133,4 +6180,4 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire"]

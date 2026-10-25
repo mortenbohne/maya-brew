@@ -84,6 +84,7 @@ Currently wrapped commands:
 - `cylinder`
 - `deltaMush`
 - `directionalLight`
+- `flexor`
 - `ikHandle`
 - `ikHandleDisplayScale`
 - `ikSolver`
