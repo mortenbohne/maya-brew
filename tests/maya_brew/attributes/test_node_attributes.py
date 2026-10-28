@@ -20,6 +20,14 @@ from maya_brew.nodes.node_types import DagNode
 logger = get_logger(__name__)
 
 
+@pytest.fixture(params=["input1D[7]", "input3D[7].input3Dx"])
+def indexed_attribute_path(request):
+    node = cmds.createNode("plusMinusAverage", name="indexed_attribute")
+    path = f"{node}.{request.param}"
+    cmds.setAttr(path, 2.5)
+    return path
+
+
 def test_cast_attributes(brew_transform):
     tx = Attribute(f"{brew_transform.node_path}.translateX")
     assert isinstance(tx, FloatAttribute)
@@ -45,6 +53,23 @@ def test_factory_with_mplug(translatex_plug):
     a = Attribute(translatex_plug)
     assert isinstance(a, FloatAttribute)
     assert a.get() == 0
+
+
+def test_numeric_attribute_factory_dispatch(non_dag_plug):
+    assert cmds.getAttr(non_dag_plug.name(), type=True) == "float"
+
+    attribute = Attribute(non_dag_plug)
+
+    assert type(attribute) is FloatAttribute
+
+
+def test_factory_resolves_indexed_attribute_path(indexed_attribute_path):
+    assert cmds.getAttr(indexed_attribute_path) == 2.5
+
+    attribute = Attribute(indexed_attribute_path)
+
+    assert attribute.name() == indexed_attribute_path
+    assert attribute.get() == cmds.getAttr(indexed_attribute_path)
 
 
 def test_subclass_with_mplug(translatex_plug):

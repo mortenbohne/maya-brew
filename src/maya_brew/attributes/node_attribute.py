@@ -49,6 +49,20 @@ class Attribute:
                 f"Known types: {sorted(_API_TYPE_SUBCLASS_MAP)}"
             )
 
+        # kNumericAttribute alone cannot distinguish booleans from floating-point types.
+        if api_type == "kNumericAttribute":
+            try:
+                numeric_type = OpenMaya2.MFnNumericAttribute(mobj_attr).numericType()
+            except RuntimeError as e:
+                raise MayaBrewAttributeError(
+                    f"Failed to determine numeric type for attribute '{plug}': {e}"
+                ) from e
+            if numeric_type in (
+                OpenMaya2.MFnNumericData.kFloat,
+                OpenMaya2.MFnNumericData.kDouble,
+            ):
+                subclass = FloatAttribute
+
         # Refine kTypedAttribute: check the actual data type to pick the right subclass.
         if api_type == "kTypedAttribute":
             fn_typed = OpenMaya2.MFnTypedAttribute(mobj_attr)
@@ -85,22 +99,27 @@ class Attribute:
 
     @staticmethod
     def _plug_from_path(path: str) -> OpenMaya2.MPlug:
-        """
-        Resolve a string path to an MPlug using MSelectionList and MFnDependencyNode.
-        Works for both DAG and dependency nodes without casting.
-        :param path: The full path to the attribute, e.g. '|grp|node|nodeShape.visibility'
-        :return: The MPlug for the attribute.
-        """
+        """Resolve plug paths with Maya, preserving indices and unindexed children."""
         if "." not in path:
             raise ValueError(
                 "Attribute path must include a '.' separating node and attribute."
             )
-        node_path, attr_name = path.rsplit(".", 1)
         selection_list = OpenMaya2.MSelectionList()
-        selection_list.add(node_path)
-        mobj = selection_list.getDependNode(0)
-        fn_dep = OpenMaya2.MFnDependencyNode(mobj)
-        return fn_dep.findPlug(attr_name, False)
+        try:
+            try:
+                selection_list.add(path)
+                return selection_list.getPlug(0)
+            except (RuntimeError, TypeError):
+                # Unindexed array children are not selectable; pivot names select components.
+                node_path, attribute_path = path.split(".", 1)
+                selection_list.clear()
+                selection_list.add(node_path)
+                fn_dep = OpenMaya2.MFnDependencyNode(selection_list.getDependNode(0))
+                return fn_dep.findPlug(attribute_path, False)
+        except (RuntimeError, TypeError) as e:
+            raise MayaBrewAttributeError(
+                f"Failed to resolve attribute '{path}': {e}"
+            ) from e
 
     def __str__(self):
         return self.name()
