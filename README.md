@@ -74,6 +74,7 @@ Currently wrapped commands:
 
 - `ambientLight`
 - `blendShape`
+- `cluster`
 - `circle`
 - `cone`
 - `connectJoint`
@@ -82,7 +83,9 @@ Currently wrapped commands:
 - `CreateWrap`
 - `cylinder`
 - `deltaMush`
+- `deformer`
 - `directionalLight`
+- `flexor`
 - `ikHandle`
 - `ikHandleDisplayScale`
 - `ikSolver`
@@ -93,6 +96,7 @@ Currently wrapped commands:
 - `lattice`
 - `ls`
 - `mirrorJoint`
+- `nonLinear`
 - `nurbsCube`
 - `nurbsPlane`
 - `nurbsSquare`
@@ -117,8 +121,11 @@ Currently wrapped commands:
 - `spaceLocator`
 - `sphere`
 - `spotLight`
+- `tension`
+- `textureDeformer`
 - `torus`
 - `wire`
+- `wrinkle`
 
 Regenerate wrappers and stubs with:
 

@@ -1,14 +1,17 @@
 from .ambient_light import ambientLight as ambientLight
 from .blend_shape import blendShape as blendShape
 from .circle import circle as circle
+from .cluster import cluster as cluster
 from .cone import cone as cone
 from .connect_joint import connectJoint as connectJoint
 from .create_jiggle_deformer import CreateJiggleDeformer as CreateJiggleDeformer
 from .create_node import createNode as createNode
 from .create_wrap import CreateWrap as CreateWrap
 from .cylinder import cylinder as cylinder
+from .deformer import deformer as deformer
 from .delta_mush import deltaMush as deltaMush
 from .directional_light import directionalLight as directionalLight
+from .flexor import flexor as flexor
 from .ik_handle import ikHandle as ikHandle
 from .ik_handle_display_scale import ikHandleDisplayScale as ikHandleDisplayScale
 from .ik_solver import ikSolver as ikSolver
@@ -19,6 +22,7 @@ from .joint_display_scale import jointDisplayScale as jointDisplayScale
 from .lattice import lattice as lattice
 from .ls import ls as ls
 from .mirror_joint import mirrorJoint as mirrorJoint
+from .non_linear import nonLinear as nonLinear
 from .nurbs_cube import nurbsCube as nurbsCube
 from .nurbs_plane import nurbsPlane as nurbsPlane
 from .nurbs_square import nurbsSquare as nurbsSquare
@@ -43,12 +47,16 @@ from .soft_mod import softMod as softMod
 from .space_locator import spaceLocator as spaceLocator
 from .sphere import sphere as sphere
 from .spot_light import spotLight as spotLight
+from .tension import tension as tension
+from .texture_deformer import textureDeformer as textureDeformer
 from .torus import torus as torus
 from .wire import wire as wire
+from .wrinkle import wrinkle as wrinkle
 
 __all__ = [
     "ambientLight",
     "blendShape",
+    "cluster",
     "circle",
     "cone",
     "connectJoint",
@@ -57,7 +65,9 @@ __all__ = [
     "CreateWrap",
     "cylinder",
     "deltaMush",
+    "deformer",
     "directionalLight",
+    "flexor",
     "ikHandle",
     "ikHandleDisplayScale",
     "ikSolver",
@@ -68,6 +78,7 @@ __all__ = [
     "lattice",
     "ls",
     "mirrorJoint",
+    "nonLinear",
     "nurbsCube",
     "nurbsPlane",
     "nurbsSquare",
@@ -92,6 +103,9 @@ __all__ = [
     "spaceLocator",
     "sphere",
     "spotLight",
+    "tension",
+    "textureDeformer",
     "torus",
     "wire",
+    "wrinkle",
 ]

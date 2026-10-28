@@ -62,6 +62,22 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         node_imports=("Ffd",),
         queryable_flag_types={"divisions": "list[int]"},
     ),
+    extensions.flexor: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="FlexorShape",
+        node_imports=("FlexorShape",),
+        queryable_flag_types={
+            "type": "str",
+            "deformerCommand": "str",
+        },
+    ),
+    extensions.nonLinear: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="NonLinear",
+        node_imports=("NonLinear",),
+        queryable_flag_types={"geometry": "str | Node | Sequence[str | Node]"},
+        flag_type_overrides={flag: "str" for flag in ("type", "typ")},
+    ),
     extensions.connectJoint: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
@@ -76,6 +92,9 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         flag_type_overrides={"searchReplace": "tuple[str, str]"},
     ),
     extensions.removeJoint: CommandSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+    ),
+    extensions.wrinkle: CommandSignature(
         argument_type="str | Node | Sequence[str | Node]",
     ),
     extensions.createNode: NodeCreationSignature(
@@ -121,6 +140,17 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         creation_return_type="BlendShape",
         node_imports=("BlendShape",),
         queryable_flag_types={"envelope": "float"},
+    ),
+    extensions.cluster: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Cluster",
+        node_imports=("Cluster",),
+        queryable_flag_types={"envelope": "float"},
+    ),
+    extensions.deformer: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Node",
+        queryable_flag_types={"geometry": "str | Node | Sequence[str | Node]"},
     ),
     extensions.deltaMush: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",
@@ -238,6 +268,36 @@ COMMANDS: dict[Callable[..., Any], Signature] = {
         creation_return_type="SoftMod",
         node_imports=("SoftMod",),
         queryable_flag_types={"envelope": "float"},
+    ),
+    extensions.tension: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="Tension",
+        node_imports=("Tension",),
+        queryable_flag_types={
+            "envelope": "float",
+            "inwardConstraint": "float",
+            "outwardConstraint": "float",
+            "smoothingIterations": "int",
+            "smoothingStep": "float",
+            "geometry": "str | Node | Sequence[str | Node]",
+        },
+    ),
+    extensions.textureDeformer: ModeSignature(
+        argument_type="str | Node | Sequence[str | Node]",
+        creation_return_type="TextureDeformer",
+        node_imports=("TextureDeformer",),
+        queryable_flag_types={
+            "envelope": "float",
+            "offset": "float",
+            "strength": "float",
+            "geometry": "str | Node | Sequence[str | Node]",
+            "vectorOffset": "tuple[float, float, float]",
+            "vectorStrength": "tuple[float, float, float]",
+        },
+        flag_type_overrides={
+            flag: "str"
+            for flag in ("direction", "d", "pointSpace", "ps", "vectorSpace", "vsp")
+        },
     ),
     extensions.wire: ModeSignature(
         argument_type="str | Node | Sequence[str | Node]",

@@ -4,7 +4,16 @@ from typing import Any
 import maya.cmds as maya_cmds
 import pytest
 from maya_brew import cmds
-from maya_brew.exceptions import NodeCastingException
+from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.texture_deformer import (
+    TextureDeformerDirection,
+    TextureDeformerPointSpace,
+    TextureDeformerVectorSpace,
+)
+from maya_brew.exceptions import (
+    NodeCastingException,
+    NodeException,
+)
 from maya_brew.nodes import node_types
 
 
@@ -19,8 +28,12 @@ class DeformerCase:
 
 CASES = (
     DeformerCase("blendShape", node_types.BlendShape, "envelope", "envelope", 0.75),
+    DeformerCase("cluster", node_types.Cluster, "envelope", "envelope", 0.5),
     DeformerCase("deltaMush", node_types.DeltaMush, "envelope", "envelope", 0.4),
     DeformerCase("lattice", node_types.Ffd, "divisions", "divisions", (2, 3, 4)),
+    DeformerCase(
+        "nonLinear", node_types.NonLinear, "geometry", "geometry", "pSphereShape1"
+    ),
     DeformerCase(
         "proximityWrap",
         node_types.ProximityWrap,
@@ -31,6 +44,10 @@ CASES = (
     DeformerCase("sculpt", node_types.Sculpt, "mode", "mode", "flip"),
     DeformerCase("skinCluster", node_types.SkinCluster, "skinMethod", "skinMethod", 1),
     DeformerCase("softMod", node_types.SoftMod, "envelope", "envelope", 0.5),
+    DeformerCase("tension", node_types.Tension, "envelope", "envelope", 0.55),
+    DeformerCase(
+        "textureDeformer", node_types.TextureDeformer, "strength", "strength", 0.25
+    ),
     DeformerCase("wire", node_types.Wire, "envelope", "envelope", 0.7),
 )
 
@@ -45,10 +62,14 @@ def created_node(case):
     mesh = cmds.polySphere()[0]
     if case.command == "blendShape":
         return cmds.blendShape(mesh, mesh), case.wrapper_type
+    if case.command == "cluster":
+        return cmds.cluster(mesh), case.wrapper_type
     if case.command == "deltaMush":
         return cmds.deltaMush(mesh), case.wrapper_type
     if case.command == "lattice":
         return cmds.lattice(mesh), case.wrapper_type
+    if case.command == "nonLinear":
+        return cmds.nonLinear(mesh, type="bend"), case.wrapper_type
     if case.command == "proximityWrap":
         driver = cmds.polyCube(name="driver_mesh")[0]
         cmds.polyCube(name="driver_extra")
@@ -63,6 +84,10 @@ def created_node(case):
         return cmds.skinCluster([root, tip], mesh, skinMethod=0), case.wrapper_type
     if case.command == "softMod":
         return cmds.softMod(mesh), case.wrapper_type
+    if case.command == "tension":
+        return cmds.tension(mesh), case.wrapper_type
+    if case.command == "textureDeformer":
+        return cmds.textureDeformer(mesh), case.wrapper_type
     curve = maya_cmds.curve(degree=1, point=[(0.0, 0.0, 0.0), (0.0, 2.0, 0.0)])
     return cmds.wire(mesh, wire=curve), case.wrapper_type
 
@@ -70,6 +95,10 @@ def created_node(case):
 def creation_args(command: str) -> tuple[Any, ...]:
     if command == "blendShape":
         return ("source", "target")
+    if command == "cluster":
+        return ("target",)
+    if command == "nonLinear":
+        return ("target",)
     if command == "skinCluster":
         return ("joint1", "target")
     if command == "proximityWrap":
@@ -116,12 +145,16 @@ def test_edits_match_maya(case, created_node, mode):
     "command, expected",
     [
         ("blendShape", "Expected BlendShape"),
+        ("cluster", "Expected Cluster"),
         ("deltaMush", "Expected DeltaMush"),
         ("lattice", "Expected Ffd"),
+        ("nonLinear", "Expected NonLinear"),
         ("proximityWrap", "Expected ProximityWrap"),
         ("sculpt", "Expected Sculpt"),
         ("skinCluster", "Expected SkinCluster"),
         ("softMod", "Expected SoftMod"),
+        ("tension", "Expected Tension"),
+        ("textureDeformer", "Expected TextureDeformer"),
         ("wire", "Expected Wire"),
     ],
 )
@@ -130,3 +163,49 @@ def test_deformers_reject_wrong_node_types(monkeypatch, command, expected):
     monkeypatch.setattr(maya_cmds, command, lambda *args, **kwargs: [wrong_result])
     with pytest.raises(NodeCastingException, match=expected):
         getattr(cmds, command)(*creation_args(command))
+
+
+def test_cluster_weighted_node_requires_related_transforms() -> None:
+    mesh = cmds.polySphere()[0]
+    cluster_node = cmds.cluster(mesh)
+    first = cmds.createNode("transform", n="cluster_weighted_a")
+    second = cmds.createNode("transform", n="cluster_weighted_b")
+    assert first is not None
+    assert second is not None
+
+    with pytest.raises(
+        NodeException,
+        match="cluster weightedNode expects related parent/child transforms",
+    ) as error:
+        cmds.cluster(cluster_node, e=True, weightedNode=(str(first), str(second)))
+
+    assert isinstance(error.value.__cause__, NodeException)
+    assert isinstance(error.value.__cause__.__cause__, RuntimeError)
+    assert "Transforms not related in hierarchy." in str(error.value.__cause__)
+
+
+def test_non_linear_type_accepts_named_constants() -> None:
+    mesh = cmds.polySphere()[0]
+    assert type(cmds.nonLinear(mesh, type=NonLinearType.BEND)) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, typ=NonLinearType.FLARE)) is node_types.NonLinear
+    assert type(cmds.nonLinear(mesh, type="sine")) is node_types.NonLinear
+
+
+def test_non_linear_type_rejects_sequence_values() -> None:
+    mesh = cmds.polySphere()[0]
+    with pytest.raises(NodeException, match="Unsupported nonLinear type value"):
+        cmds.nonLinear(mesh, type=["bend", "twist"])
+
+
+def test_texture_deformer_string_option_constants_and_wrapped_geometry() -> None:
+    mesh = cmds.polySphere()[0]
+    deformer = cmds.textureDeformer(
+        mesh,
+        direction=TextureDeformerDirection.VECTOR,
+        pointSpace=TextureDeformerPointSpace.UV,
+        vectorSpace=TextureDeformerVectorSpace.TANGENT,
+    )
+    assert type(deformer) is node_types.TextureDeformer
+
+    driver = cmds.polyCube()[0]
+    assert cmds.textureDeformer(deformer, e=True, geometry=driver) is None

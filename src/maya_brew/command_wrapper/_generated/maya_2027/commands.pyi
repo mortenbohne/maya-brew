@@ -5,7 +5,7 @@ from .concrete_nodes import ConcreteNode
 from collections.abc import Sequence
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
-from maya_brew.nodes.node_types import AmbientLight, BlendShape, DeltaMush, DirectionalLight, Ffd, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Transform, Wire
+from maya_brew.nodes.node_types import AmbientLight, BlendShape, Cluster, DeltaMush, DirectionalLight, Ffd, FlexorShape, IkEffector, IkHandle, IkSolver, Joint, MakeNurbCircle, MakeNurbCone, MakeNurbCube, MakeNurbCylinder, MakeNurbPlane, MakeNurbSphere, MakeNurbTorus, MakeNurbsSquare, NonLinear, PointLight, PolyCone, PolyCube, PolyCylinder, PolyHelix, PolyPipe, PolyPlane, PolyPlatonicSolid, PolyPrimitiveMisc, PolyPrism, PolyPyramid, PolySphere, PolyTorus, ProximityWrap, Sculpt, SkinCluster, SoftMod, SpotLight, Tension, TextureDeformer, Transform, Wire
 from typing import Any, Literal, Never, TypeVar, TypedDict, Unpack, overload
 
 T = TypeVar("T", bound=ConcreteNode)
@@ -448,6 +448,84 @@ def circle(
     nodeState: int = ...,
     nds: int = ...,
     **kwargs: Unpack[_CircleModeFlags],
+) -> Any: ...
+
+
+class _ClusterFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    bindState: bool
+    bs: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometry: str
+    g: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    relative: bool
+    rel: bool
+    resetGeometry: bool
+    rg: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+    weightedNode: tuple[str, str]
+    wn: tuple[str, str]
+
+class _ClusterCreateFlags(_ClusterFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+
+class _ClusterModeFlags(_ClusterFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+
+@overload
+def cluster(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_ClusterCreateFlags],
+) -> Cluster: ...
+
+@overload
+def cluster(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_ClusterModeFlags],
 ) -> Any: ...
 
 
@@ -910,6 +988,76 @@ def cylinder(
 ) -> Any: ...
 
 
+class _DeformerFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    type: str
+    typ: str
+    useComponentTags: bool
+    uct: bool
+
+class _DeformerCreateFlags(_DeformerFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+
+class _DeformerModeFlags(_DeformerFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+
+@overload
+def deformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeformerCreateFlags],
+) -> Node: ...
+
+@overload
+def deformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_DeformerModeFlags],
+) -> Any: ...
+
+
 class _DeltaMushFlags(TypedDict, total=False):
     after: bool
     af: bool
@@ -1049,6 +1197,53 @@ def directionalLight(
 def directionalLight(
     *args: str | Node | Sequence[str | Node],
     **kwargs: Unpack[_DirectionalLightModeFlags],
+) -> Any: ...
+
+
+class _FlexorFlags(TypedDict, total=False):
+    atBones: bool
+    ab: bool
+    atJoints: bool
+    aj: bool
+    list: bool
+    l: bool
+    name: str
+    n: str
+    noScale: bool
+    ns: bool
+    toSkeleton: bool
+    ts: bool
+
+class _FlexorCreateFlags(_FlexorFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    deformerCommand: str
+    dc: str
+    type: str
+    typ: str
+
+class _FlexorModeFlags(_FlexorFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    deformerCommand: str | bool
+    dc: str | bool
+    type: str | bool
+    typ: str | bool
+
+@overload
+def flexor(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_FlexorCreateFlags],
+) -> FlexorShape: ...
+
+@overload
+def flexor(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_FlexorModeFlags],
 ) -> Any: ...
 
 
@@ -1442,6 +1637,82 @@ def lattice(
 
 
 def mirrorJoint(*args: str | Node | Sequence[str | Node], mirrorBehavior: bool = ..., mb: bool = ..., mirrorXY: bool = ..., mxy: bool = ..., mirrorXZ: bool = ..., mxz: bool = ..., mirrorYZ: bool = ..., myz: bool = ..., searchReplace: tuple[str, str] = ..., sr: tuple[str, str] = ...) -> tuple[Node, ...]: ...
+
+
+class _NonLinearFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    autoParent: bool
+    ap: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    commonParent: bool
+    cp: bool
+    defaultScale: bool
+    ds: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    type: str
+    typ: str
+    useComponentTags: bool
+    uct: bool
+
+class _NonLinearCreateFlags(_NonLinearFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+
+class _NonLinearModeFlags(_NonLinearFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+
+@overload
+def nonLinear(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_NonLinearCreateFlags],
+) -> NonLinear: ...
+
+@overload
+def nonLinear(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_NonLinearModeFlags],
+) -> Any: ...
 
 
 
@@ -5487,6 +5758,190 @@ def spotLight(
 ) -> Any: ...
 
 
+class _TensionFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    pinBorderVertices: bool
+    pbv: bool
+    prune: bool
+    pr: bool
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+
+class _TensionCreateFlags(_TensionFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+    inwardConstraint: float
+    iwc: float
+    outwardConstraint: float
+    owc: float
+    smoothingIterations: int
+    si: int
+    smoothingStep: float
+    ss: float
+
+class _TensionModeFlags(_TensionFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+    inwardConstraint: float | bool
+    iwc: float | bool
+    outwardConstraint: float | bool
+    owc: float | bool
+    smoothingIterations: int | bool
+    si: int | bool
+    smoothingStep: float | bool
+    ss: float | bool
+
+@overload
+def tension(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TensionCreateFlags],
+) -> Tension: ...
+
+@overload
+def tension(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TensionModeFlags],
+) -> Any: ...
+
+
+class _TextureDeformerFlags(TypedDict, total=False):
+    after: bool
+    af: bool
+    afterReference: bool
+    ar: bool
+    before: bool
+    bf: bool
+    components: bool
+    cmp: bool
+    selectedComponents: bool
+    cms: bool
+    direction: str
+    d: str
+    deformerTools: bool
+    dt: bool
+    dumpInfo: bool
+    dui: bool
+    exclusive: str
+    ex: str
+    frontOfChain: bool
+    foc: bool
+    fixedSetupData: str
+    fsd: str
+    geometryIndices: bool
+    gi: bool
+    includeHiddenSelections: bool
+    ihs: bool
+    ignoreSelected: bool
+    name: str
+    n: str
+    parallel: bool
+    par: bool
+    prune: bool
+    pr: bool
+    pointSpace: str
+    ps: str
+    remove: bool
+    rm: bool
+    split: bool
+    sp: bool
+    useComponentTags: bool
+    uct: bool
+    vectorSpace: str
+    vsp: str
+
+class _TextureDeformerCreateFlags(_TextureDeformerFlags, total=False):
+    edit: Literal[False]
+    e: Literal[False]
+    query: Literal[False]
+    q: Literal[False]
+    envelope: float
+    en: float
+    geometry: str | Node | Sequence[str | Node]
+    g: str | Node | Sequence[str | Node]
+    offset: float
+    o: float
+    strength: float
+    s: float
+    vectorOffset: tuple[float, float, float]
+    vo: tuple[float, float, float]
+    vectorStrength: tuple[float, float, float]
+    vs: tuple[float, float, float]
+
+class _TextureDeformerModeFlags(_TextureDeformerFlags, total=False):
+    edit: bool
+    e: bool
+    query: bool
+    q: bool
+    envelope: float | bool
+    en: float | bool
+    geometry: str | Node | Sequence[str | Node] | bool
+    g: str | Node | Sequence[str | Node] | bool
+    offset: float | bool
+    o: float | bool
+    strength: float | bool
+    s: float | bool
+    vectorOffset: tuple[float, float, float] | bool
+    vo: tuple[float, float, float] | bool
+    vectorStrength: tuple[float, float, float] | bool
+    vs: tuple[float, float, float] | bool
+
+@overload
+def textureDeformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TextureDeformerCreateFlags],
+) -> TextureDeformer: ...
+
+@overload
+def textureDeformer(
+    *args: str | Node | Sequence[str | Node],
+    **kwargs: Unpack[_TextureDeformerModeFlags],
+) -> Any: ...
+
+
 
 class _TorusModeFlags(TypedDict, total=False):
     axis: tuple[float, float, float] | bool
@@ -5795,4 +6250,7 @@ def wire(
 ) -> Any: ...
 
 
-__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cone", "connectJoint", "createNode", "cylinder", "deltaMush", "directionalLight", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "torus", "wire"]
+def wrinkle(*args: str | Node | Sequence[str | Node], axis: tuple[float, float, float] = ..., ax: tuple[float, float, float] = ..., branchDepth: int = ..., bd: int = ..., branchCount: int = ..., brc: int = ..., crease: str = ..., cr: str = ..., center: tuple[float, float, float] = ..., ct: tuple[float, float, float] = ..., dropoffDistance: float = ..., dds: float = ..., envelope: float = ..., en: float = ..., randomness: float = ..., rnd: float = ..., style: str = ..., st: str = ..., thickness: float = ..., th: float = ..., uvSpace: tuple[float, float, float, float, float] = ..., uv: tuple[float, float, float, float, float] = ..., wrinkleCount: int = ..., wc: int = ..., wrinkleIntensity: float = ..., wi: float = ...) -> tuple[Node, ...]: ...
+
+
+__all__ = ["CreateJiggleDeformer", "CreateWrap", "ambientLight", "blendShape", "circle", "cluster", "cone", "connectJoint", "createNode", "cylinder", "deformer", "deltaMush", "directionalLight", "flexor", "ikHandle", "ikHandleDisplayScale", "ikSolver", "ikSystemInfo", "insertJoint", "joint", "jointDisplayScale", "lattice", "ls", "mirrorJoint", "nonLinear", "nurbsCube", "nurbsPlane", "nurbsSquare", "pointLight", "polyCone", "polyCube", "polyCylinder", "polyHelix", "polyPipe", "polyPlane", "polyPlatonicSolid", "polyPrimitive", "polyPrism", "polyPyramid", "polySphere", "polyTorus", "proximityWrap", "removeJoint", "sculpt", "skinCluster", "softMod", "spaceLocator", "sphere", "spotLight", "tension", "textureDeformer", "torus", "wire", "wrinkle"]

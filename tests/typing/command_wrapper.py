@@ -18,6 +18,7 @@ from maya_brew.command_wrapper import (
     jointDisplayScale,
     ls,
     mirrorJoint,
+    nonLinear,
     nurbsCube,
     nurbsPlane,
     nurbsSquare,
@@ -44,23 +45,43 @@ from maya_brew.command_wrapper._generated.maya_2027.commands import (
     CreateJiggleDeformer,
     CreateWrap,
     blendShape,
+    cluster,
+    deformer,
     deltaMush,
+    flexor,
     lattice,
     proximityWrap,
     sculpt,
     skinCluster,
     softMod,
+    tension,
+    textureDeformer,
     wire,
+    wrinkle,
 )
+from maya_brew.command_wrapper.extensions.deformer import DeformerType
+from maya_brew.command_wrapper.extensions.flexor import (
+    FlexorDeformerCommand,
+    FlexorType,
+)
+from maya_brew.command_wrapper.extensions.non_linear import NonLinearType
+from maya_brew.command_wrapper.extensions.texture_deformer import (
+    TextureDeformerDirection,
+    TextureDeformerPointSpace,
+    TextureDeformerVectorSpace,
+)
+from maya_brew.command_wrapper.extensions.wrinkle import WrinkleStyle
 from maya_brew.nodes._foundation.node_extensions import Node
 from maya_brew.nodes.node_state import NodeState
 from maya_brew.nodes.node_types import (
     AmbientLight,
     BlendShape,
+    Cluster,
     DagNode,
     DeltaMush,
     DirectionalLight,
     Ffd,
+    FlexorShape,
     IkEffector,
     IkHandle,
     IkSolver,
@@ -74,6 +95,7 @@ from maya_brew.nodes.node_types import (
     MakeNurbSphere,
     MakeNurbsSquare,
     MakeNurbTorus,
+    NonLinear,
     PointLight,
     PolyCone,
     PolyCube,
@@ -93,6 +115,8 @@ from maya_brew.nodes.node_types import (
     SkinCluster,
     SoftMod,
     SpotLight,
+    Tension,
+    TextureDeformer,
     Transform,
     Wire,
 )
@@ -153,6 +177,16 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(blendShape("blendShape1", query=mode, en=True), Any)
     assert_type(blendShape("blendShape1", e=True, envelope=0.25), Any)
 
+    assert_type(cluster("target", envelope=0.6), Cluster)
+    assert_type(cluster("cluster1", q=True, envelope=True), Any)
+    assert_type(cluster("cluster1", query=mode, en=True), Any)
+    assert_type(cluster("cluster1", e=True, envelope=0.3), Any)
+
+    assert_type(deformer("target", type=DeformerType.CLUSTER), Node)
+    assert_type(deformer("deformer1", q=True, geometry=True), Any)
+    assert_type(deformer("deformer1", query=mode, g=True), Any)
+    assert_type(deformer("deformer1", e=True, geometry="pSphereShape1"), Any)
+
     assert_type(skinCluster("joint1", "target", skinMethod=0), SkinCluster)
     assert_type(skinCluster("skinCluster1", q=True, skinMethod=True), Any)
     assert_type(skinCluster("skinCluster1", query=mode, sm=True), Any)
@@ -166,6 +200,22 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(lattice("target", divisions=[2, 3, 4]), Ffd)
     assert_type(lattice("ffd1", q=True, divisions=True), Any)
     assert_type(lattice("ffd1", e=True, divisions=[2, 2, 2]), Any)
+
+    assert_type(
+        flexor(type=FlexorType.SCULPT, deformerCommand=FlexorDeformerCommand.SCULPT),
+        FlexorShape,
+    )
+    assert_type(flexor(q=True, l=True), Any)
+    assert_type(flexor(query=mode, type=True), Any)
+    assert_type(flexor(e=True, type=FlexorType.SCULPT), Any)
+
+    assert_type(nonLinear("target", type="bend"), NonLinear)
+    assert_type(nonLinear("target", typ=NonLinearType.FLARE), NonLinear)
+    assert_type(nonLinear("target", type=NonLinearType.SINE), NonLinear)
+    assert_type(nonLinear("target", typ="squash"), NonLinear)
+    assert_type(nonLinear("nonLinear1", q=True, geometry=True), Any)
+    assert_type(nonLinear("nonLinear1", query=mode, g=True), Any)
+    assert_type(nonLinear("nonLinear1", e=True, geometry="pSphereShape1"), Any)
 
     assert_type(proximityWrap("driver", "target"), ProximityWrap)
     assert_type(proximityWrap("proximityWrap1", q=True, freeDriverIndex=True), Any)
@@ -181,10 +231,32 @@ def check_deformer_types(mode: bool) -> None:
     assert_type(softMod("softMod1", query=mode, en=True), Any)
     assert_type(softMod("softMod1", e=True, envelope=0.2), Any)
 
+    assert_type(tension("target", envelope=0.6), Tension)
+    assert_type(tension("tension1", q=True, envelope=True), Any)
+    assert_type(tension("tension1", query=mode, en=True), Any)
+    assert_type(tension("tension1", e=True, envelope=0.2), Any)
+
+    assert_type(textureDeformer("target", strength=0.8), TextureDeformer)
+    assert_type(
+        textureDeformer(
+            "target",
+            direction=TextureDeformerDirection.VECTOR,
+            pointSpace=TextureDeformerPointSpace.UV,
+            vectorSpace=TextureDeformerVectorSpace.TANGENT,
+        ),
+        TextureDeformer,
+    )
+    assert_type(textureDeformer("textureDeformer1", q=True, strength=True), Any)
+    assert_type(textureDeformer("textureDeformer1", query=mode, s=True), Any)
+    assert_type(textureDeformer("textureDeformer1", e=True, strength=0.5), Any)
+
     assert_type(wire("target", envelope=1.0), Wire)
     assert_type(wire("wire1", q=True, envelope=True), Any)
     assert_type(wire("wire1", query=mode, en=True), Any)
     assert_type(wire("wire1", e=True, envelope=0.5), Any)
+
+    assert_type(wrinkle("target"), tuple[Node, ...])
+    assert_type(wrinkle("target", style=WrinkleStyle.RADIAL), tuple[Node, ...])
 
 
 def check_joint_operation_types(target: Joint) -> None:
